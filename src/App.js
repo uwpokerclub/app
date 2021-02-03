@@ -10,28 +10,36 @@ import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar"
 
+import MembersIndex from "./pages/members/MembersIndex"
+
 export default function App() {
   return (
     <Router>
       <Navbar />
 
-      <Switch>
-        <Route exact path="/">
-          {/* TODO: Add index page */}
-        </Route>
-        <Route exact path="/members">
-          {/* TODO: Add members page  */}
-        </Route>
-        <Route exact path="/events">
-          {/* TODO: Add events page */}
-        </Route>
-        <Route exact path="/semesters">
-          {/* TODO: Add semesters page */}
-        </Route>
-        <Route exact path="/rankings">
-          {/* TODO: Add rankings page */}
-        </Route>
-      </Switch>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-10">
+          <Switch>
+            <Route exact path="/">
+              {/* TODO: Add index page */}
+            </Route>
+            <Route path="/members">
+              <MembersIndex />
+            </Route>
+            <Route exact path="/events">
+              {/* TODO: Add events page */}
+            </Route>
+            <Route exact path="/semesters">
+              {/* TODO: Add semesters page */}
+            </Route>
+            <Route exact path="/rankings">
+              {/* TODO: Add rankings page */}
+            </Route>
+          </Switch>
+        </div>
+        <div className="col-md-1"></div>
+      </div>
     </Router>
   );
 }
