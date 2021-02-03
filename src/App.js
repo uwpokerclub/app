@@ -10,6 +10,7 @@ import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar"
 
+import Home from "./pages/home/Home"
 import MembersIndex from "./pages/members/MembersIndex"
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
         <div className="col-md-10">
           <Switch>
             <Route exact path="/">
-              {/* TODO: Add index page */}
+              <Home />
             </Route>
             <Route path="/members">
               <MembersIndex />
@@ -40,6 +41,6 @@ export default function App() {
         </div>
         <div className="col-md-1"></div>
       </div>
-    </Router>
+    </Router >
   );
 }
