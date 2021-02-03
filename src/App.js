@@ -9,6 +9,7 @@ import {
 import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar"
+import Home from "./pages/home/Home"
 
 export default function App() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
 
       <Switch>
         <Route exact path="/">
-          {/* TODO: Add index page */}
+          <Home />
         </Route>
         <Route exact path="/members">
           {/* TODO: Add members page  */}
