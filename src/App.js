@@ -12,6 +12,7 @@ import Navbar from "./components/navbar/Navbar"
 
 import Home from "./pages/home/Home"
 import MembersIndex from "./pages/members/MembersIndex"
+import SemestersIndex from "./pages/semesters/SemestersIndex"
 
 export default function App() {
   return (
@@ -31,8 +32,8 @@ export default function App() {
             <Route exact path="/events">
               {/* TODO: Add events page */}
             </Route>
-            <Route exact path="/semesters">
-              {/* TODO: Add semesters page */}
+            <Route path="/semesters">
+              <SemestersIndex />
             </Route>
             <Route exact path="/rankings">
               {/* TODO: Add rankings page */}
