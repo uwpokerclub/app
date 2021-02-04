@@ -13,7 +13,7 @@ import Navbar from "./components/navbar/Navbar"
 import EventsIndex from "./pages/events/EventsIndex"
 import Home from "./pages/home/Home"
 import MembersIndex from "./pages/members/MembersIndex"
-
+import RankingsIndex from "./pages/rankings/RankingsIndex"
 
 export default function App() {
   return (
@@ -36,8 +36,8 @@ export default function App() {
             <Route exact path="/semesters">
               {/* TODO: Add semesters page */}
             </Route>
-            <Route exact path="/rankings">
-              {/* TODO: Add rankings page */}
+            <Route path="/rankings">
+              <RankingsIndex />
             </Route>
           </Switch>
         </div>
