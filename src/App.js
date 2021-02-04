@@ -10,8 +10,10 @@ import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar"
 
+import EventsIndex from "./pages/events/EventsIndex"
 import Home from "./pages/home/Home"
 import MembersIndex from "./pages/members/MembersIndex"
+
 
 export default function App() {
   return (
@@ -28,8 +30,8 @@ export default function App() {
             <Route path="/members">
               <MembersIndex />
             </Route>
-            <Route exact path="/events">
-              {/* TODO: Add events page */}
+            <Route path="/events">
+              <EventsIndex />
             </Route>
             <Route exact path="/semesters">
               {/* TODO: Add semesters page */}

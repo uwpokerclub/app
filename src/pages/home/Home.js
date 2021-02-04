@@ -1,5 +1,5 @@
-import React from 'react'
-import logo from '../../assets/logo.png';
+import React from "react"
+import logo from "../../assets/logo.png";
 
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,7 @@ import "./Home.scss"
 export default function Home() {
   return (
     <div className="center">
-      <img src={logo} className="ps-club-logo" />
+      <img src={logo} className="ps-club-logo" alt="" />
 
       <h1>UW Poker Studies Club</h1>
       <p>Welcome to The Admin Interface</p>
