@@ -15,6 +15,7 @@ import Home from "./pages/home/Home"
 import MembersIndex from "./pages/members/MembersIndex"
 import SemestersIndex from "./pages/semesters/SemestersIndex"
 import RankingsIndex from "./pages/rankings/RankingsIndex"
+import LoginIndex from "./pages/login/LoginIndex"
 
 export default function App() {
   return (
@@ -25,6 +26,9 @@ export default function App() {
         <div className="col-md-1"></div>
         <div className="col-md-10">
           <Switch>
+            <Route path="/login">
+              <LoginIndex />
+            </Route>
             <Route exact path="/">
               <Home />
             </Route>
