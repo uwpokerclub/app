@@ -5,13 +5,13 @@ import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import MemberNew from "./MemberNew";
 import MemberShow from "./MemberShow";
 
-import TermSelector from "../../components/term-selector/TermSelector"
+import TermSelector from "../../components/TermSelector/TermSelector";
 
 export default function MembersIndex() {
   const { path, url } = useRouteMatch();
 
   // Dummy data for now
-  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"]
+  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
   const members = [
     {
       studentNum: "20780648",
@@ -21,7 +21,7 @@ export default function MembersIndex() {
       questId: "asmahood",
       paid: "Yes"
     }
-  ]
+  ];
 
   return (
     <Switch>
@@ -66,7 +66,7 @@ export default function MembersIndex() {
         <MemberShow />
       </Route>
     </Switch>
-  )
+  );
 }
 
 function MembersTable({ url, members }) {
@@ -99,5 +99,5 @@ function MembersTable({ url, members }) {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

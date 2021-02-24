@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function EventCreate() {
   const semesters = [
@@ -14,7 +14,7 @@ export default function EventCreate() {
       "id": 2,
       "name": "Winter 2021"
     }
-  ]
+  ];
 
   return (
     <div>
@@ -79,15 +79,15 @@ export default function EventCreate() {
               </div>
 
             </form>
-            
+
           </div>
         </div>
 
         <div className="col-md-3" />
-        
+
       </div>
     </div>
-  )
+  );
 }
 
 const Semester = ({ semester }) => {
@@ -95,9 +95,9 @@ const Semester = ({ semester }) => {
     <option value={semester.id}>
       {semester.name}
     </option>
-  )
-}
+  );
+};
 
 const createEvent = () => {
   return ;
-}
+};

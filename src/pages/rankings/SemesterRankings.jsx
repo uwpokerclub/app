@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export default function SemesterRankings() {
   const rankings = [
@@ -26,7 +26,7 @@ export default function SemesterRankings() {
       "last_name": "Kalra",
       "points": 25
     }
-  ]
+  ];
 
   return (
     <div>
@@ -37,7 +37,7 @@ export default function SemesterRankings() {
 
       <div className="list-group">
         <div className="table-responsive">
-          
+
           <table className="table">
 
             <thead>
@@ -50,11 +50,11 @@ export default function SemesterRankings() {
                 <th className="sort">
                   First Name
                 </th>
-                
+
                 <th className="sort">
                   Last Name
                 </th>
-                
+
                 <th className="sort">
                   Score
                 </th>
@@ -69,12 +69,12 @@ export default function SemesterRankings() {
             </tbody>
 
           </table>
-        
+
         </div>
       </div>
 
     </div>
-  )
+  );
 }
 
 const Ranking = ({ ranking }) => {
@@ -98,5 +98,5 @@ const Ranking = ({ ranking }) => {
       </td>
 
     </tr>
-  )
-}
+  );
+};

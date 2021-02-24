@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import SemesterCreate from "./SemesterCreate";
@@ -21,7 +21,7 @@ export default function SemestersIndex() {
       "start_date": new Date("2021-09-01T19:00:00"),
       "end_date": new Date("2021-12-01T19:00:00")
     }
-  ]
+  ];
 
   return (
     <Switch>
@@ -43,7 +43,7 @@ export default function SemestersIndex() {
       </Route>
 
     </Switch>
-  )
+  );
 }
 
 const SemesterTable = ({ semesters }) => {
@@ -91,5 +91,5 @@ const SemesterTable = ({ semesters }) => {
 
       </table>
     </div>
-  )
-}
+  );
+};

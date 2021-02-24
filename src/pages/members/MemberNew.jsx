@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function MemberNew() {
-  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"]
+  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
   const faculties = ["AHS", "Arts", "Engineering", "Environment", "Math", "Science"];
 
   return (
@@ -95,5 +95,5 @@ export default function MemberNew() {
       </div>
       <div className="col-md-3"></div>
     </div>
-  )
+  );
 }

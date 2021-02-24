@@ -1,16 +1,16 @@
-import React from "react"
+import React from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 
-import "./Events.scss"
+import "./Events.scss";
 import EventShow from "./EventShow";
 import EventCreate from "./EventCreate";
 
-import TermSelector from "../../components/term-selector/TermSelector";
+import TermSelector from "../../components/TermSelector/TermSelector";
 
 export default function EventsIndex() {
   const { path, url } = useRouteMatch();
-  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"]
+  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
   const events = [
     {
       "id": 1,
@@ -28,7 +28,7 @@ export default function EventsIndex() {
       "notes": "Second testing",
       "count": 0
     }
-  ]
+  ];
 
   return (
     <Switch>
@@ -70,7 +70,7 @@ export default function EventsIndex() {
         <EventShow />
       </Route>
     </Switch>
-  )
+  );
 }
 
 const Event = ({ event, url }) => {
@@ -87,9 +87,9 @@ const Event = ({ event, url }) => {
       </div>
 
     </Link>
-  )
-}
+  );
+};
 
 const viewEventsForSemester = () => {
   return ;
-}
+};

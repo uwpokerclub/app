@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 import { Link, Switch, Route, useRouteMatch, useParams } from "react-router-dom";
 
-import "./Events.scss"
+import "./Events.scss";
 
-import EventSignIn from "./EventSignIn"
+import EventSignIn from "./EventSignIn";
 
 export default function EventShow() {
-  const { path, url } = useRouteMatch()
-  const { event_id } = useParams()
+  const { path, url } = useRouteMatch();
+  const { event_id } = useParams();
   const event = {
     "id": event_id,
     "name": `Event ${event_id}`,
@@ -17,7 +17,7 @@ export default function EventShow() {
     "notes": "First testing",
     "count": 3,
     "state": 0
-  }
+  };
   const error = "";
   const participants = [
     {
@@ -60,7 +60,7 @@ export default function EventShow() {
       "placement": "--",
       "event_id": 1
     }
-  ]
+  ];
 
   return (
     <Switch>
@@ -100,7 +100,7 @@ export default function EventShow() {
         <EventSignIn />
       </Route>
     </Switch>
-  )
+  );
 }
 
 const EventTable = ({ participants, state }) => {
@@ -152,8 +152,8 @@ const EventTable = ({ participants, state }) => {
       </div>
 
     </div>
-  )
-}
+  );
+};
 
 const Participant = ({ participant, index, state }) => {
   return (
@@ -177,7 +177,7 @@ const Participant = ({ participant, index, state }) => {
 
       <td className="signed_out_at">
         {
-          participant.signed_out_at 
+          participant.signed_out_at
           ? <span>{participant.signed_out_at.toLocaleString("en-US", { hour12: true, month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}</span>
           : <i>Not Signed Out</i>
         }
@@ -186,8 +186,8 @@ const Participant = ({ participant, index, state }) => {
       <td className="placement">
         <span className="margin-center">
           {
-            participant.placement 
-            ? participant.placement 
+            participant.placement
+            ? participant.placement
             : "--"
           }
         </span>
@@ -244,28 +244,28 @@ const Participant = ({ participant, index, state }) => {
               <button type="submit" className="btn btn-warning">
                 Remove
               </button>
-              
+
             </form>
           </div>
         }
       </td>
 
     </tr>
-  )
-}
+  );
+};
 
 const signOutParticipant = (user_id, event_id) => {
   return ;
-}
+};
 
 const signBackInParticipant = (user_id, event_id) => {
   return ;
-}
+};
 
 const removeParticipant = (user_id, event_id) => {
   return ;
-}
+};
 
 const endEvent = (event_id) => {
   return ;
-}
+};

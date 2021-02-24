@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
-import { Link } from "react-router-dom";
+import { useAuth } from "../../utils/ProvideAuth";
 
-import "./Navbar.scss"
+import "./Navbar.scss";
 
 export default function Navbar() {
-  return (
+  const auth = useAuth();
+  const history = useHistory();
+
+  const [hidden, setHidden] = useState(false);
+
+  const handleLogout = () => {
+    auth.signout(() => {
+      history.push("/login");
+    });
+  };
+
+  useEffect(() => setHidden(!auth.authenticated), [auth]);
+
+  return !hidden ? (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">UW Poker</Link>
@@ -38,10 +52,10 @@ export default function Navbar() {
           </ul>
 
           <div className="navbar-right">
-            <Link to="/login/logout" className="btn btn-primary navbar-btn logout-btn btn-responsive">Logout</Link>
+            <button type="button" onClick={() => handleLogout()} className="btn btn-primary navbar-btn logout-btn btn-responsive">Logout</button>
           </div>
         </div>
       </div>
     </nav>
-  );
+  ): null;
 }

@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 import logo from "../../assets/logo.png";
 
 import { Link } from "react-router-dom";
 
-import "./Home.scss"
+import "./Home.scss";
 
 export default function Home() {
   return (
@@ -76,5 +76,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }

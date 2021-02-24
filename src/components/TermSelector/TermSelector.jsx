@@ -8,5 +8,5 @@ export default function TermSelector({ semesters }) {
         <option key={sem}>{sem}</option>
       ))}
     </select>
-  )
+  );
 }

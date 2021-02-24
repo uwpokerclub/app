@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 import { useParams } from "react-router-dom";
 
-import "./Events.scss"
+import "./Events.scss";
 
 export default function EventSignIn() {
-  const { event_id } = useParams()
+  const { event_id } = useParams();
   const members = [
     {
       "id": 0,
@@ -32,7 +32,7 @@ export default function EventSignIn() {
       "first_name": "Arham",
       "last_name": "Abidi"
     }
-  ]
+  ];
 
   return (
     <div className="row">
@@ -66,7 +66,7 @@ export default function EventSignIn() {
       </div>
       <div className="col-md-3" />
     </div>
-  )
+  );
 }
 
 const Member = ({ member }) => {
@@ -88,10 +88,10 @@ const Member = ({ member }) => {
           {member.id}
         </span>
       </div>
-      
+
     </div>
-  )
-}
+  );
+};
 
 const registerMembersForEvent = (event_id) => {
-}
+};

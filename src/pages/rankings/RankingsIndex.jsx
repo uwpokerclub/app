@@ -1,11 +1,11 @@
-import React from "react"
+import React from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import SemesterRankings from "./SemesterRankings";
 
 export default function RankingsIndex() {
   const { path, url } = useRouteMatch();
-  
+
   const semesters = [
     {
       "id": 0,
@@ -19,7 +19,7 @@ export default function RankingsIndex() {
       "id": 2,
       "name": "Fall 2021"
     }
-  ]
+  ];
 
   return (
     <Switch>
@@ -42,7 +42,7 @@ export default function RankingsIndex() {
       </Route>
 
     </Switch>
-  )
+  );
 }
 
 const SemesterItem = ({ semester, url }) => {
@@ -52,5 +52,5 @@ const SemesterItem = ({ semester, url }) => {
         {semester.name}
       </h4>
     </Link>
-  )
-}
+  );
+};

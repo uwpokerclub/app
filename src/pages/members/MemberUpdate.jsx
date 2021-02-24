@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 export default function MemberUpdate() {
-  const { memberId } = useParams()
+  const { memberId } = useParams();
 
   const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
   const faculties = ["AHS", "Arts", "Engineering", "Environment", "Math", "Science"];
@@ -17,7 +17,7 @@ export default function MemberUpdate() {
     faculty: "Math",
     createdAt: new Date(),
     lastSemesterRegistered: "Winter 2021"
-  }
+  };
 
   return (
     <div>
@@ -87,5 +87,5 @@ export default function MemberUpdate() {
         </div>
       </div>
     </div>
-  )
+  );
 }

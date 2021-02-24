@@ -5,8 +5,8 @@ import { Route, Link, Switch, useParams, useRouteMatch } from "react-router-dom"
 import MemberUpdate from "./MemberUpdate";
 
 export default function MemberShow() {
-  const { path, url } = useRouteMatch()
-  const { memberId } = useParams()
+  const { path, url } = useRouteMatch();
+  const { memberId } = useParams();
 
   const member = {
     id: memberId,
@@ -17,7 +17,7 @@ export default function MemberShow() {
     faculty: "Math",
     createdAt: new Date(),
     lastSemesterRegistered: "Winter 2021"
-  }
+  };
 
   return (
     <Switch>
