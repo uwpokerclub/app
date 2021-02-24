@@ -1,32 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 export default function SemesterRankings() {
-  const rankings = [
-    {
-      "id": 11111111,
-      "first_name": "Bob",
-      "last_name": "Johnson",
-      "points": 100
-    },
-    {
-      "id": 22222222,
-      "first_name": "Adam",
-      "last_name": "Mahood",
-      "points": 75
-    },
-    {
-      "id": 33333333,
-      "first_name": "Sasha",
-      "last_name": "Nayer",
-      "points": 50
-    },
-    {
-      "id": 44444444,
-      "first_name": "Deep",
-      "last_name": "Kalra",
-      "points": 25
-    }
-  ];
+  const { semesterId } = useParams();
+
+  const [rankings, setRankings] = useState([]);
+
+  useEffect(() => {
+    fetch(`/api/semesters/${semesterId}/rankings`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRankings(data.rankings);
+      });
+  }, [semesterId]);
 
   return (
     <div>
@@ -64,7 +50,7 @@ export default function SemesterRankings() {
 
             <tbody className="list">
               {rankings.map((ranking) => (
-                <Ranking ranking={ranking} />
+                <Ranking key={ranking.id} ranking={ranking} />
               ))}
             </tbody>
 
