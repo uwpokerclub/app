@@ -23,7 +23,7 @@ import LoginIndex from "./pages/login/LoginIndex";
 export default function App() {
   return (
     <ProvideAuth>
-      <Router>
+      <Router forceRefresh>
         <Navbar />
 
         <div className="row">

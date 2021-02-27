@@ -1,8 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 export default function MemberNew() {
-  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
+  const history = useHistory();
+
   const faculties = ["AHS", "Arts", "Engineering", "Environment", "Math", "Science"];
+
+  const [semesters, setSemesters] = useState([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [faculty, setFaculty] = useState("");
+  const [paid, setPaid] = useState(false);
+  const [questId, setQuestId] = useState("");
+  const [id, setId] = useState("");
+  const [semesterId, setSemesterId] = useState("");
+
+  useEffect(() => {
+    fetch("/api/semesters")
+      .then((res) => res.json())
+      .then((data) => setSemesters(data.semesters));
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id,
+        firstName,
+        lastName,
+        email,
+        faculty,
+        paid,
+        questId,
+        semesterId
+      })
+    });
+
+    if (res.status === 201) {
+      return history.push("/members");
+    }
+  };
 
   return (
     <div className="row">
@@ -10,77 +53,101 @@ export default function MemberNew() {
       <div className="col-md-6">
         <h1 className="center">Sign Up</h1>
         <div className="mx-auto">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label for="first_name">First Name:</label>
+              <label htmlFor="first_name">First Name:</label>
               <input
                 type="text"
                 placeholder="First name"
                 name="first_name"
-                className="form-control">
+                className="form-control"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}>
               </input>
             </div>
 
             <div className="form-group">
-              <label for="last_name">Last Name:</label>
+              <label htmlFor="last_name">Last Name:</label>
               <input
                 type="text"
                 placeholder="Last name"
                 name="last_name"
-                className="form-control">
+                className="form-control"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}>
               </input>
             </div>
 
             <div className="form-group">
-              <label for="email">Email:</label>
+              <label htmlFor="email">Email:</label>
               <input
                 type="text"
                 placeholder="Email"
                 name="email"
-                className="form-control">
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}>
               </input>
             </div>
 
             <div className="form-group">
-              <label for="facultyselect">Faculty:</label>
-              <select name="faculty" id="facultyselect" className="form-control">
-                {faculties.map((f) => (
-                  <option value={f}>{f}</option>
-                ))}
+              <label htmlFor="faculty">Faculty:</label>
+              <select
+                name="faculty"
+                className="form-control"
+                value={faculty}
+                onChange={(e) => setFaculty(e.target.value)}>
+                  <option>Choose one</option>
+                  {faculties.map((f) => (
+                    <option key={f} value={f}>{f}</option>
+                  ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label for="paid">Paid:</label>
-              <input type="checkbox" name="paid" className="form-control"></input>
+              <label htmlFor="paid">Paid:</label>
+              <input
+                type="checkbox"
+                name="paid"
+                className="form-control"
+                value={paid}
+                onChange={() => setPaid(!paid)}></input>
             </div>
 
             <div className="form-group">
-              <label for="quest_id">Quest ID:</label>
+              <label htmlFor="quest_id">Quest ID:</label>
               <input
                 type="text"
                 placeholder="Quest ID"
                 name="quest_id"
-                className="form-control">
+                className="form-control"
+                value={questId}
+                onChange={(e) => setQuestId(e.target.value)}>
               </input>
             </div>
 
             <div className="form-group">
-              <label for="id">Student Number:</label>
+              <label htmlFor="id">Student Number:</label>
               <input
                 type="text"
                 placeholder="Student Number"
                 name="id"
-                className="form-control">
+                className="form-control"
+                value={id}
+                onChange={(e) => setId(e.target.value)}>
               </input>
             </div>
 
             <div className="form-group">
-              <label for="semester">Semester:</label>
-              <select name="semester_id" className="form-control">
+              <label htmlFor="semester">Semester:</label>
+              <select
+                name="semester_id"
+                className="form-control"
+                value={semesterId}
+                onChange={(e) => setSemesterId(e.target.value)}>
                 <option>Choose Semester</option>
                 {semesters.map((s) => (
-                  <option>{s}</option>
+                  <option key={s.id} value={s.id}>{s.name}</option>
                 ))}
               </select>
             </div>
