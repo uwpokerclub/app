@@ -1,31 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
 
-import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 import SemesterCreate from "./SemesterCreate";
 
 export default function SemestersIndex() {
   const { path, url } = useRouteMatch();
-  const semesters = [
-    {
-      "name": "Winter 2021",
-      "start_date": new Date("2021-01-01T19:00:00"),
-      "end_date": new Date("2021-04-01T19:00:00")
-    },
-    {
-      "name": "Spring 2021",
-      "start_date": new Date("2021-05-01T19:00:00"),
-      "end_date": new Date("2021-08-01T19:00:00")
-    },
-    {
-      "name": "Fall 2021",
-      "start_date": new Date("2021-09-01T19:00:00"),
-      "end_date": new Date("2021-12-01T19:00:00")
-    }
-  ];
+  const [semesters, setSemesters] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/semesters")
+      .then((res) => res.json())
+      .then((data) => setSemesters(data.semesters.map((s) => (
+        {
+          ...s,
+          start_date: new Date(s.start_date),
+          end_date: new Date(s.end_date)
+        }
+      ))));
+  }, []);
 
   return (
     <Switch>
-
       <Route exact path={path}>
         <div>
           <h1>
@@ -41,7 +36,6 @@ export default function SemestersIndex() {
       <Route exact path={`${path}/create`}>
         <SemesterCreate />
       </Route>
-
     </Switch>
   );
 }
@@ -50,10 +44,8 @@ const SemesterTable = ({ semesters }) => {
   return (
     <div className="table-responsive">
       <table className="table">
-
         <thead>
           <tr>
-
             <th>
               Name
             </th>
@@ -65,14 +57,12 @@ const SemesterTable = ({ semesters }) => {
             <th>
               End Date
             </th>
-
           </tr>
         </thead>
 
         <tbody>
           {semesters.map((semester) => (
             <tr>
-
               <td>
                 {semester.name}
               </td>
@@ -84,11 +74,9 @@ const SemesterTable = ({ semesters }) => {
               <td>
                 {semester.end_date.toLocaleDateString("en-US", { dateStyle: "long"})}
               </td>
-
             </tr>
           ))}
         </tbody>
-
       </table>
     </div>
   );
