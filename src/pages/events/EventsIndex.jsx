@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 
@@ -10,58 +10,71 @@ import TermSelector from "../../components/TermSelector/TermSelector";
 
 export default function EventsIndex() {
   const { path, url } = useRouteMatch();
-  const semesters = ["Winter 2021", "Spring 2021", "Fall 2021"];
-  const events = [
-    {
-      "id": 1,
-      "name": "Event 1",
-      "format": "NLHE",
-      "start_date": new Date("2020-02-01T19:00:00"),
-      "notes": "First testing",
-      "count": 3
-    },
-    {
-      "id": 2,
-      "name": "Event 2",
-      "format": "NLHE",
-      "start_date": new Date("2020-02-02T20:00:00"),
-      "notes": "Second testing",
-      "count": 0
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [semesters, setSemesters] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+
+  const viewEventsForSemester = (semesterId) => {
+    if (semesterId === 'All') {
+      setFilteredEvents(events);
     }
-  ];
+    else {
+      setFilteredEvents(events.filter(
+        event => event.semester_id === semesterId
+      ));
+    }
+  };
+
+  useEffect(() => {
+    const requests = [];
+
+    requests.push(fetch("/api/events").then((res) => res.json()));
+    requests.push(fetch("/api/semesters").then((res) => res.json()));
+
+    Promise.all(requests).then(([eventsData, semesterData]) => {
+      setEvents(eventsData.events);
+      setFilteredEvents(eventsData.events);
+      setSemesters(semesterData.semesters);
+      setIsLoading(false);
+    });
+
+  }, []);
+
 
   return (
     <Switch>
       <Route exact path={path}>
-        <div>
+        {!isLoading && (
+          <div>
 
-          <h1>Events</h1>
+            <h1>Events</h1>
 
-          <div className="row">
+            <div className="row">
 
-            <div className="col-md-6">
-              <Link to={`${url}/create`} className="btn btn-primary btn-responsive">
-                Create an Event
-              </Link>
-            </div>
-
-            <div className="col-md-6">
-              <div className="form-group">
-                <select className="form-control" id="term-view" name="semester" onchange={viewEventsForSemester}>
-                  <TermSelector semesters={semesters} />
-                </select>
+              <div className="col-md-6">
+                <Link to={`${url}/create`} className="btn btn-primary btn-responsive">
+                  Create an Event
+                </Link>
               </div>
+
+              <div className="col-md-6">
+                <div className="form-group">
+                  <TermSelector semesters={semesters} onSelect={viewEventsForSemester} />
+                </div>
+              </div>
+
+            </div>
+
+            <div className="list-group">
+              {filteredEvents.map((event) => (
+                <Event event={event} url={url} />
+              ))}
             </div>
 
           </div>
-
-          <div className="list-group">
-            {events.map((event) => (
-              <Event event={event} url={url} />
-            ))}
-          </div>
-
-        </div>
+        )}
       </Route>
       <Route exact path={`${path}/create`}>
         <EventCreate />
@@ -88,8 +101,4 @@ const Event = ({ event, url }) => {
 
     </Link>
   );
-};
-
-const viewEventsForSemester = () => {
-  return ;
 };
