@@ -10,6 +10,7 @@ export default function EventShow() {
   const [isLoading, setIsLoading] = useState(true);
   const { path, url } = useRouteMatch();
   const { event_id } = useParams();
+
   const [event, setEvent] = useState({
     id: event_id,
     name: "",
@@ -37,6 +38,7 @@ export default function EventShow() {
 
   const updateParticipants = (result) => {
     if (result.status !== 200) {
+      console.log(result);
       setError(result.status);
     }
     else {
@@ -45,7 +47,10 @@ export default function EventShow() {
 
     fetch(`/api/participants/?eventId=${event_id}`)
       .then((res) => res.json())
-      .then((data) => setParticipants(data.participants));
+      .then((data) => {
+        setParticipants(data.participants);
+        setFilteredParticipants(data.participants);
+      });
   };
   
   const endEvent =  async () => {
@@ -156,12 +161,14 @@ export default function EventShow() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          user_id,
-          event_id
+          userId: user_id,
+          eventId: event_id
         })
       });
 
-      updateParticipants(res);
+      if (res.status === 200) {
+        updateParticipants(res);
+      }
     };
     
     const signBackInParticipant = async (e, user_id) => {
@@ -173,12 +180,14 @@ export default function EventShow() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          user_id,
-          event_id
+          userId: user_id,
+          eventId: event_id
         })
       });
 
-      updateParticipants(res);
+      if (res.status === 200) {
+        updateParticipants(res);
+      }
     };
     
     const removeParticipant = async (e, user_id) => {
@@ -190,8 +199,8 @@ export default function EventShow() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          user_id,
-          event_id
+          userId: user_id,
+          eventId: event_id
         })
       });
 
@@ -239,37 +248,25 @@ export default function EventShow() {
           {state !== 1 &&
             <div className="btn-group">
               {
-                !participant.signed_out_at
+                participant.signed_out_at
                 ?
-                  <form onSubmit={signOutParticipant} className="form-inline">
-  
-                    <div className="form-group">
-                      <input type="hidden" name="user_id" value={participant.id} className="form-control" />
-                    </div>
-  
+                  <form onSubmit={e => signBackInParticipant(e, participant.id)} className="form-inline">
+      
+                    <button type="submit" className="btn btn-primary">
+                      Sign Back In
+                    </button>
+
+                  </form>
+                :
+                  <form onSubmit={e => signOutParticipant(e, participant.id)} className="form-inline">
+
                     <button type="submit" className="btn btn-info">
                       Sign Out
                     </button>
-  
-                  </form>
-                :
-                  <form onSubmit={signBackInParticipant} className="form-inline">
-  
-                  <div className="form-group">
-                    <input type="hidden" name="user_id" value={participant.id} className="form-control" />
-                  </div>
-  
-                  <button type="submit" className="btn btn-primary">
-                  Sign Back In
-                  </button>
-  
+
                   </form>
               }
-              <form onSubmit={removeParticipant} className="form-inline">
-  
-                <div className="form-group">
-                  <input type="hidden" name="user_id" value={participant.id} className="form-control" />
-                </div>
+              <form onSubmit={e => removeParticipant(e, participant.id)} className="form-inline">
   
                 <button type="submit" className="btn btn-warning">
                   Remove

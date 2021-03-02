@@ -11,8 +11,6 @@ export default function EventSignIn() {
   const set = new Set();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [participants, setParticipants] = useState([]);
-  const [semesterId, setSemesterId] = useState("");
   const [members, setMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState(set);
 
@@ -32,7 +30,7 @@ export default function EventSignIn() {
     });
 
     if (res.status === 200) {
-      // return history.push(`/events/${event_id}`);
+      return history.push(`/events/${event_id}`);
     }
   };
 
@@ -40,17 +38,15 @@ export default function EventSignIn() {
     fetch(`/api/events/${event_id}`)
       .then((res) => res.json())
       .then((eventData) => {
-        setSemesterId(eventData.event.semester_id);
 
         fetch(`/api/participants/?eventId=${event_id}`)
           .then((res) => res.json())
           .then((participantsData) => {
-          setParticipants(participantsData.participants.map((participant) => participant.user_id));
 
           fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
             .then((res) => res.json())
             .then((membersData) => {
-              setMembers(membersData.users.filter((user) => participantsData.participants.map((p) => p.user_id).indexOf(user.id) === -1));
+              setMembers(membersData.users.filter((user) => !new Set(participantsData.participants.map((participant) => participant.id)).has(user.id)));
               setIsLoading(false);
             });
         });
@@ -70,7 +66,9 @@ export default function EventSignIn() {
             defaultChecked={selectedMembers.has(member.id)}
             onClick={(e) => {
               if (selectedMembers.has(e.target.value)) {
-                setSelectedMembers(selectedMembers.delete(e.target.value));
+                const selectedMembersCopy = selectedMembers;
+                selectedMembersCopy.delete(e.target.value);
+                setSelectedMembers(selectedMembersCopy);
               } else {
                 setSelectedMembers(selectedMembers.add(e.target.value));
               }
