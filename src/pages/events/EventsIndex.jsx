@@ -69,7 +69,7 @@ export default function EventsIndex() {
 
             <div className="list-group">
               {filteredEvents.map((event) => (
-                <Event event={event} url={url} />
+                <Event key={event.id} event={event} url={url} />
               ))}
             </div>
 

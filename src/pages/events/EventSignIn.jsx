@@ -26,43 +26,46 @@ export default function EventSignIn() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        event_id,
-        newParticipants
+        eventId: event_id,
+        participants: newParticipants
       })
     });
 
-    if (res.status === 201) {
-      return history.push(`/events/${event_id}`);
+    if (res.status === 200) {
+      // return history.push(`/events/${event_id}`);
     }
   };
 
   useEffect(() => {
-
     fetch(`/api/events/${event_id}`)
       .then((res) => res.json())
       .then((eventData) => {
         setSemesterId(eventData.event.semester_id);
 
-        fetch(`/api/users?semesterId=${semesterId}`)
+        fetch(`/api/participants/?eventId=${event_id}`)
           .then((res) => res.json())
-          .then((membersData) => setMembers(membersData.users.filter((user) => participants.indexOf(user.id) === -1)));
+          .then((participantsData) => {
+          setParticipants(participantsData.participants.map((participant) => participant.user_id));
 
+          fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
+            .then((res) => res.json())
+            .then((membersData) => {
+              setMembers(membersData.users.filter((user) => participantsData.participants.map((p) => p.user_id).indexOf(user.id) === -1));
+              setIsLoading(false);
+            });
+        });
       });
-    fetch(`/api/participants/?eventId=${event_id}`)
-      .then((res) => res.json())
-      .then((participantsData) => setParticipants(participantsData.participants.map((participant) => participant.user_id)));
 
-    //onClick={setIsChecked(!isChecked)}
-  }, []);
+  }, [event_id]);
 
   const Member = ({ member }) => {
     return (
       <div className="Participants__item">
-  
+
         <div className="Participants__item-checkbox">
-          <input 
-            type="checkbox" 
-            name="selected" 
+          <input
+            type="checkbox"
+            name="selected"
             value={member.id}
             defaultChecked={selectedMembers.has(member.id)}
             onClick={(e) => {
@@ -74,19 +77,19 @@ export default function EventSignIn() {
             }}
              />
         </div>
-  
+
         <div className="Participants__item-title">
           <span>
             {member.first_name} {member.last_name}
           </span>
         </div>
-  
+
         <div className="Participants__item-student_id">
           <span>
             {member.id}
           </span>
         </div>
-  
+
       </div>
     );
   };
@@ -106,7 +109,7 @@ export default function EventSignIn() {
               <form onSubmit={registerMembersForEvent}>
 
                 {members.map((member) => (
-                  <Member member={member} />
+                  <Member key={member.id} member={member} />
                 ))}
 
                 <div className="Participants__submit">
