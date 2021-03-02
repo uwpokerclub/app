@@ -8,28 +8,17 @@ import "./Events.scss";
 export default function EventSignIn() {
   const history = useHistory();
   const { event_id } = useParams();
+  const set = new Set();
 
   const [isLoading, setIsLoading] = useState(true);
   const [participants, setParticipants] = useState([]);
   const [semesterId, setSemesterId] = useState("");
   const [members, setMembers] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-
-  const toggleMember = (e) => {
-    e.preventDefault();
-
-    if (e.target.checked) {
-      setSelectedMembers(selectedMembers.push(e.target.value));
-    } else {
-      setSelectedMembers(selectedMembers.filter(
-        member => member !== e.target.value
-      ));
-    }
-  };
+  const [selectedMembers, setSelectedMembers] = useState(set);
 
   const registerMembersForEvent = async (e) => {
     e.preventDefault();
+    const newParticipants = Array.from(selectedMembers);
 
     const res = await fetch("/api/participants", {
       method: "POST",
@@ -38,7 +27,7 @@ export default function EventSignIn() {
       },
       body: JSON.stringify({
         event_id,
-        selectedMembers
+        newParticipants
       })
     });
 
@@ -48,26 +37,23 @@ export default function EventSignIn() {
   };
 
   useEffect(() => {
-    const requests = [];
 
-    requests.push(fetch(`/api/events/${event_id}`).then((res) => res.json()));
-    requests.push(fetch(`/api/participants/?eventId=${event_id}`).then((res) => res.json()));
+    fetch(`/api/events/${event_id}`)
+      .then((res) => res.json())
+      .then((eventData) => {
+        setSemesterId(eventData.event.semester_id);
 
-    Promise.all(requests).then(([eventData, participantsData]) => {
-      setSemesterId(eventData.event.semester_id);
-      setParticipants(participantsData.participants.map((participant) => participant.user_id));
-    });
+        fetch(`/api/users?semesterId=${semesterId}`)
+          .then((res) => res.json())
+          .then((membersData) => setMembers(membersData.users.filter((user) => participants.indexOf(user.id) === -1)));
 
-    const membersRequest = [
-      fetch(`/api/users?semesterId=${semesterId}`).then((res) => res.json())
-    ];
+      });
+    fetch(`/api/participants/?eventId=${event_id}`)
+      .then((res) => res.json())
+      .then((participantsData) => setParticipants(participantsData.participants.map((participant) => participant.user_id)));
 
-    Promise.all(membersRequest).then(([membersData]) => {
-      setMembers(membersData.users.filter((user) => participants.indexOf(user.id) === -1));
-      setIsLoading(false);
-    });
     //onClick={setIsChecked(!isChecked)}
-  }, [event_id, participants, semesterId]);
+  }, []);
 
   const Member = ({ member }) => {
     return (
@@ -78,7 +64,14 @@ export default function EventSignIn() {
             type="checkbox" 
             name="selected" 
             value={member.id}
-            checked={isChecked}
+            defaultChecked={selectedMembers.has(member.id)}
+            onClick={(e) => {
+              if (selectedMembers.has(e.target.value)) {
+                setSelectedMembers(selectedMembers.delete(e.target.value));
+              } else {
+                setSelectedMembers(selectedMembers.add(e.target.value));
+              }
+            }}
              />
         </div>
   
