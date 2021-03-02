@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
-
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import "./Events.scss";
 
 export default function EventSignIn() {
   const history = useHistory();
   const { event_id } = useParams();
-  const set = new Set();
 
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState(set);
+  const [selectedMembers, setSelectedMembers] = useState(new Set());
 
   const registerMembersForEvent = async (e) => {
     e.preventDefault();

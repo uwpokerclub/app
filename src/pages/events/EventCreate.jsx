@@ -36,8 +36,6 @@ export default function EventCreate() {
 
     if (res.status === 201) {
       return history.push("/events");
-    } else {
-      console.log(res);
     }
   };
 

@@ -31,8 +31,7 @@ export default function EventShow() {
     e.preventDefault();
 
     setFilteredParticipants(participants.filter((participant) => 
-      participant.first_name.toLowerCase().includes(search)
-      || participant.last_name.toLowerCase().includes(search)
+      (participant.first_name.toLowerCase() + participant.last_name.toLowerCase()).includes(search)
     ));
   };
 
