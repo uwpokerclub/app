@@ -44,7 +44,7 @@ export default function EventSignIn() {
             Sign In Members
           </h3>
 
-          <form onSubmit={registerMembersForEvent}>
+          <form>
 
             <input type="hidden" name="event_id" value={event_id} />
 
@@ -91,7 +91,4 @@ const Member = ({ member }) => {
 
     </div>
   );
-};
-
-const registerMembersForEvent = (event_id) => {
 };

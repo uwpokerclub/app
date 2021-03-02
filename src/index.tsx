@@ -7,7 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import './index.scss';
 
-import App from './App.jsx';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
