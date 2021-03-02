@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link, Switch, Route, useRouteMatch, useParams } from "react-router-dom";
+import { Link, Switch, Route, useHistory, useRouteMatch, useParams } from "react-router-dom";
 
 import "./Events.scss";
 
 import EventSignIn from "./EventSignIn";
 
 export default function EventShow() {
-  const [isLoading, setIsLoading] = useState(true);
   const { path, url } = useRouteMatch();
   const { event_id } = useParams();
+  const history = useHistory();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [event, setEvent] = useState({
     id: event_id,
     name: "",
@@ -35,15 +36,7 @@ export default function EventShow() {
     ));
   };
 
-  const updateParticipants = (result) => {
-    if (result.status !== 200) {
-      console.log(result);
-      setError(result.status);
-    }
-    else {
-      setError("");
-    }
-
+  const updateParticipants = () => {
     fetch(`/api/participants/?eventId=${event_id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -52,29 +45,31 @@ export default function EventShow() {
       });
   };
   
-  const endEvent =  async () => {
-    const result = await fetch(`/api/events/${event_id}/end`, {
+  const endEvent =  async (e) => {
+    e.preventDefault();
+
+    await fetch(`/api/events/${event_id}/end`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       }
-    });
+    }).then((res) => res.json())
+      .then((data) => {
+        setError(data.message);
 
-    if (result.status !== 200) {
-      setError(result.status);
-    }
-    else {
-      setError("");
-      setEvent({
-        id: event_id,
-        name: event.name,
-        start_date: event.start_date,
-        format: event.format,
-        notes: event.notes,
-        semester_id: event.semester_id,
-        state: 1
+        if (!data.message) {
+          setEvent({
+            id: event_id,
+            name: event.name,
+            start_date: event.start_date,
+            format: event.format,
+            notes: event.notes,
+            semester_id: event.semester_id,
+            state: 1
+          });
+        }
+        history.go(0);
       });
-    }
   };
 
   useEffect(() => {
@@ -150,11 +145,11 @@ export default function EventShow() {
   };
 
   const Participant = ({ participant, index, state }) => {
-  
-    const signOutParticipant = async (e, user_id) => {
+
+    const updateParticipant = async (e, user_id, action) => {
       e.preventDefault();
   
-      const res = await fetch("/api/participants/sign-out", {
+      await fetch(`/api/participants/${action}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -163,51 +158,18 @@ export default function EventShow() {
           userId: user_id,
           eventId: event_id
         })
-      });
+      }).then((response) => response.json())
+        .then((data) => {
+          setError(data.message);
 
-      if (res.status === 200) {
-        updateParticipants(res);
-      }
-    };
-    
-    const signBackInParticipant = async (e, user_id) => {
-      e.preventDefault();
-  
-      const res = await fetch("/api/participants/sign-in", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userId: user_id,
-          eventId: event_id
-        })
-      });
-
-      if (res.status === 200) {
-        updateParticipants(res);
-      }
-    };
-    
-    const removeParticipant = async (e, user_id) => {
-      e.preventDefault();
-  
-      const res = await fetch("/api/participants/delete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userId: user_id,
-          eventId: event_id
-        })
-      });
-
-      updateParticipants(res);
+          if (!data.message) {
+            updateParticipants();
+          }
+        });
     };
   
     return (
-      <tr>
+      <tr key={participant.id}>
   
         <th>
           {index + 1}
@@ -249,7 +211,7 @@ export default function EventShow() {
               {
                 participant.signed_out_at
                 ?
-                  <form onSubmit={e => signBackInParticipant(e, participant.id)} className="form-inline">
+                  <form onSubmit={e => updateParticipant(e, participant.id, "sign-in")} className="form-inline">
       
                     <button type="submit" className="btn btn-primary">
                       Sign Back In
@@ -257,7 +219,7 @@ export default function EventShow() {
 
                   </form>
                 :
-                  <form onSubmit={e => signOutParticipant(e, participant.id)} className="form-inline">
+                  <form onSubmit={e => updateParticipant(e, participant.id, "sign-out")} className="form-inline">
 
                     <button type="submit" className="btn btn-info">
                       Sign Out
@@ -265,7 +227,7 @@ export default function EventShow() {
 
                   </form>
               }
-              <form onSubmit={e => removeParticipant(e, participant.id)} className="form-inline">
+              <form onSubmit={e => updateParticipant(e, participant.id, "delete")} className="form-inline">
   
                 <button type="submit" className="btn btn-warning">
                   Remove
@@ -290,7 +252,7 @@ export default function EventShow() {
             }
 
             {error &&
-              <div className="alert alert-danger">error</div>
+              <div className="alert alert-danger">{error}</div>
             }
 
             <h1>{event.name}</h1>
