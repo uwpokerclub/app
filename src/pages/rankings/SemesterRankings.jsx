@@ -16,35 +16,20 @@ export default function SemesterRankings() {
 
   return (
     <div>
-
-      <h1>
-        Rankings
-      </h1>
+      <h1>Rankings</h1>
 
       <div className="list-group">
         <div className="table-responsive">
-
           <table className="table">
-
             <thead>
               <tr>
+                <th className="sort">Student#</th>
 
-                <th className="sort">
-                  Student#
-                </th>
+                <th className="sort">First Name</th>
 
-                <th className="sort">
-                  First Name
-                </th>
+                <th className="sort">Last Name</th>
 
-                <th className="sort">
-                  Last Name
-                </th>
-
-                <th className="sort">
-                  Score
-                </th>
-
+                <th className="sort">Score</th>
               </tr>
             </thead>
 
@@ -53,12 +38,9 @@ export default function SemesterRankings() {
                 <Ranking key={ranking.id} ranking={ranking} />
               ))}
             </tbody>
-
           </table>
-
         </div>
       </div>
-
     </div>
   );
 }
@@ -66,23 +48,13 @@ export default function SemesterRankings() {
 const Ranking = ({ ranking }) => {
   return (
     <tr>
+      <td className="studentno">{ranking.id}</td>
 
-      <td className="studentno">
-        {ranking.id}
-      </td>
+      <td className="fname">{ranking.first_name}</td>
 
-      <td className="fname">
-        {ranking.first_name}
-      </td>
+      <td className="lname">{ranking.last_name}</td>
 
-      <td className="lname">
-        {ranking.last_name}
-      </td>
-
-      <td className="score">
-        {ranking.points}
-      </td>
-
+      <td className="score">{ranking.points}</td>
     </tr>
   );
 };

@@ -1,38 +1,31 @@
 module.exports = {
-  "roots": [
-    "<rootDir>/src"
-  ],
-  "collectCoverageFrom": [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.d.ts"
-  ],
-  "setupFiles": [
-    "react-app-polyfill/jsdom"
-  ],
-  "setupFilesAfterEnv": [
-    "<rootDir>/src/setupTests.js"
-  ],
-  "testMatch": [
+  roots: ["<rootDir>/src"],
+  collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
+  setupFiles: ["react-app-polyfill/jsdom"],
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
+  testMatch: [
     "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}",
   ],
-  "testEnvironment": "jsdom",
-  "testRunner": "/home/adam/projects/uwpokerclub/app/node_modules/jest-circus/runner.js",
-  "transform": {
+  testEnvironment: "jsdom",
+  testRunner:
+    "/home/adam/projects/uwpokerclub/app/node_modules/jest-circus/runner.js",
+  transform: {
     "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)":
+      "<rootDir>/config/jest/fileTransform.js",
   },
-  "transformIgnorePatterns": [
+  transformIgnorePatterns: [
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-    "^.+\\.module\\.(css|sass|scss)$"
+    "^.+\\.module\\.(css|sass|scss)$",
   ],
-  "modulePaths": [],
-  "moduleNameMapper": {
+  modulePaths: [],
+  moduleNameMapper: {
     "^react-native$": "react-native-web",
-    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
   },
-  "moduleFileExtensions": [
+  moduleFileExtensions: [
     "web.js",
     "js",
     "web.ts",
@@ -42,11 +35,11 @@ module.exports = {
     "json",
     "web.jsx",
     "jsx",
-    "node"
+    "node",
   ],
-  "watchPlugins": [
+  watchPlugins: [
     "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname"
+    "jest-watch-typeahead/testname",
   ],
-  "resetMocks": true
-}
+  resetMocks: true,
+};

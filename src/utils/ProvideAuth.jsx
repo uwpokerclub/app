@@ -7,7 +7,9 @@ export function useAuth() {
 }
 
 function useProvideAuth() {
-  const [authenticated, setAuthenticated] = useState(document.cookie.split(';').some((item) => item.trim().startsWith("pctoken")));
+  const [authenticated, setAuthenticated] = useState(
+    document.cookie.split(";").some((item) => item.trim().startsWith("pctoken"))
+  );
 
   const signin = (cb) => {
     setAuthenticated(true);
@@ -23,16 +25,12 @@ function useProvideAuth() {
   return {
     authenticated,
     signin,
-    signout
+    signout,
   };
 }
 
 export default function ProvideAuth({ children }) {
   const auth = useProvideAuth();
 
-  return (
-    <authContext.Provider value={auth}>
-      {children}
-    </authContext.Provider>
-  );
+  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }

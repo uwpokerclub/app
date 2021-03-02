@@ -16,12 +16,9 @@ export default function RankingsIndex() {
 
   return (
     <Switch>
-
       <Route exact path={path}>
         <div>
-          <h1>
-            Rankings
-          </h1>
+          <h1>Rankings</h1>
           <div className="list-group">
             {semesters.map((semester) => (
               <SemesterItem key={semester.id} semester={semester} url={url} />
@@ -33,7 +30,6 @@ export default function RankingsIndex() {
       <Route path={`${path}/:semesterId`}>
         <SemesterRankings />
       </Route>
-
     </Switch>
   );
 }
@@ -41,9 +37,7 @@ export default function RankingsIndex() {
 const SemesterItem = ({ semester, url }) => {
   return (
     <Link to={`${url}/${semester.id}`} className="list-group-item">
-      <h4 className="list-group-item-heading bold">
-        {semester.name}
-      </h4>
+      <h4 className="list-group-item-heading bold">{semester.name}</h4>
     </Link>
   );
 };
