@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link, Switch, Route, useHistory, useRouteMatch, useParams } from "react-router-dom";
+import { Link, Switch, Route, useHistory, useLocation, useRouteMatch, useParams } from "react-router-dom";
 
 import "./Events.scss";
 
@@ -68,7 +68,6 @@ export default function EventShow() {
             state: 1
           });
         }
-        history.go(0);
       });
   };
 
@@ -87,7 +86,7 @@ export default function EventShow() {
 
   }, [event_id]);
 
-  const EventTable = ({ participantsList, state }) => {
+  const EventTable = ({ participantsList }) => {
     return (
       <div className="panel panel-default">
   
@@ -133,7 +132,7 @@ export default function EventShow() {
   
             <tbody className="list">
               {participantsList.map((participant, index) => (
-                <Participant participant={participant} index={index} state={state} />
+                <Participant participant={participant} index={index} />
               ))}
             </tbody>
   
@@ -144,13 +143,35 @@ export default function EventShow() {
     );
   };
 
-  const Participant = ({ participant, index, state }) => {
+  const Participant = ({ participant, index }) => {
 
     const updateParticipant = async (e, user_id, action) => {
       e.preventDefault();
   
       await fetch(`/api/participants/${action}`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: user_id,
+          eventId: event_id
+        })
+      }).then((response) => response.json())
+        .then((data) => {
+          setError(data.message);
+
+          if (!data.message) {
+            updateParticipants();
+          }
+        });
+    };
+
+    const deleteParticipant = async(e, user_id) => {
+      e.preventDefault();
+
+      await fetch("/api/participants", {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         },
@@ -206,7 +227,7 @@ export default function EventShow() {
         </td>
   
         <td className="center">
-          {state !== 1 &&
+          {event.state !== 1 &&
             <div className="btn-group">
               {
                 participant.signed_out_at
@@ -227,7 +248,7 @@ export default function EventShow() {
 
                   </form>
               }
-              <form onSubmit={e => updateParticipant(e, participant.id, "delete")} className="form-inline">
+              <form onSubmit={e => deleteParticipant(e, participant.id)} className="form-inline">
   
                 <button type="submit" className="btn btn-warning">
                   Remove
@@ -272,7 +293,7 @@ export default function EventShow() {
               </div>
             }
 
-            <EventTable participantsList={filteredParticipants} state={event.state} />
+            <EventTable participantsList={filteredParticipants} />
 
           </div>
         )}
