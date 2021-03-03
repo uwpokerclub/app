@@ -17,21 +17,11 @@ export default function MembersIndex() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const onSelectTerm = (semesterId) => {
-    if (semesterId === "All") {
-      return fetch("/api/users")
-        .then((res) => res.json())
-        .then((data) => {
-          setMembers(data.users);
-          setFilteredMembers(data.users);
-        });
+    if (semesterId === 'All') {
+      setFilteredMembers(members);
+    } else {
+      setFilteredMembers(members.filter((member) => member.semester_id === semesterId));
     }
-
-    return fetch(`/api/users?semesterId=${semesterId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMembers(data.users);
-        setFilteredMembers(data.users);
-      });
   };
 
   const handleExport = (e) => {
