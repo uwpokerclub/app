@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
 import "./Events.scss";
@@ -18,12 +18,12 @@ export default function EventSignIn() {
     const res = await fetch("/api/participants", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         eventId: event_id,
-        participants: newParticipants
-      })
+        participants: newParticipants,
+      }),
     });
 
     if (res.status === 200) {
@@ -35,26 +35,31 @@ export default function EventSignIn() {
     fetch(`/api/events/${event_id}`)
       .then((res) => res.json())
       .then((eventData) => {
-
         fetch(`/api/participants/?eventId=${event_id}`)
           .then((res) => res.json())
           .then((participantsData) => {
-
-          fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
-            .then((res) => res.json())
-            .then((membersData) => {
-              setMembers(membersData.users.filter((user) => !new Set(participantsData.participants.map((participant) => participant.id)).has(user.id)));
-              setIsLoading(false);
-            });
-        });
+            fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
+              .then((res) => res.json())
+              .then((membersData) => {
+                setMembers(
+                  membersData.users.filter(
+                    (user) =>
+                      !new Set(
+                        participantsData.participants.map(
+                          (participant) => participant.id
+                        )
+                      ).has(user.id)
+                  )
+                );
+                setIsLoading(false);
+              });
+          });
       });
-
   }, [event_id]);
 
   const Member = ({ member }) => {
     return (
       <div className="Participants__item">
-
         <div className="Participants__item-checkbox">
           <input
             type="checkbox"
@@ -70,7 +75,7 @@ export default function EventSignIn() {
                 setSelectedMembers(selectedMembers.add(e.target.value));
               }
             }}
-             />
+          />
         </div>
 
         <div className="Participants__item-title">
@@ -80,11 +85,8 @@ export default function EventSignIn() {
         </div>
 
         <div className="Participants__item-student_id">
-          <span>
-            {member.id}
-          </span>
+          <span>{member.id}</span>
         </div>
-
       </div>
     );
   };
@@ -96,13 +98,9 @@ export default function EventSignIn() {
           <div className="col-md-3" />
           <div className="col-md-6">
             <div className="Participants">
-
-              <h3 className="center bold">
-                Sign In Members
-              </h3>
+              <h3 className="center bold">Sign In Members</h3>
 
               <form onSubmit={registerMembersForEvent}>
-
                 {members.map((member) => (
                   <Member key={member.id} member={member} />
                 ))}
@@ -114,9 +112,7 @@ export default function EventSignIn() {
                     </button>
                   </div>
                 </div>
-
               </form>
-
             </div>
           </div>
           <div className="col-md-3" />

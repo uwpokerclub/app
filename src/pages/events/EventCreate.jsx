@@ -23,15 +23,15 @@ export default function EventCreate() {
     const res = await fetch("/api/events", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "name": name,
-        "startDate": startDate,
-        "format": format,
-        "notes": notes,
-        "semesterId": semesterId
-      })
+        name: name,
+        startDate: startDate,
+        format: format,
+        notes: notes,
+        semesterId: semesterId,
+      }),
     });
 
     if (res.status === 201) {
@@ -41,19 +41,14 @@ export default function EventCreate() {
 
   return (
     <div>
-      <h1 className="center">
-        New Event
-      </h1>
+      <h1 className="center">New Event</h1>
 
       <div className="row">
-
         <div className="col-md-3" />
 
         <div className="col-md-6">
           <div className="mx-auto">
-
             <form onSubmit={createEvent}>
-
               <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input
@@ -62,7 +57,8 @@ export default function EventCreate() {
                   name="name"
                   className="form-control"
                   value={name}
-                  onChange={(e) => setName(e.target.value)} />
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
 
               <div className="form-group">
@@ -71,11 +67,12 @@ export default function EventCreate() {
                   name="semester_id"
                   className="form-control"
                   value={semesterId}
-                  onChange={(e) => setSemesterId(e.target.value)} >
-                    <option>Select Semester</option>
-                    {semesters.map((semester) => (
-                      <Semester semester={semester} />
-                    ))}
+                  onChange={(e) => setSemesterId(e.target.value)}
+                >
+                  <option>Select Semester</option>
+                  {semesters.map((semester) => (
+                    <Semester semester={semester} />
+                  ))}
                 </select>
               </div>
 
@@ -86,7 +83,8 @@ export default function EventCreate() {
                   name="start_date"
                   className="form-control"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)} />
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
               </div>
 
               <div className="form-group">
@@ -97,7 +95,8 @@ export default function EventCreate() {
                   name="format"
                   className="form-control"
                   value={format}
-                  onChange={(e) => setFormat(e.target.value)} />
+                  onChange={(e) => setFormat(e.target.value)}
+                />
               </div>
 
               <div className="form-group">
@@ -107,33 +106,31 @@ export default function EventCreate() {
                   name="notes"
                   className="form-control"
                   value={notes}
-                  onChange={(e) => setNotes(e.target.value)} />
+                  onChange={(e) => setNotes(e.target.value)}
+                />
               </div>
 
               <div className="row">
                 <div class="mx-auto">
-                  <button type="submit" value="submit" className="btn btn-success btn-responsive">
+                  <button
+                    type="submit"
+                    value="submit"
+                    className="btn btn-success btn-responsive"
+                  >
                     Submit
                   </button>
                 </div>
               </div>
-
             </form>
-
           </div>
         </div>
 
         <div className="col-md-3" />
-
       </div>
     </div>
   );
 }
 
 const Semester = ({ semester }) => {
-  return (
-    <option value={semester.id}>
-      {semester.name}
-    </option>
-  );
+  return <option value={semester.id}>{semester.name}</option>;
 };

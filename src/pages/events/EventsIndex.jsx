@@ -17,13 +17,12 @@ export default function EventsIndex() {
   const [filteredEvents, setFilteredEvents] = useState([]);
 
   const viewEventsForSemester = (semesterId) => {
-    if (semesterId === 'All') {
+    if (semesterId === "All") {
       setFilteredEvents(events);
-    }
-    else {
-      setFilteredEvents(events.filter(
-        event => event.semester_id === semesterId
-      ));
+    } else {
+      setFilteredEvents(
+        events.filter((event) => event.semester_id === semesterId)
+      );
     }
   };
 
@@ -39,32 +38,33 @@ export default function EventsIndex() {
       setSemesters(semesterData.semesters);
       setIsLoading(false);
     });
-
   }, []);
-
 
   return (
     <Switch>
       <Route exact path={path}>
         {!isLoading && (
           <div>
-
             <h1>Events</h1>
 
             <div className="row">
-
               <div className="col-md-6">
-                <Link to={`${url}/create`} className="btn btn-primary btn-responsive">
+                <Link
+                  to={`${url}/create`}
+                  className="btn btn-primary btn-responsive"
+                >
                   Create an Event
                 </Link>
               </div>
 
               <div className="col-md-6">
                 <div className="form-group">
-                  <TermSelector semesters={semesters} onSelect={viewEventsForSemester} />
+                  <TermSelector
+                    semesters={semesters}
+                    onSelect={viewEventsForSemester}
+                  />
                 </div>
               </div>
-
             </div>
 
             <div className="list-group">
@@ -72,7 +72,6 @@ export default function EventsIndex() {
                 <Event key={event.id} event={event} url={url} />
               ))}
             </div>
-
           </div>
         )}
       </Route>
@@ -89,16 +88,28 @@ export default function EventsIndex() {
 const Event = ({ event, url }) => {
   return (
     <Link to={`${url}/${event.id}`} className="list-group-item">
-
       <h4 className="list-group-item-heading bold">{event.name}</h4>
 
       <div className="list-group-item-text">
-        <p><strong>Format:</strong> {event.format}</p>
-        <p><strong>Date:</strong> {event.start_date.toLocaleString("en-US", { hour12: true, month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" })}</p>
-        <p><strong>Additional Details:</strong> {event.notes}</p>
+        <p>
+          <strong>Format:</strong> {event.format}
+        </p>
+        <p>
+          <strong>Date:</strong>{" "}
+          {event.start_date.toLocaleString("en-US", {
+            hour12: true,
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </p>
+        <p>
+          <strong>Additional Details:</strong> {event.notes}
+        </p>
         <p> {event.count || "No"} Entries </p>
       </div>
-
     </Link>
   );
 };

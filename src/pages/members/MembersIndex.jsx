@@ -17,10 +17,12 @@ export default function MembersIndex() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const onSelectTerm = (semesterId) => {
-    if (semesterId === 'All') {
+    if (semesterId === "All") {
       setFilteredMembers(members);
     } else {
-      setFilteredMembers(members.filter((member) => member.semester_id === semesterId));
+      setFilteredMembers(
+        members.filter((member) => member.semester_id === semesterId)
+      );
     }
   };
 
