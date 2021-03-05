@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import { useAuth } from "../../utils/ProvideAuth";
 
 import "./Navbar.scss";
 
-export default function Navbar() {
+export default function Navbar(): ReactElement {
   const auth = useAuth();
   const history = useHistory();
 
   const [hidden, setHidden] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     auth.signout(() => {
       history.push("/login");
     });

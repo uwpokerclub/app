@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
+import { Semester } from "../../types";
 
-export default function TermSelector({ semesters, onSelect }) {
+interface Props {
+  semesters: Semester[];
+  onSelect: (selected: string) => void;
+}
+
+export default function TermSelector({ semesters, onSelect }: Props): ReactElement {
   const [value, setValue] = useState("");
 
-  const handleChange = (selected) => {
+  const handleChange = (selected: string): void => {
     setValue(selected);
     onSelect(selected);
   };
