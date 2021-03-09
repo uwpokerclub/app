@@ -6,7 +6,10 @@ interface Props {
   onSelect: (selected: string) => void;
 }
 
-export default function TermSelector({ semesters, onSelect }: Props): ReactElement {
+export default function TermSelector({
+  semesters,
+  onSelect,
+}: Props): ReactElement {
   const [value, setValue] = useState("");
 
   const handleChange = (selected: string): void => {

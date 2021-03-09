@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import SemestersIndex from "./pages/semesters/SemestersIndex";
 import RankingsIndex from "./pages/rankings/RankingsIndex";
 import LoginIndex from "./pages/login/LoginIndex";
 
-export default function App() {
+export default function App(): ReactElement {
   return (
     <ProvideAuth>
       <Router forceRefresh>

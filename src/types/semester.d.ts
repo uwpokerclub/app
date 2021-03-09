@@ -1,5 +1,5 @@
 export type Semester = {
-  id: string
+  id: string;
   name: string;
   meta: string;
-}
+};

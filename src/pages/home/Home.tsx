@@ -1,14 +1,14 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import logo from "../../assets/logo.png";
 
 import { Link } from "react-router-dom";
 
 import "./Home.scss";
 
-export default function Home() {
+export default function Home(): ReactElement {
   return (
     <div className="center">
-      <img src={logo} className="ps-club-logo" alt="" />
+      <img src={logo} className="ps-club-logo" alt="Logo" />
 
       <h1>UW Poker Studies Club</h1>
       <p>Welcome to The Admin Interface</p>
