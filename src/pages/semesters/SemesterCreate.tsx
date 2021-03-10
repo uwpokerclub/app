@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { FormEvent, ReactElement, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-export default function SemesterCreate() {
+export default function SemesterCreate(): ReactElement {
   const history = useHistory();
 
   const [name, setName] = useState("");
@@ -10,7 +10,7 @@ export default function SemesterCreate() {
   const [meta, setMeta] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     let status = 0;
@@ -92,11 +92,11 @@ export default function SemesterCreate() {
               <div className="form-group">
                 <label htmlFor="meta">Additional Details</label>
                 <textarea
-                  rows="6"
+                  rows={6}
                   name="meta"
                   className="form-control"
                   value={meta}
-                  onChange={(e) => setMeta(e)}
+                  onChange={(e) => setMeta(e.target.value)}
                 />
               </div>
 
