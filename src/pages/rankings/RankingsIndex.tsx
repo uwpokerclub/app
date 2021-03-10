@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-
+import React, { ReactElement, useEffect, useState } from "react";
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
+
+import { Semester } from "../../types";
+
 import SemesterRankings from "./SemesterRankings";
 
-export default function RankingsIndex() {
+export default function RankingsIndex(): ReactElement {
   const { path, url } = useRouteMatch();
 
-  const [semesters, setSemesters] = useState([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
 
   useEffect(() => {
     fetch("/api/semesters")
@@ -21,7 +23,9 @@ export default function RankingsIndex() {
           <h1>Rankings</h1>
           <div className="list-group">
             {semesters.map((semester) => (
-              <SemesterItem key={semester.id} semester={semester} url={url} />
+              <Link key={semester.id} to={`${url}/${semester.id}`} className="list-group-item">
+                <h4 className="list-group-item-heading bold">{semester.name}</h4>
+              </Link>
             ))}
           </div>
         </div>
@@ -33,11 +37,3 @@ export default function RankingsIndex() {
     </Switch>
   );
 }
-
-const SemesterItem = ({ semester, url }) => {
-  return (
-    <Link to={`${url}/${semester.id}`} className="list-group-item">
-      <h4 className="list-group-item-heading bold">{semester.name}</h4>
-    </Link>
-  );
-};
