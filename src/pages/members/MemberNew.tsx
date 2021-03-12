@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { faculties } from "../../constants";
+import { Semester } from "../../types";
 
-export default function MemberNew() {
+export default function MemberNew(): ReactElement {
   const history = useHistory();
 
-  const faculties = [
-    "AHS",
-    "Arts",
-    "Engineering",
-    "Environment",
-    "Math",
-    "Science",
-  ];
-
-  const [semesters, setSemesters] = useState([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +22,7 @@ export default function MemberNew() {
       .then((data) => setSemesters(data.semesters));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await fetch("/api/users", {
@@ -120,7 +113,7 @@ export default function MemberNew() {
                 type="checkbox"
                 name="paid"
                 className="form-control"
-                value={paid}
+                defaultChecked={paid}
                 onChange={() => setPaid(!paid)}
               ></input>
             </div>

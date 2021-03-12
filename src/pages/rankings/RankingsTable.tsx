@@ -37,5 +37,5 @@ export default function RankingsTable({ rankings }: Props): ReactElement {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

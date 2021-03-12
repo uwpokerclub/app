@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 
 import MemberNew from "./MemberNew";
 import MemberShow from "./MemberShow";
+import MembersTable from "./MembersTable";
 
 import TermSelector from "../../components/TermSelector/TermSelector";
 
-export default function MembersIndex() {
+export default function MembersIndex(): ReactElement {
   const { path, url } = useRouteMatch();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +23,7 @@ export default function MembersIndex() {
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const onSelectTerm = (semesterId) => {
+  const onSelectTerm = (semesterId: string) => {
     if (semesterId === "All") {
       setFilteredMembers(members);
     } else {
@@ -26,7 +33,7 @@ export default function MembersIndex() {
     }
   };
 
-  const handleExport = (e) => {
+  const handleExport = (e: FormEvent) => {
     e.preventDefault();
 
     fetch("/api/users/export", { method: "POST" })
@@ -37,7 +44,7 @@ export default function MembersIndex() {
       });
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSearchQuery(e.target.value);
 
@@ -104,7 +111,7 @@ export default function MembersIndex() {
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div className="input-group">
                   <span className="input-group-btn">
-                    <button type="search" className="btn btn-default">
+                    <button type="button" className="btn btn-default">
                       Search
                     </button>
                   </span>
@@ -131,50 +138,5 @@ export default function MembersIndex() {
         <MemberShow />
       </Route>
     </Switch>
-  );
-}
-
-function MembersTable({ url, members }) {
-  return (
-    <div className="table-responsive">
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th data-sort="studentno" className="sort">
-              Student Number
-            </th>
-            <th data-sort="fname" className="sort">
-              First Name
-            </th>
-            <th data-sort="lname" className="sort">
-              Last Name
-            </th>
-            <th data-sort="email" className="sort">
-              Email
-            </th>
-            <th data-sort="questid" className="sort">
-              Quest ID
-            </th>
-            <th data-sort="paid" className="sort">
-              Paid
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((m) => (
-            <tr key={m.id} className={`${m.paid === "Yes" ? "" : "danger"}`}>
-              <td className="studentno">
-                <Link to={`${url}/${m.id}`}>{m.id}</Link>
-              </td>
-              <td className="fname">{m.first_name}</td>
-              <td className="lname">{m.last_name}</td>
-              <td className="email">{m.email}</td>
-              <td className="questid">{m.quest_id}</td>
-              <td className="paid">{m.paid ? "Yes" : "No"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   );
 }

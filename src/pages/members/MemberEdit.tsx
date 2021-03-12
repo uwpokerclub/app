@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 
 import { useHistory, useParams } from "react-router-dom";
+import { faculties } from "../../constants";
 
-export default function MemberUpdate() {
-  const { memberId } = useParams();
+export default function MemberUpdate(): ReactElement {
+  const { memberId } = useParams<{ memberId: string }>();
   const history = useHistory();
-
-  const faculties = [
-    "AHS",
-    "Arts",
-    "Engineering",
-    "Environment",
-    "Math",
-    "Science",
-  ];
 
   const [isLoading, setIsLoading] = useState(true);
   const [semesters, setSemesters] = useState([]);
@@ -26,9 +18,7 @@ export default function MemberUpdate() {
   const [createdAt, setCreatedAt] = useState(null);
   const [semesterId, setSemesterId] = useState("");
 
-  const handleDelete = (e) => {
-    e.preventDefault();
-
+  const handleDelete = () => {
     fetch(`/api/users/${memberId}`, { method: "DELETE" }).then((res) => {
       if (res.status === 200) {
         return history.replace("/members");
@@ -36,7 +26,7 @@ export default function MemberUpdate() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await fetch(`/api/users/${memberId}`, {
@@ -123,7 +113,7 @@ export default function MemberUpdate() {
                   <input
                     type="checkbox"
                     name="paid"
-                    checked={paid}
+                    defaultChecked={paid}
                     onChange={() => setPaid(!paid)}
                     style={{ margin: "0 10px" }}
                   ></input>
@@ -208,7 +198,7 @@ export default function MemberUpdate() {
               <button
                 type="button"
                 className="btn btn-danger"
-                onClick={handleDelete}
+                onClick={() => handleDelete()}
               >
                 Delete Member
               </button>

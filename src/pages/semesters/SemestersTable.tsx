@@ -25,11 +25,19 @@ export default function SemestersTable({ semesters }: Props): ReactElement {
               <td>{semester.name}</td>
 
               <td>
-                {semester.start_date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                {semester.start_date.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </td>
 
               <td>
-                {semester.end_date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                {semester.end_date.toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
               </td>
             </tr>
           ))}
@@ -37,5 +45,4 @@ export default function SemestersTable({ semesters }: Props): ReactElement {
       </table>
     </div>
   );
-
 }

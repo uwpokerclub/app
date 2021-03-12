@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import {
   Route,
   Link,
@@ -6,16 +6,17 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
+import { Semester, User } from "../../types";
 
-import MemberUpdate from "./MemberUpdate";
+import MemberUpdate from "./MemberEdit";
 
-export default function MemberShow() {
+export default function MemberShow(): ReactElement {
   const { path, url } = useRouteMatch();
-  const { memberId } = useParams();
+  const { memberId } = useParams<{ memberId: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [member, setMember] = useState({});
-  const [semester, setSemester] = useState({});
+  const [member, setMember] = useState<User>(null);
+  const [semester, setSemester] = useState<Semester>(null);
 
   useEffect(() => {
     fetch(`/api/users/${memberId}`)
@@ -121,7 +122,10 @@ export default function MemberShow() {
                       type="text"
                       name="created_at"
                       value={member.created_at.toLocaleDateString("en-US", {
-                        dateStyle: "full",
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       })}
                       className="form-control"
                       readOnly
