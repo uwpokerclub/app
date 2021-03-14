@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, ReactElement, useState } from "react";
 import {
   Route,
   Switch,
@@ -10,10 +10,10 @@ import {
 import { useAuth } from "../../utils/ProvideAuth";
 import LoginCreate from "./LoginCreate";
 
-export default function LoginIndex() {
+export default function LoginIndex(): ReactElement {
   const { path } = useRouteMatch();
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{ from: { pathname: string } }>();
   const auth = useAuth();
 
   const [username, setUsername] = useState("");
@@ -26,7 +26,7 @@ export default function LoginIndex() {
     history.replace(from);
   }
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await fetch("/api/login/session", {

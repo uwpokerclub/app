@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { FormEvent, ReactElement, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 import { useAuth } from "../../utils/ProvideAuth";
 
-export default function LoginCreate() {
+export default function LoginCreate(): ReactElement {
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation<{ from: { pathname: string } }>();
   const auth = useAuth();
 
   const [username, setUsername] = useState("");
@@ -18,7 +18,7 @@ export default function LoginCreate() {
     history.replace(from);
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await fetch("/api/login", {
