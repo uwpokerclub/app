@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-export default function EventCreate() {
+import { Semester } from "../../types";
+
+export default function EventCreate(): ReactElement {
   const history = useHistory();
 
-  const [semesters, setSemesters] = useState([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [format, setFormat] = useState("");
@@ -17,7 +19,7 @@ export default function EventCreate() {
       .then((data) => setSemesters(data.semesters));
   }, []);
 
-  const createEvent = async (e) => {
+  const createEvent = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await fetch("/api/events", {
@@ -71,7 +73,7 @@ export default function EventCreate() {
                 >
                   <option>Select Semester</option>
                   {semesters.map((semester) => (
-                    <Semester semester={semester} />
+                    <option value={semester.id}>{semester.name}</option>
                   ))}
                 </select>
               </div>
@@ -102,7 +104,7 @@ export default function EventCreate() {
               <div className="form-group">
                 <label htmlFor="notes">Additional Details</label>
                 <textarea
-                  rows="6"
+                  rows={6}
                   name="notes"
                   className="form-control"
                   value={notes}
@@ -111,7 +113,7 @@ export default function EventCreate() {
               </div>
 
               <div className="row">
-                <div class="mx-auto">
+                <div className="mx-auto">
                   <button
                     type="submit"
                     value="submit"
@@ -130,7 +132,3 @@ export default function EventCreate() {
     </div>
   );
 }
-
-const Semester = ({ semester }) => {
-  return <option value={semester.id}>{semester.name}</option>;
-};

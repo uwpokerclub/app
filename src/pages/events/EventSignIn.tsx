@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { Entry, User } from "../../types";
 
 import "./Events.scss";
 
-export default function EventSignIn() {
+export default function EventSignIn(): ReactElement {
   const history = useHistory();
-  const { event_id } = useParams();
+  const { eventId } = useParams<{ eventId: string }>();
 
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState(new Set());
 
-  const registerMembersForEvent = async (e) => {
+  const registerMembersForEvent = async (e: FormEvent) => {
     e.preventDefault();
     const newParticipants = Array.from(selectedMembers);
 
@@ -21,21 +22,21 @@ export default function EventSignIn() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        eventId: event_id,
+        eventId: eventId,
         participants: newParticipants,
       }),
     });
 
     if (res.status === 200) {
-      return history.push(`/events/${event_id}`);
+      return history.push(`/events/${eventId}`);
     }
   };
 
   useEffect(() => {
-    fetch(`/api/events/${event_id}`)
+    fetch(`/api/events/${eventId}`)
       .then((res) => res.json())
       .then((eventData) => {
-        fetch(`/api/participants/?eventId=${event_id}`)
+        fetch(`/api/participants/?eventId=${eventId}`)
           .then((res) => res.json())
           .then((participantsData) => {
             fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
@@ -43,10 +44,10 @@ export default function EventSignIn() {
               .then((membersData) => {
                 setMembers(
                   membersData.users.filter(
-                    (user) =>
+                    (user: User) =>
                       !new Set(
                         participantsData.participants.map(
-                          (participant) => participant.id
+                          (entry: Entry) => entry.id
                         )
                       ).has(user.id)
                   )
@@ -55,42 +56,7 @@ export default function EventSignIn() {
               });
           });
       });
-  }, [event_id]);
-
-  const Member = ({ member }) => {
-    return (
-      <div className="Participants__item">
-        <div className="Participants__item-checkbox">
-          <input
-            type="checkbox"
-            name="selected"
-            value={member.id}
-            defaultChecked={selectedMembers.has(member.id)}
-            onClick={(e) => {
-              if (selectedMembers.has(e.target.value)) {
-                const selectedMembersCopy = selectedMembers;
-                selectedMembersCopy.delete(e.target.value);
-                setSelectedMembers(selectedMembersCopy);
-              } else {
-                setSelectedMembers(selectedMembers.add(e.target.value));
-              }
-            }}
-          />
-        </div>
-
-        <div className="Participants__item-title">
-          <span>
-            {member.first_name} {member.last_name}
-          </span>
-        </div>
-
-        <div className="Participants__item-student_id">
-          <span>{member.id}</span>
-        </div>
-      </div>
-    );
-  };
-
+  }, [eventId]);
   return (
     <div className="row">
       {!isLoading && (
@@ -102,7 +68,37 @@ export default function EventSignIn() {
 
               <form onSubmit={registerMembersForEvent}>
                 {members.map((member) => (
-                  <Member key={member.id} member={member} />
+                  <div key={member.id} className="Participants__item">
+                    <div className="Participants__item-checkbox">
+                      <input
+                        type="checkbox"
+                        name="selected"
+                        value={member.id}
+                        defaultChecked={selectedMembers.has(member.id)}
+                        onChange={(e) => {
+                          if (selectedMembers.has(e.target.value)) {
+                            const selectedMembersCopy = selectedMembers;
+                            selectedMembersCopy.delete(e.target.value);
+                            setSelectedMembers(selectedMembersCopy);
+                          } else {
+                            setSelectedMembers(
+                              selectedMembers.add(e.target.value)
+                            );
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div className="Participants__item-title">
+                      <span>
+                        {member.first_name} {member.last_name}
+                      </span>
+                    </div>
+
+                    <div className="Participants__item-student_id">
+                      <span>{member.id}</span>
+                    </div>
+                  </div>
                 ))}
 
                 <div className="Participants__submit">

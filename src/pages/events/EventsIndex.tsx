@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
 
@@ -8,7 +8,7 @@ import EventCreate from "./EventCreate";
 
 import TermSelector from "../../components/TermSelector/TermSelector";
 
-export default function EventsIndex() {
+export default function EventsIndex(): ReactElement {
   const { path, url } = useRouteMatch();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +16,7 @@ export default function EventsIndex() {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
 
-  const viewEventsForSemester = (semesterId) => {
+  const viewEventsForSemester = (semesterId: string): void => {
     if (semesterId === "All") {
       setFilteredEvents(events);
     } else {
@@ -69,7 +69,34 @@ export default function EventsIndex() {
 
             <div className="list-group">
               {filteredEvents.map((event) => (
-                <Event key={event.id} event={event} url={url} />
+                <Link
+                  key={event.id}
+                  to={`${url}/${event.id}`}
+                  className="list-group-item"
+                >
+                  <h4 className="list-group-item-heading bold">{event.name}</h4>
+
+                  <div className="list-group-item-text">
+                    <p>
+                      <strong>Format:</strong> {event.format}
+                    </p>
+                    <p>
+                      <strong>Date:</strong>{" "}
+                      {event.start_date.toLocaleString("en-US", {
+                        hour12: true,
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <p>
+                      <strong>Additional Details:</strong> {event.notes}
+                    </p>
+                    <p> {event.count || "No"} Entries </p>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -78,38 +105,9 @@ export default function EventsIndex() {
       <Route exact path={`${path}/create`}>
         <EventCreate />
       </Route>
-      <Route path={`${path}/:event_id`}>
+      <Route path={`${path}/:eventId`}>
         <EventShow />
       </Route>
     </Switch>
   );
 }
-
-const Event = ({ event, url }) => {
-  return (
-    <Link to={`${url}/${event.id}`} className="list-group-item">
-      <h4 className="list-group-item-heading bold">{event.name}</h4>
-
-      <div className="list-group-item-text">
-        <p>
-          <strong>Format:</strong> {event.format}
-        </p>
-        <p>
-          <strong>Date:</strong>{" "}
-          {event.start_date.toLocaleString("en-US", {
-            hour12: true,
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-          })}
-        </p>
-        <p>
-          <strong>Additional Details:</strong> {event.notes}
-        </p>
-        <p> {event.count || "No"} Entries </p>
-      </div>
-    </Link>
-  );
-};
