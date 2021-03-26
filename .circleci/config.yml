@@ -1,0 +1,11 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@1.5.0
+workflows:
+  version: 2
+  publish_image:
+    when: << pipeline.git.tag >>
+    jobs:
+      - docker/publish:
+          image: uwpokerclub/app
+          tag: <<pipeline.git.tag>>,latest
