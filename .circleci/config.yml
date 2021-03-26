@@ -9,3 +9,4 @@ workflows:
       - docker/publish:
           image: uwpokerclub/app
           tag: <<pipeline.git.tag>>,latest
+          extra_build_args: --rm
