@@ -11,4 +11,5 @@ RUN apk add --no-cache --virtual .gyp python make g++ \
     && npm run build
 
 FROM alpine:latest
-COPY --from=node_stage /usr/app/build /usr/api/
+WORKDIR /usr/app/build/
+COPY --from=node_stage /usr/app/build .
