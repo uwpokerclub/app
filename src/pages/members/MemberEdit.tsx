@@ -190,18 +190,20 @@ export default function MemberUpdate(): ReactElement {
                   </select>
                 </div>
 
-                <button type="submit" className="btn btn-success">
-                  Save
-                </button>
-              </form>
+                <div className="form-group center">
+                  <button type="submit" className="btn btn-success">
+                    Save
+                  </button>
 
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleDelete()}
-              >
-                Delete Member
-              </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => handleDelete()}
+                  >
+                    Delete Member
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </>

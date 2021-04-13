@@ -145,9 +145,11 @@ export default function MemberShow(): ReactElement {
                     ></input>
                   </div>
 
-                  <Link to={`${url}/edit`} className="btn btn-success">
-                    Update
-                  </Link>
+                  <div className="form-group center">
+                    <Link to={`${url}/edit`} className="btn btn-success">
+                      Update
+                    </Link>
+                  </div>
                 </form>
               </div>
             </div>
