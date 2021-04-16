@@ -87,26 +87,28 @@ export default function MembersIndex(): ReactElement {
             </div>
             <div className="row">
               <div className="col-lg-6 col-md-6 col-sm-6">
-                <Link
-                  to={`${url}/new`}
-                  className="btn btn-primary btn-responsive"
-                >
-                  Add Members
-                </Link>
-
-                <form className="form-inline">
-                  <div className="form-group">
-                    <input type="hidden" className="form-control"></input>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={(e) => handleExport(e)}
+                <div className="btn-group">
+                  <Link
+                    to={`${url}/new`}
+                    className="btn btn-primary btn-responsive"
                   >
-                    Export
-                  </button>
-                </form>
+                    Add Members
+                  </Link>
+
+                  <form className="form-inline">
+                    <div className="form-group">
+                      <input type="hidden" className="form-control"></input>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={(e) => handleExport(e)}
+                    >
+                      Export
+                    </button>
+                  </form>
+                </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div className="input-group">
