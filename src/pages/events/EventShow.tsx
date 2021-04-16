@@ -86,13 +86,15 @@ export default function EventShow(): ReactElement {
       setParticipants(
         participantsData.participants.map((p: Entry) => ({
           ...p,
-          signed_out_at: new Date(p.signed_out_at),
+          signed_out_at:
+            p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
         }))
       );
       setFilteredParticipants(
         participantsData.participants.map((p: Entry) => ({
           ...p,
-          signed_out_at: new Date(p.signed_out_at),
+          signed_out_at:
+            p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
         }))
       );
       setIsLoading(false);

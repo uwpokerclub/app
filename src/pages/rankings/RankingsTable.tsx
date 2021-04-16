@@ -12,6 +12,8 @@ export default function RankingsTable({ rankings }: Props): ReactElement {
       <table className="table">
         <thead>
           <tr>
+            <th>Place</th>
+
             <th className="sort">Student#</th>
 
             <th className="sort">First Name</th>
@@ -23,8 +25,9 @@ export default function RankingsTable({ rankings }: Props): ReactElement {
         </thead>
 
         <tbody className="list">
-          {rankings.map((ranking) => (
+          {rankings.map((ranking, idx) => (
             <tr key={ranking.id}>
+              <td>{idx + 1}</td>
               <td className="studentno">{ranking.id}</td>
 
               <td className="fname">{ranking.first_name}</td>
