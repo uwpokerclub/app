@@ -7,6 +7,7 @@ import EventShow from "./EventShow";
 import EventCreate from "./EventCreate";
 
 import TermSelector from "../../components/TermSelector/TermSelector";
+import NoResults from "../../components/NoResults/NoResults";
 
 export default function EventsIndex(): ReactElement {
   const { path, url } = useRouteMatch();
@@ -68,36 +69,47 @@ export default function EventsIndex(): ReactElement {
             </div>
 
             <div className="list-group">
-              {filteredEvents.map((event) => (
-                <Link
-                  key={event.id}
-                  to={`${url}/${event.id}`}
-                  className="list-group-item"
-                >
-                  <h4 className="list-group-item-heading bold">{event.name}</h4>
+              {filteredEvents.length > 0 ? (
+                <>
+                  {filteredEvents.map((event) => (
+                    <Link
+                      key={event.id}
+                      to={`${url}/${event.id}`}
+                      className="list-group-item"
+                    >
+                      <h4 className="list-group-item-heading bold">
+                        {event.name}
+                      </h4>
 
-                  <div className="list-group-item-text">
-                    <p>
-                      <strong>Format:</strong> {event.format}
-                    </p>
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {event.start_date.toLocaleString("en-US", {
-                        hour12: true,
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                    <p>
-                      <strong>Additional Details:</strong> {event.notes}
-                    </p>
-                    <p> {event.count || "No"} Entries </p>
-                  </div>
-                </Link>
-              ))}
+                      <div className="list-group-item-text">
+                        <p>
+                          <strong>Format:</strong> {event.format}
+                        </p>
+                        <p>
+                          <strong>Date:</strong>{" "}
+                          {event.start_date.toLocaleString("en-US", {
+                            hour12: true,
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                        <p>
+                          <strong>Additional Details:</strong> {event.notes}
+                        </p>
+                        <p> {event.count || "No"} Entries </p>
+                      </div>
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <NoResults
+                  title="No events have been created."
+                  body="Create a new event above to get started."
+                />
+              )}
             </div>
           </div>
         )}
