@@ -81,24 +81,34 @@ export default function EventShow(): ReactElement {
       fetch(`/api/participants/?eventId=${eventId}`).then((res) => res.json())
     );
 
-    Promise.all(requests).then(([eventData, participantsData]) => {
-      setEvent(eventData.event);
-      setParticipants(
-        participantsData.participants.map((p: Entry) => ({
-          ...p,
-          signed_out_at:
-            p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
-        }))
-      );
-      setFilteredParticipants(
-        participantsData.participants.map((p: Entry) => ({
-          ...p,
-          signed_out_at:
-            p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
-        }))
-      );
-      setIsLoading(false);
-    });
+    Promise.all(requests).then(
+      ([eventData, participantsData]: [{ event: Event }, any]) => {
+        setEvent({
+          id: eventData.event.id,
+          name: eventData.event.name,
+          format: eventData.event.format,
+          notes: eventData.event.notes,
+          semester_id: eventData.event.semester_id,
+          start_date: new Date(eventData.event.start_date),
+          state: eventData.event.state,
+        });
+        setParticipants(
+          participantsData.participants.map((p: Entry) => ({
+            ...p,
+            signed_out_at:
+              p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
+          }))
+        );
+        setFilteredParticipants(
+          participantsData.participants.map((p: Entry) => ({
+            ...p,
+            signed_out_at:
+              p.signed_out_at !== null ? new Date(p.signed_out_at) : null,
+          }))
+        );
+        setIsLoading(false);
+      }
+    );
   }, [eventId]);
 
   return (

@@ -9,7 +9,7 @@
     "lint": "npx eslint --cache . && npx prettier --check .",
     "lint:fix": "npx eslint --fix . && npx prettier --write ."
   },
-  "proxy": "http://uwpokerclub-dev.herokuapp.com",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
