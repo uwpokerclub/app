@@ -82,7 +82,7 @@ export default function EventShow(): ReactElement {
     );
 
     Promise.all(requests).then(
-      ([eventData, participantsData]: [{ event: Event }, any]) => {
+      ([eventData, participantsData]: [{ event: Event }, { participants: Entry[]}]) => {
         setEvent({
           id: eventData.event.id,
           name: eventData.event.name,
