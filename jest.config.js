@@ -9,7 +9,7 @@ module.exports = {
   ],
   testEnvironment: "jsdom",
   testRunner:
-    "/home/adam/projects/uwpokerclub/app/node_modules/jest-circus/runner.js",
+    "<rootDir>/node_modules/jest-circus/runner.js",
   transform: {
     "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
