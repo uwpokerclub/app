@@ -8,8 +8,7 @@ module.exports = {
     "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}",
   ],
   testEnvironment: "jsdom",
-  testRunner:
-    "<rootDir>/node_modules/jest-circus/runner.js",
+  testRunner: "<rootDir>/node_modules/jest-circus/runner.js",
   transform: {
     "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
