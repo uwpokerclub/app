@@ -3,7 +3,7 @@ name: Continous Integration
 on: [push]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
