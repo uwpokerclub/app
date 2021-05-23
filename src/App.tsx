@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar/Navbar";
 import EventsIndex from "./pages/events/EventsIndex";
 import Home from "./pages/home/Home";
 import MembersIndex from "./pages/members/MembersIndex";
-import SemestersIndex from "./pages/semesters/SemestersIndex";
+import SemestersRoute from "./pages/semesters/SemestersRoute";
 import RankingsIndex from "./pages/rankings/RankingsIndex";
 import LoginIndex from "./pages/login/LoginIndex";
 
@@ -39,7 +39,7 @@ export default function App(): ReactElement {
                 <EventsIndex />
               </PrivateRoute>
               <PrivateRoute path="/semesters">
-                <SemestersIndex />
+                <SemestersRoute />
               </PrivateRoute>
               <PrivateRoute path="/rankings">
                 <RankingsIndex />

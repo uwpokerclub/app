@@ -8,12 +8,10 @@ export default function MemberUpdate(): ReactElement {
   const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [semesters, setSemesters] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [faculty, setFaculty] = useState("");
-  const [paid, setPaid] = useState(false);
   const [id, setId] = useState("");
   const [createdAt, setCreatedAt] = useState(null);
   const [semesterId, setSemesterId] = useState("");
@@ -39,7 +37,6 @@ export default function MemberUpdate(): ReactElement {
         lastName,
         email,
         faculty,
-        paid,
         semesterId,
       }),
     });
@@ -50,25 +47,18 @@ export default function MemberUpdate(): ReactElement {
   };
 
   useEffect(() => {
-    fetch("/api/semesters")
+    fetch(`/api/users/${memberId}`)
       .then((res) => res.json())
-      .then(({ semesters }) => {
-        setSemesters(semesters);
+      .then(({ user }) => {
+        setFirstName(user.first_name);
+        setLastName(user.last_name);
+        setEmail(user.email);
+        setFaculty(user.faculty);
+        setSemesterId(user.semester_id);
+        setId(user.id);
+        setCreatedAt(new Date(user.created_at));
 
-        fetch(`/api/users/${memberId}`)
-          .then((res) => res.json())
-          .then(({ user }) => {
-            setFirstName(user.first_name);
-            setLastName(user.last_name);
-            setEmail(user.email);
-            setFaculty(user.faculty);
-            setPaid(user.paid);
-            setSemesterId(user.semester_id);
-            setId(user.id);
-            setCreatedAt(new Date(user.created_at));
-
-            setIsLoading(false);
-          });
+        setIsLoading(false);
       });
   }, [memberId]);
 
@@ -105,17 +95,6 @@ export default function MemberUpdate(): ReactElement {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     className="form-control"
-                  ></input>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="paid">Paid:</label>
-                  <input
-                    type="checkbox"
-                    name="paid"
-                    defaultChecked={paid}
-                    onChange={() => setPaid(!paid)}
-                    style={{ margin: "0 10px" }}
                   ></input>
                 </div>
 
@@ -172,22 +151,6 @@ export default function MemberUpdate(): ReactElement {
                     className="form-control"
                     readOnly
                   ></input>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="semester_id">Semester:</label>
-                  <select
-                    name="semester_id"
-                    className="form-control"
-                    value={semesterId}
-                    onChange={(e) => setSemesterId(e.target.value)}
-                  >
-                    {semesters.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
                 </div>
 
                 <div className="form-group center">

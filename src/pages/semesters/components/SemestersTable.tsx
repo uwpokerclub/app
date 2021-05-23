@@ -1,11 +1,14 @@
 import React, { ReactElement } from "react";
-import { Semester } from "../../types";
+import { Link, useRouteMatch } from "react-router-dom";
+import { Semester } from "../../../types";
 
 export interface Props {
   semesters: Semester[];
 }
 
 export default function SemestersTable({ semesters }: Props): ReactElement {
+  const { url } = useRouteMatch();
+
   return (
     <div className="table-responsive">
       <table className="table">
@@ -16,6 +19,8 @@ export default function SemestersTable({ semesters }: Props): ReactElement {
             <th>Start Date</th>
 
             <th>End Date</th>
+
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -38,6 +43,12 @@ export default function SemestersTable({ semesters }: Props): ReactElement {
                   day: "numeric",
                   year: "numeric",
                 })}
+              </td>
+
+              <td>
+                <Link to={`${url}/${semester.id}`} className="btn btn-primary">
+                  View
+                </Link>
               </td>
             </tr>
           ))}

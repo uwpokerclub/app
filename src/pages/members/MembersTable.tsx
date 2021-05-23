@@ -29,14 +29,11 @@ export default function MembersTable({ url, members }: Props): ReactElement {
             <th data-sort="questid" className="sort">
               Quest ID
             </th>
-            <th data-sort="paid" className="sort">
-              Paid
-            </th>
           </tr>
         </thead>
         <tbody>
           {members.map((m) => (
-            <tr key={m.id} className={`${m.paid ? "" : "danger"}`}>
+            <tr key={m.id}>
               <td className="studentno">
                 <Link to={`${url}/${m.id}`}>{m.id}</Link>
               </td>
@@ -44,7 +41,6 @@ export default function MembersTable({ url, members }: Props): ReactElement {
               <td className="lname">{m.last_name}</td>
               <td className="email">{m.email}</td>
               <td className="questid">{m.quest_id}</td>
-              <td className="paid">{m.paid ? "Yes" : "No"}</td>
             </tr>
           ))}
         </tbody>

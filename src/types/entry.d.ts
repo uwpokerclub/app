@@ -6,4 +6,5 @@ export type Entry = {
   last_name: string;
   signed_out_at: Date;
   placement: number;
+  membership_id: string;
 };

@@ -19,14 +19,14 @@ export default function EntriesTable({
 }: Props): ReactElement {
   const [search, setSearch] = useState("");
 
-  const updateParticipant = async (userId: string, action: string) => {
+  const updateParticipant = async (membershipId: string, action: string) => {
     await fetch(`/api/participants/${action}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId,
+        membershipId,
         eventId: event.id,
       }),
     })
@@ -40,14 +40,14 @@ export default function EntriesTable({
       });
   };
 
-  const deleteParticipant = async (userId: string) => {
+  const deleteParticipant = async (membershipId: string) => {
     await fetch("/api/participants", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId,
+        membershipId,
         eventId: event.id,
       }),
     })
@@ -106,7 +106,7 @@ export default function EntriesTable({
                 <td className="signed_out_at">
                   {entry.signed_out_at ? (
                     <span>
-                      {entry.signed_out_at.toLocaleString("en-US", {
+                      {new Date(entry.signed_out_at).toLocaleString("en-US", {
                         hour12: true,
                         month: "short",
                         day: "numeric",
@@ -133,7 +133,9 @@ export default function EntriesTable({
                         <button
                           type="submit"
                           className="btn btn-primary"
-                          onClick={() => updateParticipant(entry.id, "sign-in")}
+                          onClick={() =>
+                            updateParticipant(entry.membership_id, "sign-in")
+                          }
                         >
                           Sign Back In
                         </button>
@@ -142,7 +144,7 @@ export default function EntriesTable({
                           type="submit"
                           className="btn btn-info"
                           onClick={() =>
-                            updateParticipant(entry.id, "sign-out")
+                            updateParticipant(entry.membership_id, "sign-out")
                           }
                         >
                           Sign Out
@@ -151,7 +153,7 @@ export default function EntriesTable({
                       <button
                         type="submit"
                         className="btn btn-warning"
-                        onClick={() => deleteParticipant(entry.id)}
+                        onClick={() => deleteParticipant(entry.membership_id)}
                       >
                         Remove
                       </button>

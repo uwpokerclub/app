@@ -6,7 +6,7 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
-import { Semester, User } from "../../types";
+import { User } from "../../types";
 
 import MemberUpdate from "./MemberEdit";
 
@@ -16,7 +16,6 @@ export default function MemberShow(): ReactElement {
 
   const [isLoading, setIsLoading] = useState(true);
   const [member, setMember] = useState<User>(null);
-  const [semester, setSemester] = useState<Semester>(null);
 
   useEffect(() => {
     fetch(`/api/users/${memberId}`)
@@ -26,12 +25,8 @@ export default function MemberShow(): ReactElement {
           ...data.user,
           created_at: new Date(data.user.created_at),
         });
-        fetch(`/api/semesters/${data.user.semester_id}`)
-          .then((res) => res.json())
-          .then((semData) => {
-            setSemester(semData.semester);
-            setIsLoading(false);
-          });
+
+        setIsLoading(false);
       });
   }, [memberId]);
 
@@ -127,19 +122,6 @@ export default function MemberShow(): ReactElement {
                         month: "long",
                         day: "numeric",
                       })}
-                      className="form-control"
-                      readOnly
-                    ></input>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="last_semester">
-                      Last Semester Registered:
-                    </label>
-                    <input
-                      type="text"
-                      name="last_semester"
-                      value={semester.name}
                       className="form-control"
                       readOnly
                     ></input>

@@ -12,26 +12,13 @@ import MemberNew from "./MemberNew";
 import MemberShow from "./MemberShow";
 import MembersTable from "./MembersTable";
 
-import TermSelector from "../../components/TermSelector/TermSelector";
-
 export default function MembersIndex(): ReactElement {
   const { path, url } = useRouteMatch();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [semesters, setSemesters] = useState([]);
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const onSelectTerm = (semesterId: string) => {
-    if (semesterId === "All") {
-      setFilteredMembers(members);
-    } else {
-      setFilteredMembers(
-        members.filter((member) => member.semester_id === semesterId)
-      );
-    }
-  };
 
   const handleExport = (e: FormEvent) => {
     e.preventDefault();
@@ -64,12 +51,10 @@ export default function MembersIndex(): ReactElement {
     const requests = [];
 
     requests.push(fetch("/api/users").then((res) => res.json()));
-    requests.push(fetch("/api/semesters").then((res) => res.json()));
 
     Promise.all(requests).then(([userData, semesterData]) => {
       setMembers(userData.users);
       setFilteredMembers(userData.users);
-      setSemesters(semesterData.semesters);
       setIsLoading(false);
     });
   }, []);
@@ -80,11 +65,7 @@ export default function MembersIndex(): ReactElement {
         {!isLoading && (
           <div id="members">
             <h1> Members ({filteredMembers.length})</h1>
-            <div className="row">
-              <div className="form-group">
-                <TermSelector semesters={semesters} onSelect={onSelectTerm} />
-              </div>
-            </div>
+
             <div className="row">
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div className="btn-group">

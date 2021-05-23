@@ -1,26 +1,16 @@
-import React, { FormEvent, ReactElement, useEffect, useState } from "react";
+import React, { FormEvent, ReactElement, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { faculties } from "../../constants";
-import { Semester } from "../../types";
 
 export default function MemberNew(): ReactElement {
   const history = useHistory();
 
-  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [faculty, setFaculty] = useState("");
-  const [paid, setPaid] = useState(false);
   const [questId, setQuestId] = useState("");
   const [id, setId] = useState("");
-  const [semesterId, setSemesterId] = useState("");
-
-  useEffect(() => {
-    fetch("/api/semesters")
-      .then((res) => res.json())
-      .then((data) => setSemesters(data.semesters));
-  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,9 +26,7 @@ export default function MemberNew(): ReactElement {
         lastName,
         email,
         faculty,
-        paid,
         questId,
-        semesterId,
       }),
     });
 
@@ -108,17 +96,6 @@ export default function MemberNew(): ReactElement {
             </div>
 
             <div className="form-group">
-              <label htmlFor="paid">Paid:</label>
-              <input
-                type="checkbox"
-                name="paid"
-                className="form-control"
-                defaultChecked={paid}
-                onChange={() => setPaid(!paid)}
-              ></input>
-            </div>
-
-            <div className="form-group">
               <label htmlFor="quest_id">Quest ID:</label>
               <input
                 type="text"
@@ -140,23 +117,6 @@ export default function MemberNew(): ReactElement {
                 value={id}
                 onChange={(e) => setId(e.target.value)}
               ></input>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="semester">Semester:</label>
-              <select
-                name="semester_id"
-                className="form-control"
-                value={semesterId}
-                onChange={(e) => setSemesterId(e.target.value)}
-              >
-                <option>Choose Semester</option>
-                {semesters.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <div className="row">

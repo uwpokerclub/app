@@ -1,6 +1,6 @@
 import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { Entry, User } from "../../types";
+import { Entry, Membership } from "../../types";
 
 import "./Events.scss";
 
@@ -36,20 +36,20 @@ export default function EventSignIn(): ReactElement {
     fetch(`/api/events/${eventId}`)
       .then((res) => res.json())
       .then((eventData) => {
-        fetch(`/api/participants/?eventId=${eventId}`)
+        fetch(`/api/participants?eventId=${eventId}`)
           .then((res) => res.json())
           .then((participantsData) => {
-            fetch(`/api/users?semesterId=${eventData.event.semester_id}`)
+            fetch(`/api/memberships?semesterId=${eventData.event.semester_id}`)
               .then((res) => res.json())
               .then((membersData) => {
                 setMembers(
-                  membersData.users.filter(
-                    (user: User) =>
+                  membersData.memberships.filter(
+                    (member: Membership) =>
                       !new Set(
                         participantsData.participants.map(
-                          (entry: Entry) => entry.id
+                          (entry: Entry) => entry.user_id
                         )
-                      ).has(user.id)
+                      ).has(member.user_id)
                   )
                 );
                 setIsLoading(false);
@@ -96,7 +96,7 @@ export default function EventSignIn(): ReactElement {
                     </div>
 
                     <div className="Participants__item-student_id">
-                      <span>{member.id}</span>
+                      <span>{member.user_id}</span>
                     </div>
                   </div>
                 ))}
