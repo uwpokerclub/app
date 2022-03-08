@@ -1,5 +1,7 @@
 import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
+import Select from "react-select";
+
 import { Membership, User } from "../../../types";
 
 export default function SemesterNewMember(): ReactElement {
@@ -52,7 +54,12 @@ export default function SemesterNewMember(): ReactElement {
       const unregisteredUserIds = Array.from(unregisteredUserSet);
 
       setUsers(
-        userData.users.filter((u: User) => unregisteredUserIds.includes(u.id))
+        userData.users
+          .filter((u: User) => unregisteredUserIds.includes(u.id))
+          .map((u: User) => ({
+            value: u.id,
+            label: `${u.first_name} ${u.last_name}`,
+          }))
       );
     });
   }, [semesterId]);
@@ -66,20 +73,13 @@ export default function SemesterNewMember(): ReactElement {
         <form onSubmit={onSubmit}>
           <div className="form-group">
             <label>User</label>
-            <select
-              className="form-control"
-              onChange={(e) => setUserId(e.target.value)}
-              value={userId}
-            >
-              <option value="" disabled>
-                Select a user
-              </option>
-              {users.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.first_name} {u.last_name}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={users}
+              onChange={(e: User & { value: string }) => {
+                console.log(e);
+                setUserId(e.value);
+              }}
+            />
           </div>
 
           <div className="form-group">
