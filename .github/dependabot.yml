@@ -4,8 +4,18 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-    allow:
-      - dependency-type: "production"
-    open-pull-requests-limit: 5
     reviewers:
       - asmahood
+    ignore:
+      # We can customize this per repo but as a starting point we may want to ignore all major updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+    reviewers:
+      - asmahood
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

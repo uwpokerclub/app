@@ -13,10 +13,8 @@ jobs:
         with:
           node-version: 14.x
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
       - name: Build project
-        run: npm run build --if-present
+        run: yarn build
       - name: Run tests
-        run: npm test
-      - name: Run linter
-        run: npm run lint --if-present
+        run: yarn test

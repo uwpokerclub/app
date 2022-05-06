@@ -9,3 +9,11 @@ export type User = {
   created_at: Date;
   semester_id: string;
 };
+
+export type GetUserResponse = {
+  user: User;
+}
+
+export type ListUsersResponse = {
+  users: User[];
+}

@@ -6,4 +6,9 @@ export type Event = {
   notes: string;
   semester_id: string;
   state: number;
+  count?: number;
+};
+
+export type GetEventResponse = {
+  event: Event;
 };

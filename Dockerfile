@@ -1,14 +1,17 @@
-FROM node:14.16.0-alpine3.11 AS node_stage
+FROM node:16.15.0-alpine3.14 AS node_stage
 
-# Set work dir
 WORKDIR /usr/app
 
 COPY . .
 
-# Install all deps
-RUN apk add --no-cache --virtual .gyp python make g++ \
-    && npm install \
-    && npm run build
+# Install system dependencies
+RUN apk add --no-cache --virtual .gyp python make g++
+
+# Install Node dependencies
+RUN yarn install --frozen-lockfile
+
+# Build production ready application
+RUN yarn build
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html

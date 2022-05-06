@@ -1,54 +1,26 @@
 import React, { ReactElement } from "react";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import ProvideAuth from "./utils/ProvideAuth";
-import PrivateRoute from "./utils/PrivateRoute";
+import AuthProvider from "./shared/utils/AuthProvider";
 
-import "./App.scss";
-
-import Navbar from "./components/Navbar/Navbar";
-
-import EventsIndex from "./pages/events/EventsIndex";
-import Home from "./pages/home/Home";
-import MembersIndex from "./pages/members/MembersIndex";
-import SemestersRoute from "./pages/semesters/SemestersRoute";
-import RankingsIndex from "./pages/rankings/RankingsIndex";
-import LoginIndex from "./pages/login/LoginIndex";
+import Login from "./views/Login/";
+import RequireAuth from "./shared/utils/RequireAuth";
+import Admin from "./views/Admin";
 
 export default function App(): ReactElement {
   return (
-    <ProvideAuth>
-      <Router forceRefresh>
-        <Navbar />
-
-        <div className="row">
-          <div className="col-md-1" />
-          <div className="col-md-10">
-            <Switch>
-              <Route path="/login">
-                <LoginIndex />
-              </Route>
-              <PrivateRoute exact path="/">
-                <Home />
-              </PrivateRoute>
-              <PrivateRoute path="/members">
-                <MembersIndex />
-              </PrivateRoute>
-              <PrivateRoute path="/events">
-                <EventsIndex />
-              </PrivateRoute>
-              <PrivateRoute path="/semesters">
-                <SemestersRoute />
-              </PrivateRoute>
-              <PrivateRoute path="/rankings">
-                <RankingsIndex />
-              </PrivateRoute>
-            </Switch>
-          </div>
-          <div className="col-md-1" />
-        </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login/*" element={<Login />} />
+          <Route path="/*" element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
+          } />
+        </Routes>
       </Router>
-    </ProvideAuth>
+    </AuthProvider>
   );
 }

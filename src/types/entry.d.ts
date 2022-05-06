@@ -4,7 +4,11 @@ export type Entry = {
   event_id: string;
   first_name: string;
   last_name: string;
-  signed_out_at: Date;
-  placement: number;
+  signed_out_at?: Date;
+  placement?: number;
   membership_id: string;
+};
+
+export type ListEntriesForEvent = {
+  participants: Entry[];
 };
