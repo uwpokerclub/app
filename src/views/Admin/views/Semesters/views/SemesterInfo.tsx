@@ -60,6 +60,8 @@ function SemesterInfo(): ReactElement {
 
             <th>Paid</th>
 
+            <th>Discounted</th>
+
             <th>Actions</th>
           </tr>
         </thead>
@@ -74,6 +76,8 @@ function SemesterInfo(): ReactElement {
               <td>{m.last_name}</td>
 
               <td>{m.paid ? "Yes" : "No"}</td>
+
+              <td>{m.discounted ? "Yes" : "No"}</td>
 
               <td>
                 <button

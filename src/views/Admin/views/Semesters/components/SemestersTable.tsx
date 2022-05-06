@@ -21,7 +21,7 @@ function SemestersTable({ semesters }: { semesters: Semester[] }): ReactElement 
 
         <tbody>
           {semesters.map((semester) => (
-            <tr>
+            <tr key={semester.id}>
               <td>{semester.name}</td>
 
               <td>

@@ -16,6 +16,7 @@ function NewMembership(): ReactElement {
 
   const [userId, setUserId] = useState("");
   const [paid, setPaid] = useState(false);
+  const [discounted, setDiscounted] = useState(false);
 
   const [users, setUsers] = useState<UserSelectionType[]>([]);
 
@@ -31,6 +32,7 @@ function NewMembership(): ReactElement {
         semesterId,
         userId,
         paid,
+        discounted
       }),
     }).then(() => navigate(`../${semesterId}`));
   };
@@ -91,12 +93,21 @@ function NewMembership(): ReactElement {
             />
           </div>
 
-          <div className="form-check">
+          <div className="form-check form-check-inline">
             <label className="form-check-label">Paid</label>
             <input
               type="checkbox"
               className="form-check-input"
               onChange={() => setPaid(!paid)}
+            ></input>
+          </div>
+
+          <div className="form-check form-check-inline">
+            <label className="form-check-label">Discounted</label>
+            <input
+              type="checkbox"
+              className="form-check-input"
+              onChange={() => setDiscounted(!discounted)}
             ></input>
           </div>
 

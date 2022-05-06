@@ -5,4 +5,5 @@ export type Membership = {
   user_id: string;
   semester_id: string;
   paid: boolean;
+  discounted: boolean;
 };
