@@ -17,14 +17,15 @@ function SemesterInfo(): ReactElement {
       });
   }, [semesterId]);
 
-  const updateMembership = (membershipId: string, isPaid: boolean) => {
+  const updateMembership = (membershipId: string, isPaid: boolean, isDiscounted: boolean) => {
     fetch(`/api/memberships/${membershipId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        paid: !isPaid,
+        paid: isPaid,
+        discounted: isDiscounted
       }),
     });
 
@@ -34,7 +35,8 @@ function SemesterInfo(): ReactElement {
 
         return {
           ...m,
-          paid: !isPaid,
+          paid: isPaid,
+          discounted: isDiscounted
         };
       })
     );
@@ -82,9 +84,16 @@ function SemesterInfo(): ReactElement {
               <td>
                 <button
                   className="btn btn-primary btn-sm"
-                  onClick={() => updateMembership(m.id, m.paid)}
+                  onClick={() => updateMembership(m.id, !m.paid, m.discounted)}
                 >
                   Set {m.paid ? "Unpaid" : "Paid"}
+                </button>
+
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => updateMembership(m.id, m.paid, !m.discounted)}
+                >
+                  {m.discounted ? "Remove Discount" : "Discount"}
                 </button>
               </td>
             </tr>
