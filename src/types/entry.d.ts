@@ -7,6 +7,7 @@ export type Entry = {
   signed_out_at?: Date;
   placement?: number;
   membership_id: string;
+  rebuys: number;
 };
 
 export type ListEntriesForEvent = {

@@ -16,8 +16,8 @@ function EntriesTable({
 }): ReactElement {
   const [search, setSearch] = useState("");
 
-  const updateParticipant = async (membershipId: string, action: string) => {
-    await fetch(`/api/participants/${action}`, {
+  const updateParticipant = (membershipId: string, action: string) => {
+    fetch(`/api/participants/${action}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,6 +83,7 @@ function EntriesTable({
               <th>First Name</th>
               <th>Last Name</th>
               <th>Student Number</th>
+              <th>Rebuys</th>
               <th>Signed Out At</th>
               <th className="center">Place</th>
               <th className="center">Actions</th>
@@ -99,6 +100,8 @@ function EntriesTable({
                 <td className="lname">{entry.last_name}</td>
 
                 <td className="studentno">{entry.id}</td>
+
+                <td className="rebuys">{entry.rebuys}</td>
 
                 <td className="signed_out_at">
                   {entry.signed_out_at !== null && entry.signed_out_at !== undefined ? (
@@ -117,7 +120,7 @@ function EntriesTable({
                   )}
                 </td>
 
-                <td className="placement">
+                <td className="center placement">
                   <span className="margin-center">
                     {entry.placement ? entry.placement : "--"}
                   </span>
@@ -126,6 +129,12 @@ function EntriesTable({
                 <td className="center">
                   {event.state !== 1 && (
                     <div className="btn-group">
+                      <button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={() => updateParticipant(entry.membership_id, "rebuy")}>
+                        Rebuy
+                      </button>
                       {entry.signed_out_at ? (
                         <button
                           type="submit"
