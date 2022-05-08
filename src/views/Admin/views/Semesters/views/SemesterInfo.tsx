@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Membership } from "../../../../../types";
+
+import { Membership, Transaction } from "../../../../../types";
+import NewTransactionModal from "../components/NewTransactionModal";
 
 import "./style.scss";
 
@@ -8,12 +10,21 @@ function SemesterInfo(): ReactElement {
   const { semesterId } = useParams<{ semesterId: string }>();
 
   const [memberships, setMemberships] = useState<Membership[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetch(`/api/memberships?semesterId=${semesterId}`)
       .then((res) => res.json())
       .then((data) => {
         setMemberships(data.memberships);
+      });
+
+    fetch(`/api/semesters/${semesterId}/transactions`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTransactions(data.transactions);
       });
   }, [semesterId]);
 
@@ -42,12 +53,52 @@ function SemesterInfo(): ReactElement {
     );
   };
 
+  const onSubmit = (description: string, amount: number): void => {
+    fetch(`/api/semesters/${semesterId}/transactions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        description,
+        amount
+      })
+    }).then((res) => {
+      if (res.status === 201) {
+        fetch(`/api/semesters/${semesterId}/transactions`)
+        .then((res) => res.json())
+        .then((data) => {
+          setTransactions(data.transactions);
+        });  
+      }
+    });
+
+    setShowModal(false);
+  }
+
+  const handleDelete = (id: number): void => {
+    fetch(`/api/semesters/${semesterId}/transactions/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then((res) => {
+      if (res.status === 200) {
+        fetch(`/api/semesters/${semesterId}/transactions`)
+          .then((res) => res.json())
+          .then((data) => {
+            setTransactions(data.transactions);
+        });
+      }
+    });
+  }
+
   return (
     <div>
       <div className="Memberships__header">
         <h3>Memberships ({memberships.length})</h3>
         <Link to={`new-member`} className="btn btn-primary">
-          Add Member
+          Add member
         </Link>
       </div>
 
@@ -100,6 +151,44 @@ function SemesterInfo(): ReactElement {
           ))}
         </tbody>
       </table>
+
+      <div className="Transactions__header">
+        <h3>Transactions</h3>
+        <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>New transaction</button>
+      </div>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+
+            <th>Description</th>
+
+            <th>Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {transactions.map((t) => (
+            <tr key={t.id}>
+              <td>{t.id}</td>
+
+              <td>{t.description}</td>
+
+              <td>{t.amount >= 0 ? `$${Number(t.amount).toFixed(2)}` : `-$${Number(t.amount * -1).toFixed(2)}`}</td>
+
+              <td style={{ textAlign: "right" }}>
+                <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(t.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <NewTransactionModal 
+        show={showModal} 
+        onClose={() => setShowModal(false)} 
+        onSubmit={onSubmit} 
+      />
     </div>
   );
 }
