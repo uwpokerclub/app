@@ -7,6 +7,10 @@ function NewSemester(): ReactElement {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [startingBudget, setStartingBudget] = useState("");
+  const [membershipFee, setMembershipFee] = useState("");
+  const [discountedMembershipFee, setDiscountedMembershipFee] = useState("");
+  const [rebuyFee, setRebuyFee] = useState("");
   const [meta, setMeta] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -23,6 +27,10 @@ function NewSemester(): ReactElement {
         name,
         startDate,
         endDate,
+        startingBudget: Number(startingBudget),
+        membershipFee: Number(membershipFee),
+        discountedMembershipFee: Number(discountedMembershipFee),
+        rebuyFee: Number(rebuyFee),
         meta,
       }),
     })
@@ -86,6 +94,46 @@ function NewSemester(): ReactElement {
                   className="form-control"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Starting Budget</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={startingBudget}
+                  onChange={(e) => setStartingBudget(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Membership Fee</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={membershipFee}
+                  onChange={(e) => setMembershipFee(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Discounted Membership Fee</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={discountedMembershipFee}
+                  onChange={(e) => setDiscountedMembershipFee(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Rebuy Fee</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={rebuyFee}
+                  onChange={(e) => setRebuyFee(e.target.value)}
                 />
               </div>
 

@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Membership, Transaction } from "../../../../../types";
+import { Membership, Semester, Transaction } from "../../../../../types";
 import NewTransactionModal from "../components/NewTransactionModal";
 
 import "./style.scss";
@@ -9,12 +9,19 @@ import "./style.scss";
 function SemesterInfo(): ReactElement {
   const { semesterId } = useParams<{ semesterId: string }>();
 
+  const [semester, setSemester] = useState<Semester>();
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    fetch(`/api/semesters/${semesterId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSemester(data.semester);
+      });
+
     fetch(`/api/memberships?semesterId=${semesterId}`)
       .then((res) => res.json())
       .then((data) => {
@@ -95,6 +102,53 @@ function SemesterInfo(): ReactElement {
 
   return (
     <div>
+      <div className="Semester__highlights">
+        <div className="card Semester__highlight-item">
+          <div className="card-body">
+            <h2 className="card-title">
+              {Number(semester?.starting_budget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+            </h2>
+            <h6 className="card-subtitle mb-2 text-muted">Starting Budget</h6>
+          </div>
+        </div>
+
+        <div className="card Semester__highlight-item">
+          <div className="card-body">
+            <h2 className="card-title">
+              {Number(semester?.current_budget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+            </h2>
+            <h6 className="card-subtitle mb-2 text-muted">Current Budget</h6>
+          </div>
+        </div>
+
+        <div className="card Semester__highlight-item">
+          <div className="card-body">
+            <h2 className="card-title">
+              {Number(semester?.membership_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+            </h2>
+            <h6 className="card-subtitle mb-2 text-muted">Membership Fee</h6>
+          </div>
+        </div>
+
+        <div className="card Semester__highlight-item">
+          <div className="card-body">
+            <h2 className="card-title">
+              {Number(semester?.membership_discount_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+            </h2>
+            <h6 className="card-subtitle mb-2 text-muted">Membership Fee (Discounted)</h6>
+          </div>
+        </div>
+    
+        <div className="card Semester__highlight-item">
+          <div className="card-body">
+            <h2 className="card-title">
+              {Number(semester?.rebuy_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+            </h2>
+            <h6 className="card-subtitle mb-2 text-muted">Rebuy Fee</h6>
+          </div>
+        </div>
+      </div>
+
       <div className="Memberships__header">
         <h3>Memberships ({memberships.length})</h3>
         <Link to={`new-member`} className="btn btn-primary">

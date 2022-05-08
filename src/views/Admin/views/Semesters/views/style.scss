@@ -9,3 +9,14 @@
   justify-content: space-between;
   padding-top: 1rem;
 }
+
+.Semester {
+  &__highlights {
+    margin: 0.5rem 0;
+    display: flex;
+  }
+
+  &__highlight-item {
+    margin: 0 0.5rem;
+  }
+}
