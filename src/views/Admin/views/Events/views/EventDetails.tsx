@@ -1,7 +1,12 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Entry, Event, GetEventResponse, ListEntriesForEvent } from "../../../../../types";
+import {
+  Entry,
+  Event,
+  GetEventResponse,
+  ListEntriesForEvent,
+} from "../../../../../types";
 import EntriesTable from "../components/EntriesTable";
 
 function EventDetails(): ReactElement {
@@ -19,8 +24,9 @@ function EventDetails(): ReactElement {
       participants.filter((participant) =>
         (
           participant.first_name.toLowerCase() +
+          " " +
           participant.last_name.toLowerCase()
-        ).includes(query)
+        ).includes(query.toLocaleLowerCase())
       )
     );
   };
@@ -65,39 +71,51 @@ function EventDetails(): ReactElement {
   useEffect(() => {
     const requests = [];
 
-    requests.push(fetch(`/api/events/${eventId}`).then((res) => res.json() as Promise<GetEventResponse>));
     requests.push(
-      fetch(`/api/participants?eventId=${eventId}`).then((res) => res.json() as Promise<ListEntriesForEvent>)
+      fetch(`/api/events/${eventId}`).then(
+        (res) => res.json() as Promise<GetEventResponse>
+      )
+    );
+    requests.push(
+      fetch(`/api/participants?eventId=${eventId}`).then(
+        (res) => res.json() as Promise<ListEntriesForEvent>
+      )
     );
 
-    Promise.all(requests).then(
-      ([eventData, participantsData]) => {
-        setEvent({
-          id: (eventData as GetEventResponse).event.id,
-          name: (eventData as GetEventResponse).event.name,
-          format: (eventData as GetEventResponse).event.format,
-          notes: (eventData as GetEventResponse).event.notes,
-          semester_id: (eventData as GetEventResponse).event.semester_id,
-          start_date: new Date((eventData as GetEventResponse).event.start_date),
-          state: (eventData as GetEventResponse).event.state,
-        });
-        setParticipants(
-          (participantsData as ListEntriesForEvent).participants.map((p: Entry) => ({
+    Promise.all(requests).then(([eventData, participantsData]) => {
+      setEvent({
+        id: (eventData as GetEventResponse).event.id,
+        name: (eventData as GetEventResponse).event.name,
+        format: (eventData as GetEventResponse).event.format,
+        notes: (eventData as GetEventResponse).event.notes,
+        semester_id: (eventData as GetEventResponse).event.semester_id,
+        start_date: new Date((eventData as GetEventResponse).event.start_date),
+        state: (eventData as GetEventResponse).event.state,
+      });
+      setParticipants(
+        (participantsData as ListEntriesForEvent).participants.map(
+          (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at !== null ? new Date(p.signed_out_at) : undefined,
-          }))
-        );
-        setFilteredParticipants(
-          (participantsData as ListEntriesForEvent).participants.map((p: Entry) => ({
+              p.signed_out_at !== undefined && p.signed_out_at !== null
+                ? new Date(p.signed_out_at)
+                : undefined,
+          })
+        )
+      );
+      setFilteredParticipants(
+        (participantsData as ListEntriesForEvent).participants.map(
+          (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at ? new Date(p.signed_out_at) : undefined,
-          }))
-        );
-        setIsLoading(false);
-      }
-    );
+              p.signed_out_at !== undefined && p.signed_out_at
+                ? new Date(p.signed_out_at)
+                : undefined,
+          })
+        )
+      );
+      setIsLoading(false);
+    });
   }, [eventId]);
 
   return (
