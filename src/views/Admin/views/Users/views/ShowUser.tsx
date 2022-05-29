@@ -62,17 +62,6 @@ function ShowUser(): ReactElement {
             </div>
 
             <div className="form-group">
-              <label htmlFor="paid">Paid:</label>
-              <input
-                type="checkbox"
-                name="paid"
-                checked={user.paid}
-                style={{ margin: "0 10px" }}
-                readOnly
-              ></input>
-            </div>
-
-            <div className="form-group">
               <label htmlFor="email">Email:</label>
               <input
                 type="text"
