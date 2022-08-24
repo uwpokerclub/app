@@ -4,17 +4,17 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import AuthProvider from "./shared/utils/AuthProvider";
 
-import Login from "./views/Login/";
 import RequireAuth from "./shared/utils/RequireAuth";
-import Admin from "./views/Admin";
+import { Login, Admin, Main } from "./views";
 
 export default function App(): ReactElement {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login/*" element={<Login />} />
-          <Route path="/*" element={
+          <Route path="/*" element={<Main />} />
+          <Route path="/admin/login/*" element={<Login />} />
+          <Route path="/admin/*" element={
             <RequireAuth>
               <Admin />
             </RequireAuth>

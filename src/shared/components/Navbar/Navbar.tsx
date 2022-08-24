@@ -18,7 +18,7 @@ export default function Navbar(): ReactElement {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link to="/" className="navbar-brand">
+        <Link to="/admin" className="navbar-brand">
           UW Poker
         </Link>
 
@@ -37,22 +37,22 @@ export default function Navbar(): ReactElement {
         <div className="collapse navbar-collapse" id="navbarSupportedContent" style={{ justifyContent: "inherit" }}>
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to="/users" className="nav-link">
+              <Link to="/admin/users" className="nav-link">
                 Users
               </Link>
             </li>
             <li>
-              <Link to="/events" className="nav-link">
+              <Link to="/admin/events" className="nav-link">
                 Events
               </Link>
             </li>
             <li>
-              <Link to="/semesters" className="nav-link">
+              <Link to="/admin/semesters" className="nav-link">
                 Semesters
               </Link>
             </li>
             <li>
-              <Link to="/rankings" className="nav-link">
+              <Link to="/admin/rankings" className="nav-link">
                 Rankings
               </Link>
             </li>
