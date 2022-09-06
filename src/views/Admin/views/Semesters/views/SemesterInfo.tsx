@@ -74,6 +74,18 @@ function SemesterInfo(): ReactElement {
         };
       })
     );
+
+    setFilteredMemberships(
+      filteredMemberships.map((m) => {
+        if (m.id !== membershipId) return m;
+
+        return {
+          ...m,
+          paid: isPaid,
+          discounted: isDiscounted
+        };
+      })
+    );
   };
 
   const onSubmit = (description: string, amount: number): void => {
