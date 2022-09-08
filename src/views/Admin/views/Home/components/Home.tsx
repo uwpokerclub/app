@@ -18,22 +18,22 @@ function Home(): ReactElement {
       <p>Welcome to The Admin Interface</p>
 
       <div className="btn-group">
-        <Link to="/events" className="btn btn-primary">
+        <Link to="/admin/events" className="btn btn-primary">
           Manage Events
         </Link>
-        <Link to="/users" className="btn btn-success">
+        <Link to="/admin/users" className="btn btn-success">
           Manage Users
         </Link>
       </div>
 
       <div className="btn-group-sub">
-        <Link to="/semesters/new" className="btn btn-primary">
+        <Link to="/admin/semesters/new" className="btn btn-primary">
           Create Semester
         </Link>
-        <Link to="/events/new" className="btn btn-primary">
+        <Link to="/admin/events/new" className="btn btn-primary">
           Create Event
         </Link>
-        <Link to="/users/new" className="btn btn-primary">
+        <Link to="/admin/users/new" className="btn btn-primary">
           Create User
         </Link>
       </div>

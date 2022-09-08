@@ -12,7 +12,7 @@
 }
 
 .socials-list li {
-  padding: 1.5rem;
+  padding: 0px;
   background-color: rgba(0, 0, 0, 0.35);
   border: 0.08rem solid white;
   border-radius: 1rem;
@@ -24,11 +24,13 @@
   align-items: center;
 }
 
-.socials-list .socials-link,
-.socials-list .socials-link.active,
-.socials-list .socials-link:hover {
-  height: 1.5rem;
-
+.socials-list a,
+.socials-list a.active,
+.socials-list a:hover {
   display: flex;
   align-items: center;
+
+  padding: 1.4rem;
+  width: 100%;
+  height: 100%;
 }

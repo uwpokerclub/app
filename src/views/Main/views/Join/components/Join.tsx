@@ -1,7 +1,6 @@
-import React, { ReactElement } from "react";
-import { Route, Routes } from "react-router-dom";
+import React from "react";
 
-import { cloth, discord_line, instagram_line, facebook_line, email_line } from "../../../../../assets"
+import { discordLine, instagramLine, facebookLine, emailLine } from "../../../../../assets"
 import "./Join.scss"
 
 const Join = () => {
@@ -24,35 +23,32 @@ const Join = () => {
                 <a className="nav-link" href=""></a>
               </li> */}
               <li>
-                <a className="socials-link text-link" href="https://discord.gg/2k4h9sM" target="_blank">
-                  <img src={discord_line} className="mr-4" />
+                <a className="text-link" href="https://discord.gg/2k4h9sM" target="_blank" rel="noreferrer">
+                  <img src={discordLine} className="mr-4" />
                   JOIN THE DISCORD
                 </a>
               </li>
               <li>
-                <a className="socials-link text-link" href="https://www.instagram.com/uwpokerclub/" target="_blank">
-                  <img src={instagram_line} className="mr-4" />
+                <a className="text-link" href="https://www.instagram.com/uwpokerclub/" target="_blank" rel="noreferrer">
+                  <img src={instagramLine} className="mr-4" />
                   FOLLOW ON INSTAGRAM
                 </a>
               </li>
               <li>
-                <a className="socials-link text-link" href="https://www.facebook.com/uwpokerstudies" target="_blank">
-                  <img src={facebook_line} className="mr-4 pl-1 pr-2" />
+                <a className="text-link" href="https://www.facebook.com/uwpokerstudies" target="_blank" rel="noreferrer">
+                  <img src={facebookLine} className="mr-4 pl-1 pr-2" />
                   LIKE US ON FACEBOOK
                 </a>
               </li>
               <li>
-                <a className="socials-link text-link" href="mailto:uwaterloopoker@gmail.com" target="_blank">
-                  <img src={email_line} className="mr-4" />
+                <a className="text-link" href="mailto:uwaterloopoker@gmail.com" target="_blank" rel="noreferrer">
+                  <img src={emailLine} className="mr-4" />
                   CONTACT US VIA EMAIL
                 </a>
               </li>
             </ul>
           </div>
           <div className="col-lg"></div>
-          {/* <div className="col">
-            Col2
-          </div> */}
         </div>
       </div>
     </div >

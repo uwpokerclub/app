@@ -3,9 +3,9 @@ import cloth from "./SpeedCloth.png";
 import menu from "./menu.svg";
 import close from "./close.svg";
 
-import discord_line from "./discord_line.svg";
-import instagram_line from "./instagram_line.svg";
-import facebook_line from "./facebook_line.svg";
-import email_line from "./email_line.svg";
+import discordLine from "./discord_line.svg";
+import instagramLine from "./instagram_line.svg";
+import facebookLine from "./facebook_line.svg";
+import emailLine from "./email_line.svg";
 
-export { logo, menu, close, cloth, discord_line, instagram_line, facebook_line, email_line };
+export { logo, menu, close, cloth, discordLine, instagramLine, facebookLine, emailLine };

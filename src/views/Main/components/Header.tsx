@@ -2,19 +2,20 @@ import React from "react";
 
 import './Header.scss'
 
-import { logo, menu } from "../../../assets"
-import { navLinks } from "../../../constants";
+import { logo } from "../../../assets"
+// import { navLinks } from "../../../constants";
 
 const Header = () => {
 
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top px-4 py-2">
-        <a className="navbar-brand" href="/"><img src={logo} /></a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerContent">
+        <a className="navbar-brand" href="/"><img src={logo} alt="UWPSC Logo"/></a>
+        {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerContent">
           <img src={menu} alt="" />
-        </button>
+        </button> */}
 
+        {/*
         <div className="collapse navbar-collapse" id="headerContent">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
@@ -27,7 +28,7 @@ const Header = () => {
               <a className="nav-link" href="/events">Events</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="https://discord.gg/2k4h9sM" target="_blank">Discord</a>
+              <a className="nav-link" href="https://discord.gg/2k4h9sM" target="_blank" rel="noreferrer">Discord</a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/gallery">Gallery</a>
@@ -40,6 +41,7 @@ const Header = () => {
             </li>
           </ul>
         </div>
+        */}
       </nav>
     </>
   );
