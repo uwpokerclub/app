@@ -24,25 +24,25 @@ const Join = () => {
               </li> */}
               <li>
                 <a className="text-link" href="https://discord.gg/2k4h9sM" target="_blank" rel="noreferrer">
-                  <img src={discordLine} className="mr-4" />
+                  <img src={discordLine} className="mr-4" alt=""/>
                   JOIN THE DISCORD
                 </a>
               </li>
               <li>
                 <a className="text-link" href="https://www.instagram.com/uwpokerclub/" target="_blank" rel="noreferrer">
-                  <img src={instagramLine} className="mr-4" />
+                  <img src={instagramLine} className="mr-4" alt=""/>
                   FOLLOW ON INSTAGRAM
                 </a>
               </li>
               <li>
                 <a className="text-link" href="https://www.facebook.com/uwpokerstudies" target="_blank" rel="noreferrer">
-                  <img src={facebookLine} className="mr-4 pl-1 pr-2" />
+                  <img src={facebookLine} className="mr-4 pl-1 pr-2" alt=""/>
                   LIKE US ON FACEBOOK
                 </a>
               </li>
               <li>
                 <a className="text-link" href="mailto:uwaterloopoker@gmail.com" target="_blank" rel="noreferrer">
-                  <img src={emailLine} className="mr-4" />
+                  <img src={emailLine} className="mr-4" alt=""/>
                   CONTACT US VIA EMAIL
                 </a>
               </li>
