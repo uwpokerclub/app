@@ -11,7 +11,7 @@ export default function Navbar(): ReactElement {
 
   const handleLogout = (): void => {
     auth.signOut(() => {
-      naviagate("/logout");
+      naviagate("/login");
     });
   };
 

@@ -11,7 +11,22 @@ function SemesterInfo(): ReactElement {
 
   const [semester, setSemester] = useState<Semester>();
   const [memberships, setMemberships] = useState<Membership[]>([]);
+  const [filteredMemberships, setFilteredMemberships] = useState<Membership[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const [query, setQuery] = useState("");
+  const handleSearch = (search: string): void => {
+    setQuery(search);
+
+    if (!search) {
+      setFilteredMemberships(memberships);
+      return;
+    }
+
+    setFilteredMemberships(
+      memberships.filter((m) => RegExp(search, "i").test(`${m.first_name} ${m.last_name}`))
+    );
+  }
 
   const [showModal, setShowModal] = useState(false);
 
@@ -26,6 +41,7 @@ function SemesterInfo(): ReactElement {
       .then((res) => res.json())
       .then((data) => {
         setMemberships(data.memberships);
+        setFilteredMemberships(data.memberships)
       });
 
     fetch(`/api/semesters/${semesterId}/transactions`)
@@ -49,6 +65,18 @@ function SemesterInfo(): ReactElement {
 
     setMemberships(
       memberships.map((m) => {
+        if (m.id !== membershipId) return m;
+
+        return {
+          ...m,
+          paid: isPaid,
+          discounted: isDiscounted
+        };
+      })
+    );
+
+    setFilteredMemberships(
+      filteredMemberships.map((m) => {
         if (m.id !== membershipId) return m;
 
         return {
@@ -151,9 +179,18 @@ function SemesterInfo(): ReactElement {
 
       <div className="Memberships__header">
         <h3>Memberships ({memberships.length})</h3>
-        <Link to={`new-member`} className="btn btn-primary">
-          Add member
-        </Link>
+        <div className="Memberships__header__search">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="form-control search"
+            value={query}
+            onChange={(e) => handleSearch(e.target.value)}
+          ></input>
+          <Link to={`new-member`} className="btn btn-primary Memberships__header__search-button">
+            Add member
+          </Link>
+        </div>
       </div>
 
       <table className="table">
@@ -174,7 +211,7 @@ function SemesterInfo(): ReactElement {
         </thead>
 
         <tbody>
-          {memberships.map((m) => (
+          {filteredMemberships.map((m) => (
             <tr key={m.id}>
               <td>{m.user_id}</td>
 
