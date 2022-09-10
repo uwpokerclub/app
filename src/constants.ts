@@ -6,3 +6,22 @@ export const faculties = [
   "Math",
   "Science",
 ];
+
+export const navLinks = [
+  {
+    id: "about",
+    title: "About",
+  },
+  {
+    id: "events",
+    title: "Events",
+  },
+  {
+    id: "gallery",
+    title: "Gallery",
+  },
+  {
+    id: "prizes",
+    title: "Prizes",
+  },
+];
