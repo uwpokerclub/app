@@ -68,7 +68,7 @@ function RegisterEntires(): ReactElement {
 
               <form onSubmit={registerMembersForEvent}>
                 {members.map((member) => (
-                  <div key={member.id} className="Participants__item">
+                  <div key={member.id} className={`Participants__item ${Number(member.attendance) >= 1 && !member.paid ? "Participants__item-danger" : ""}`}>
                     <div className="Participants__item-checkbox">
                       <input
                         type="checkbox"
