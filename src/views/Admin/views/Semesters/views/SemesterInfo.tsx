@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { Membership, Semester, Transaction } from "../../../../../types";
+import { Membership, Semester, Transaction, User } from "../../../../../types";
 import NewMembershipModal from "../components/NewMembershipModal";
 import NewTransactionModal from "../components/NewTransactionModal";
 
@@ -128,6 +128,44 @@ function SemesterInfo(): ReactElement {
     }).then((res) => setShowMembershipModal(false));
   };
 
+  const onUserSubmit = (user: Partial<User>, paid: boolean, discounted: boolean): Promise<boolean> => {
+    // Create user first
+    return fetch("/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: user.id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        faculty: user.faculty,
+        questId: user.quest_id
+      }),
+    }).then((res) => {
+      if (res.status !== 201) {
+        return false;
+      }
+
+      fetch(`/api/memberships`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          semesterId,
+          userId: user.id,
+          paid,
+          discounted
+        }),
+      }).then((res) => setShowMembershipModal(false));
+
+      return true;
+    });
+
+  }
+
   const handleDelete = (id: number): void => {
     fetch(`/api/semesters/${semesterId}/transactions/${id}`, {
       method: "DELETE",
@@ -204,11 +242,8 @@ function SemesterInfo(): ReactElement {
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
           ></input>
-          <Link to={`new-member`} className="btn btn-primary Memberships__header__search-button">
-            Add member
-          </Link>
+          <button type="button" className="btn btn-primary" onClick={() => setShowMembershipModal(true)}>New member</button>
         </div>
-        <button type="button" className="btn btn-primary" onClick={() => setShowMembershipModal(true)}>Modal</button>
       </div>
 
       <table className="table">
@@ -302,7 +337,8 @@ function SemesterInfo(): ReactElement {
       <NewMembershipModal
         show={showMembershipModal}
         onClose={() => setShowMembershipModal(false)}
-        onSubmit={onMembershipSubmit}
+        onMemberSubmit={onMembershipSubmit}
+        onUserSubmit={onUserSubmit}
       />
     </div>
   );
