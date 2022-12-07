@@ -51,7 +51,7 @@ function NewMembership(): ReactElement {
     Promise.all(requests).then(([userData, membershipData]) => {
       const userIds: string[] = userData.users.map((u: User) => u.id);
       const membershipUserIds: string[] = membershipData.memberships.map(
-        (m: Membership) => m.user_id
+        (m: Membership) => m.userId
       );
 
       const userSet = new Set(userIds);
@@ -66,7 +66,7 @@ function NewMembership(): ReactElement {
           .filter((u: User) => unregisteredUserIds.includes(u.id))
           .map((u: User) => ({
             value: u.id,
-            label: `${u.first_name} ${u.last_name}`,
+            label: `${u.firstName} ${u.lastName}`,
           }))
       );
     });

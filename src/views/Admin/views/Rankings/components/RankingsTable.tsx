@@ -30,9 +30,9 @@ export default function RankingsTable({ rankings }: Props): ReactElement {
               <td>{idx + 1}</td>
               <td className="studentno">{ranking.id}</td>
 
-              <td className="fname">{ranking.first_name}</td>
+              <td className="fname">{ranking.firstName}</td>
 
-              <td className="lname">{ranking.last_name}</td>
+              <td className="lname">{ranking.lastName}</td>
 
               <td className="score">{ranking.points}</td>
             </tr>

@@ -16,7 +16,7 @@ function ListEvents(): ReactElement {
       setFilteredEvents(events);
     } else {
       setFilteredEvents(
-        events.filter((event) => event.semester_id === semesterId)
+        events.filter((event) => event.semesterId === semesterId)
       );
     }
   };
@@ -28,9 +28,9 @@ function ListEvents(): ReactElement {
     requests.push(fetch("/api/semesters").then((res) => res.json()));
 
     Promise.all(requests).then(([eventsData, semesterData]) => {
-      setEvents(eventsData.events);
-      setFilteredEvents(eventsData.events);
-      setSemesters(semesterData.semesters);
+      setEvents(eventsData);
+      setFilteredEvents(eventsData);
+      setSemesters(semesterData);
       setIsLoading(false);
     });
   }, []);
@@ -81,7 +81,7 @@ function ListEvents(): ReactElement {
                       </p>
                       <p>
                         <strong>Date:</strong>{" "}
-                        {event.start_date.toLocaleString("en-US", {
+                        {event.startDate.toLocaleString("en-US", {
                           hour12: true,
                           month: "short",
                           day: "numeric",

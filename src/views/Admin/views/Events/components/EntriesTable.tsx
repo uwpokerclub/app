@@ -47,12 +47,12 @@ function EntriesTable({
         membershipId,
         eventId: event.id,
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setError(data.message);
-
-        if (!data.message) {
+    }).then((response) => {
+        if (response.status !== 204) {
+          response.json().then((data) => {
+            setError(data.message);
+          });  
+        } else {
           updateParticipants();
         }
       });
@@ -95,18 +95,18 @@ function EntriesTable({
               <tr key={entry.id}>
                 <th>{index + 1}</th>
 
-                <td className="fname">{entry.first_name}</td>
+                <td className="fname">{entry.firstName}</td>
 
-                <td className="lname">{entry.last_name}</td>
+                <td className="lname">{entry.lastName}</td>
 
                 <td className="studentno">{entry.id}</td>
 
                 <td className="rebuys">{entry.rebuys}</td>
 
                 <td className="signed_out_at">
-                  {entry.signed_out_at !== null && entry.signed_out_at !== undefined ? (
+                  {entry.signedOutAt !== null ? (
                     <span>
-                      {new Date(entry.signed_out_at).toLocaleString("en-US", {
+                      {new Date(entry.signedOutAt).toLocaleString("en-US", {
                         hour12: true,
                         month: "short",
                         day: "numeric",
@@ -132,15 +132,15 @@ function EntriesTable({
                       <button
                         type="button"
                         className="btn btn-success"
-                        onClick={() => updateParticipant(entry.membership_id, "rebuy")}>
+                        onClick={() => updateParticipant(entry.membershipId, "rebuy")}>
                         Rebuy
                       </button>
-                      {entry.signed_out_at ? (
+                      {entry.signedOutAt ? (
                         <button
                           type="submit"
                           className="btn btn-primary"
                           onClick={() =>
-                            updateParticipant(entry.membership_id, "sign-in")
+                            updateParticipant(entry.membershipId, "sign-in")
                           }
                         >
                           Sign Back In
@@ -150,7 +150,7 @@ function EntriesTable({
                           type="submit"
                           className="btn btn-info"
                           onClick={() =>
-                            updateParticipant(entry.membership_id, "sign-out")
+                            updateParticipant(entry.membershipId, "sign-out")
                           }
                         >
                           Sign Out
@@ -159,7 +159,7 @@ function EntriesTable({
                       <button
                         type="submit"
                         className="btn btn-warning"
-                        onClick={() => deleteParticipant(entry.membership_id)}
+                        onClick={() => deleteParticipant(entry.membershipId)}
                       >
                         Remove
                       </button>

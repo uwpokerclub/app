@@ -25,7 +25,7 @@ function SemesterInfo(): ReactElement {
     }
 
     setFilteredMemberships(
-      memberships.filter((m) => RegExp(search, "i").test(`${m.first_name} ${m.last_name}`))
+      memberships.filter((m) => RegExp(search, "i").test(`${m.firstName} ${m.lastName}`))
     );
   }
 
@@ -36,20 +36,20 @@ function SemesterInfo(): ReactElement {
     fetch(`/api/semesters/${semesterId}`)
       .then((res) => res.json())
       .then((data) => {
-        setSemester(data.semester);
+        setSemester(data);
       });
 
     fetch(`/api/memberships?semesterId=${semesterId}`)
       .then((res) => res.json())
       .then((data) => {
-        setMemberships(data.memberships);
-        setFilteredMemberships(data.memberships)
+        setMemberships(data);
+        setFilteredMemberships(data)
       });
 
     fetch(`/api/semesters/${semesterId}/transactions`)
       .then((res) => res.json())
       .then((data) => {
-        setTransactions(data.transactions);
+        setTransactions(data);
       });
   }, [semesterId]);
 
@@ -137,11 +137,11 @@ function SemesterInfo(): ReactElement {
       },
       body: JSON.stringify({
         id: user.id,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         faculty: user.faculty,
-        questId: user.quest_id
+        questId: user.questId
       }),
     }).then((res) => {
       if (res.status !== 201) {
@@ -189,7 +189,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.starting_budget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.startingBudget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Starting Budget</h6>
           </div>
@@ -198,7 +198,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.current_budget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.currentBudget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Current Budget</h6>
           </div>
@@ -207,7 +207,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.membership_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.membershipFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Membership Fee</h6>
           </div>
@@ -216,7 +216,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.membership_discount_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.membershipFeeDiscount).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Membership Fee (Discounted)</h6>
           </div>
@@ -225,7 +225,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.rebuy_fee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.rebuyFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Rebuy Fee</h6>
           </div>
@@ -266,11 +266,11 @@ function SemesterInfo(): ReactElement {
         <tbody>
           {filteredMemberships.map((m) => (
             <tr key={m.id}>
-              <td>{m.user_id}</td>
+              <td>{m.userId}</td>
 
-              <td>{m.first_name}</td>
+              <td>{m.firstName}</td>
 
-              <td>{m.last_name}</td>
+              <td>{m.lastName}</td>
 
               <td>{m.paid ? "Yes" : "No"}</td>
 

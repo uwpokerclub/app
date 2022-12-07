@@ -12,7 +12,7 @@ export default function SemesterRankings(): ReactElement {
     fetch(`/api/semesters/${semesterId}/rankings`)
       .then((res) => res.json())
       .then((data) => {
-        setRankings(data.rankings);
+        setRankings(data);
       });
   }, [semesterId]);
 

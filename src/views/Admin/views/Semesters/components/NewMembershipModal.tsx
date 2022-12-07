@@ -71,10 +71,10 @@ function NewMembershipModal({
       )
     );
 
-    Promise.all(requests).then(([userData, membershipData]) => {
-      const userIds: string[] = userData.users.map((u: User) => u.id);
-      const membershipUserIds: string[] = membershipData.memberships.map(
-        (m: Membership) => m.user_id
+    Promise.all(requests).then(([users, memberships]) => {
+      const userIds: string[] = users.map((u: User) => u.id);
+      const membershipUserIds: string[] = memberships.map(
+        (m: Membership) => m.userId
       );
 
       const userSet = new Set(userIds);
@@ -85,11 +85,11 @@ function NewMembershipModal({
       const unregisteredUserIds = Array.from(unregisteredUserSet);
 
       setUsers(
-        userData.users
+        users
           .filter((u: User) => unregisteredUserIds.includes(u.id))
           .map((u: User) => ({
             value: u.id,
-            label: `${u.first_name} ${u.last_name}`,
+            label: `${u.firstName} ${u.lastName}`,
           }))
       );
     });
@@ -105,11 +105,11 @@ function NewMembershipModal({
       onUserSubmit(
         {
           id,
-          first_name: firstName,
-          last_name: lastName,
+          firstName,
+          lastName,
           email,
           faculty,
-          quest_id: questId,
+          questId,
         },
         paid,
         discounted

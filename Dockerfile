@@ -4,6 +4,8 @@ WORKDIR /usr/app
 
 COPY . .
 
+ENV NODE_ENV=production
+
 # Install system dependencies
 RUN apk add --no-cache --virtual .gyp python3 make g++
 

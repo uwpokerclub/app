@@ -13,10 +13,10 @@ function SemestersList(): ReactElement {
       .then((res) => res.json())
       .then((data) =>
         setSemesters(
-          data.semesters.map((s: Semester) => ({
+          data.map((s: Semester) => ({
             ...s,
-            start_date: new Date(s.start_date),
-            end_date: new Date(s.end_date),
+            start_date: new Date(s.startDate),
+            end_date: new Date(s.endDate),
           }))
         )
       );

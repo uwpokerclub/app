@@ -4,8 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import {
   Entry,
   Event,
-  GetEventResponse,
-  ListEntriesForEvent,
 } from "../../../../../types";
 import EntriesTable from "../components/EntriesTable";
 
@@ -23,9 +21,9 @@ function EventDetails(): ReactElement {
     setFilteredParticipants(
       participants.filter((participant) =>
         (
-          participant.first_name.toLowerCase() +
+          participant.firstName.toLowerCase() +
           " " +
-          participant.last_name.toLowerCase()
+          participant.lastName.toLowerCase()
         ).includes(query.toLocaleLowerCase())
       )
     );
@@ -35,8 +33,8 @@ function EventDetails(): ReactElement {
     fetch(`/api/participants/?eventId=${eventId}`)
       .then((res) => res.json())
       .then((data) => {
-        setParticipants(data.participants);
-        setFilteredParticipants(data.participants);
+        setParticipants(data);
+        setFilteredParticipants(data);
       });
   };
 
@@ -46,25 +44,27 @@ function EventDetails(): ReactElement {
     await fetch(`/api/events/${eventId}/end`, {
       method: "POST",
     }).then((res) => {
-      if (res.status === 200) {
-        return;
-      }
-
-      res.json().then((data) => {
-        setError(data.message);
-
-        if (!data.message && event && eventId) {
-          setEvent({
-            id: eventId,
-            name: event.name,
-            start_date: event.start_date,
-            format: event.format,
-            notes: event.notes,
-            semester_id: event.semester_id,
-            state: 1,
-          });
+      if (res.status === 204) {
+        if (!eventId || !event) {
+          return
         }
-      });
+
+        setEvent({
+          id: eventId,
+          name: event.name,
+          startDate: event.startDate,
+          format: event.format,
+          notes: event.notes,
+          semesterId: event.semesterId,
+          state: 1,
+        });
+
+        updateParticipants()
+      } else {
+        res.json().then((data) => {
+          setError(data.message);
+        });
+      }
     });
   };
 
@@ -73,48 +73,50 @@ function EventDetails(): ReactElement {
 
     requests.push(
       fetch(`/api/events/${eventId}`).then(
-        (res) => res.json() as Promise<GetEventResponse>
+        (res) => res.json() as Promise<Event>
       )
     );
     requests.push(
       fetch(`/api/participants?eventId=${eventId}`).then(
-        (res) => res.json() as Promise<ListEntriesForEvent>
+        (res) => res.json() as Promise<Entry[]>
       )
     );
 
-    Promise.all(requests).then(([eventData, participantsData]) => {
+    Promise.all(requests).then(([event, participants]) => {
       setEvent({
-        id: (eventData as GetEventResponse).event.id,
-        name: (eventData as GetEventResponse).event.name,
-        format: (eventData as GetEventResponse).event.format,
-        notes: (eventData as GetEventResponse).event.notes,
-        semester_id: (eventData as GetEventResponse).event.semester_id,
-        start_date: new Date((eventData as GetEventResponse).event.start_date),
-        state: (eventData as GetEventResponse).event.state,
+        id: (event as Event).id,
+        name: (event as Event).name,
+        format: (event as Event).format,
+        notes: (event as Event).notes,
+        semesterId: (event as Event).semesterId,
+        startDate: new Date((event as Event).startDate),
+        state: (event as Event).state,
       });
       setParticipants(
-        (participantsData as ListEntriesForEvent).participants.map(
+        (participants as Entry[]).map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at !== null
-                ? new Date(p.signed_out_at)
+              p.signedOutAt !== undefined && p.signedOutAt !== null
+                ? new Date(p.signedOutAt)
                 : undefined,
           })
         )
       );
       setFilteredParticipants(
-        (participantsData as ListEntriesForEvent).participants.map(
+        (participants as Entry[]).map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at
-                ? new Date(p.signed_out_at)
+              p.signedOutAt !== undefined && p.signedOutAt
+                ? new Date(p.signedOutAt)
                 : undefined,
           })
         )
       );
       setIsLoading(false);
+
+      console.log(participants)
     });
   }, [eventId]);
 
@@ -134,7 +136,7 @@ function EventDetails(): ReactElement {
           </p>
           <p>
             <strong>Date:</strong>{" "}
-            {event.start_date.toLocaleString("en-US", {
+            {event.startDate.toLocaleString("en-US", {
               hour12: true,
               month: "short",
               day: "numeric",

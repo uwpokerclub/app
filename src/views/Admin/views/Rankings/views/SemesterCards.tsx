@@ -9,7 +9,7 @@ function SemesterCards(): ReactElement {
   useEffect(() => {
     fetch("/api/semesters")
       .then((res) => res.json())
-      .then((data) => setSemesters(data.semesters));
+      .then((data) => setSemesters(data));
   }, []);
 
   return (

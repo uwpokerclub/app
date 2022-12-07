@@ -32,10 +32,10 @@ function UsersTable({ users }: { users: User[] }): ReactElement {
               <td className="studentno">
                 <Link to={`${u.id}`}>{u.id}</Link>
               </td>
-              <td className="fname">{u.first_name}</td>
-              <td className="lname">{u.last_name}</td>
+              <td className="fname">{u.firstName}</td>
+              <td className="lname">{u.lastName}</td>
               <td className="email">{u.email}</td>
-              <td className="questid">{u.quest_id}</td>
+              <td className="questid">{u.questId}</td>
             </tr>
           ))}
         </tbody>

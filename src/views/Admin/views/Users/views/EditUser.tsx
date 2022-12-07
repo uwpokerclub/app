@@ -51,14 +51,14 @@ function EditUser(): ReactElement {
   useEffect(() => {
     fetch(`/api/users/${userId}`)
       .then((res) => res.json())
-      .then(({ user }) => {
-        setFirstName(user.first_name);
-        setLastName(user.last_name);
+      .then((user) => {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
         setEmail(user.email);
         setFaculty(user.faculty);
-        setSemesterId(user.semester_id);
+        setSemesterId(user.semesterId);
         setId(user.id);
-        setCreatedAt(new Date(user.created_at));
+        setCreatedAt(new Date(user.createdAt));
 
         setIsLoading(false);
       });

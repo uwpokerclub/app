@@ -16,7 +16,7 @@ function NewEvent(): ReactElement {
   useEffect(() => {
     fetch("/api/semesters")
       .then((res) => res.json())
-      .then((data) => setSemesters(data.semesters));
+      .then((data) => setSemesters(data));
   }, []);
 
   const createEvent = async (e: React.FormEvent) => {
@@ -29,7 +29,7 @@ function NewEvent(): ReactElement {
       },
       body: JSON.stringify({
         name: name,
-        startDate: startDate,
+        startDate: new Date(startDate),
         format: format,
         notes: notes,
         semesterId: semesterId,

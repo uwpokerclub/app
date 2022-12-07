@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { ListUsersResponse, User } from "../../../../../types";
+import { User } from "../../../../../types";
 import UsersTable from "../components/UsersTable";
 
 function ListUsers(): ReactElement {
@@ -14,9 +14,9 @@ function ListUsers(): ReactElement {
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
-      .then((data: ListUsersResponse) => {
-        setUsers(data.users);
-        setFilteredUsers(data.users);
+      .then((data: User[]) => {
+        setUsers(data);
+        setFilteredUsers(data);
       });
   }, []);
 
@@ -46,7 +46,7 @@ function ListUsers(): ReactElement {
     }
 
     setFilteredUsers(
-      users.filter((u) => RegExp(e.target.value, "i").test(`${u.first_name} ${u.last_name}`))
+      users.filter((u) => RegExp(e.target.value, "i").test(`${u.firstName} ${u.lastName}`))
     );
   }
 

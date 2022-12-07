@@ -10,46 +10,53 @@ function RegisterEntires(): ReactElement {
 
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState<Membership[]>([]);
-  const [selectedMembers, setSelectedMembers] = useState(new Set());
+  const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
 
   const registerMembersForEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     const newParticipants = Array.from(selectedMembers);
 
-    const res = await fetch("/api/participants", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        eventId: eventId,
-        participants: newParticipants,
-      }),
-    });
+    const requests = [];
+    for (const p of newParticipants) {
+      const res = fetch("/api/participants", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: Number(eventId),
+          membershipId: p,
+        }),
+      });
 
-    if (res.status === 200) {
-      return navigate(`../${eventId}`);
+      requests.push(res)
     }
+
+    Promise.all(requests).then((res) => {
+      if (res[0].status === 201) {
+        navigate(`../${eventId}`)
+      }
+    })
   };
 
   useEffect(() => {
     fetch(`/api/events/${eventId}`)
       .then((res) => res.json())
-      .then((eventData) => {
+      .then((event) => {
         fetch(`/api/participants?eventId=${eventId}`)
           .then((res) => res.json())
-          .then((participantsData) => {
-            fetch(`/api/memberships?semesterId=${eventData.event.semester_id}`)
+          .then((participants) => {
+            fetch(`/api/memberships?semesterId=${event.semesterId}`)
               .then((res) => res.json())
-              .then((membersData) => {
+              .then((memberships) => {
                 setMembers(
-                  membersData.memberships.filter(
+                  memberships.filter(
                     (member: Membership) =>
                       !new Set(
-                        participantsData.participants.map(
-                          (entry: Entry) => entry.user_id
+                        participants.map(
+                          (entry: Entry) => entry.membershipId
                         )
-                      ).has(member.user_id)
+                      ).has(member.id)
                   )
                 );
                 setIsLoading(false);
@@ -91,12 +98,12 @@ function RegisterEntires(): ReactElement {
 
                     <div className="Participants__item-title">
                       <span>
-                        {member.first_name} {member.last_name}
+                        {member.firstName} {member.lastName}
                       </span>
                     </div>
 
                     <div className="Participants__item-student_id">
-                      <span>{member.user_id}</span>
+                      <span>{member.userId}</span>
                     </div>
                   </div>
                 ))}
