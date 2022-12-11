@@ -1,6 +1,9 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { faculties } from "../../../../../constants";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { User } from "../../../../../types";
 
 function EditUser(): ReactElement {
   const { userId } = useParams<{ userId: string }>();
@@ -13,56 +16,46 @@ function EditUser(): ReactElement {
   const [faculty, setFaculty] = useState("");
   const [id, setId] = useState("");
   const [createdAt, setCreatedAt] = useState<Date>();
-  const [semesterId, setSemesterId] = useState("");
 
   // handleDelete sends a DELETE request to the API to remove the user.
   const handleDelete = () => {
-    fetch(`/api/users/${userId}`, { method: "DELETE" }).then((res) => {
-      if (res.status === 200) {
+    sendAPIRequest(`users/${userId}`, "DELETE").then(({ status }) => {
+      if (status === 204) {
         return navigate("../../users", { replace: true });
       }
     });
   };
 
   // handleSubmit sends an update to the api for this user when the form is submitted.
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch(`/api/users/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        faculty,
-        semesterId,
-      }),
+    sendAPIRequest(`users/${userId}`, "PATCH", {
+      firstName,
+      lastName,
+      email,
+      faculty,
+    }).then(({ status }) => {
+      if (status === 200) {
+        return navigate(`../${userId}`);
+      }
     });
-
-    if (res.status === 200) {
-      return navigate(`../${userId}`);
-    }
   };
 
   // Fetch user information
+  const { data: user } = useFetch<User>(`users/${userId}`);
   useEffect(() => {
-    fetch(`/api/users/${userId}`)
-      .then((res) => res.json())
-      .then(({ user }) => {
-        setFirstName(user.first_name);
-        setLastName(user.last_name);
-        setEmail(user.email);
-        setFaculty(user.faculty);
-        setSemesterId(user.semester_id);
-        setId(user.id);
-        setCreatedAt(new Date(user.created_at));
-
-        setIsLoading(false);
-      });
-  }, [userId]);
+    if (user) {
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setEmail(user.email);
+      setFaculty(user.faculty);
+      setId(user.id);
+      setCreatedAt(new Date(user.createdAt));
+  
+      setIsLoading(false);
+    }
+  }, [user]);
 
   return (
     <div>

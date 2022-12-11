@@ -1,6 +1,6 @@
 export type Transaction = {
   id: number;
-  semester_id: string;
+  semesterId: string;
   amount: number;
   description: string; 
 }

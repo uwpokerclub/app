@@ -1,20 +1,22 @@
 import React, { useState, useEffect, ReactElement } from "react";
 import { useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
+import { Ranking } from "../../../../../types";
 
 import RankingsTable from "../components/RankingsTable";
 
 export default function SemesterRankings(): ReactElement {
   const { semesterId } = useParams<{ semesterId: string }>();
 
-  const [rankings, setRankings] = useState([]);
+  const [rankings, setRankings] = useState<Ranking[]>([]);
+
+  const { data } = useFetch<Ranking[]>(`semesters/${semesterId}/rankings`);
 
   useEffect(() => {
-    fetch(`/api/semesters/${semesterId}/rankings`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRankings(data.rankings);
-      });
-  }, [semesterId]);
+    if (data) {
+      setRankings(data);
+    }
+  }, [data]);
 
   return (
     <div>

@@ -2,13 +2,15 @@ import React, { FormEvent, ReactElement, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import Select from "react-select";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 import { Membership, User } from "../../../../../types";
 
 type UserSelectionType = {
   value: string;
   label: string;
-}
+};
 
 function NewMembership(): ReactElement {
   const { semesterId } = useParams<{ semesterId: string }>();
@@ -23,37 +25,26 @@ function NewMembership(): ReactElement {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    fetch(`/api/memberships`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        semesterId,
-        userId,
-        paid,
-        discounted
-      }),
+    sendAPIRequest("memberships", "POST", {
+      semesterId,
+      userId,
+      paid,
+      discounted,
     }).then(() => navigate(`../${semesterId}`));
   };
 
   // Will fetch all the users that are not already registered for this semester
+  const { data: usersData } = useFetch<User[]>("users");
+  const { data: membershipsData } = useFetch<Membership[]>(
+    `memberships?semesterId=${semesterId}`
+  );
+
   useEffect(() => {
-    const requests = [];
-
-    requests.push(fetch(`/api/users`).then((res) => res.json()));
-    requests.push(
-      fetch(`/api/memberships?semesterId=${semesterId}`).then((res) =>
-        res.json()
-      )
-    );
-
-    Promise.all(requests).then(([userData, membershipData]) => {
-      const userIds: string[] = userData.users.map((u: User) => u.id);
-      const membershipUserIds: string[] = membershipData.memberships.map(
-        (m: Membership) => m.user_id
+    if (usersData && membershipsData) {
+      const userIds = usersData.map((u: User) => u.id);
+      const membershipUserIds = membershipsData.map(
+        (m) => m.userId
       );
-
       const userSet = new Set(userIds);
       const memberSet = new Set(membershipUserIds);
 
@@ -62,15 +53,15 @@ function NewMembership(): ReactElement {
       const unregisteredUserIds = Array.from(unregisteredUserSet);
 
       setUsers(
-        userData.users
-          .filter((u: User) => unregisteredUserIds.includes(u.id))
-          .map((u: User) => ({
+        usersData
+          .filter((u) => unregisteredUserIds.includes(u.id))
+          .map((u) => ({
             value: u.id,
-            label: `${u.first_name} ${u.last_name}`,
+            label: `${u.firstName} ${u.lastName}`,
           }))
       );
-    });
-  }, [semesterId]);
+    }
+  }, [usersData, membershipsData]);
 
   return (
     <div className="row">
@@ -83,7 +74,7 @@ function NewMembership(): ReactElement {
             <label>User</label>
             <Select
               options={users}
-              onChange={(e) => {  
+              onChange={(e) => {
                 if (!e?.value) {
                   return;
                 }

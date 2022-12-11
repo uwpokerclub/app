@@ -1,5 +1,6 @@
 import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
-import { Entry, Event } from "../../../../../types";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { APIErrorResponse, Entry, Event } from "../../../../../types";
 
 function EntriesTable({
   entries,
@@ -17,45 +18,29 @@ function EntriesTable({
   const [search, setSearch] = useState("");
 
   const updateParticipant = (membershipId: string, action: string) => {
-    fetch(`/api/participants/${action}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipId,
-        eventId: event.id,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    sendAPIRequest<APIErrorResponse>(`participants/${action}`, "POST", {
+      membershipId,
+      eventId: event.id,
+    }).then(({ data }) => {
+      if (data && data.message) {
         setError(data.message);
-
-        if (!data.message) {
-          updateParticipants();
-        }
-      });
+      } else {
+        updateParticipants();
+      }
+    });
   };
 
-  const deleteParticipant = async (membershipId: string) => {
-    await fetch("/api/participants", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipId,
-        eventId: event.id,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+  const deleteParticipant = (membershipId: string) => {
+    sendAPIRequest<APIErrorResponse>("participants", "DELETE", {
+      membershipId,
+      eventId: event.id,
+    }).then(({ status, data }) => {
+      if (data && status !== 204) {
         setError(data.message);
-
-        if (!data.message) {
-          updateParticipants();
-        }
-      });
+      } else {
+        updateParticipants();
+      }
+    });
   };
 
   return (
@@ -95,18 +80,18 @@ function EntriesTable({
               <tr key={entry.id}>
                 <th>{index + 1}</th>
 
-                <td className="fname">{entry.first_name}</td>
+                <td className="fname">{entry.firstName}</td>
 
-                <td className="lname">{entry.last_name}</td>
+                <td className="lname">{entry.lastName}</td>
 
                 <td className="studentno">{entry.id}</td>
 
                 <td className="rebuys">{entry.rebuys}</td>
 
                 <td className="signed_out_at">
-                  {entry.signed_out_at !== null && entry.signed_out_at !== undefined ? (
+                  {entry.signedOutAt !== null ? (
                     <span>
-                      {new Date(entry.signed_out_at).toLocaleString("en-US", {
+                      {new Date(entry.signedOutAt).toLocaleString("en-US", {
                         hour12: true,
                         month: "short",
                         day: "numeric",
@@ -132,15 +117,18 @@ function EntriesTable({
                       <button
                         type="button"
                         className="btn btn-success"
-                        onClick={() => updateParticipant(entry.membership_id, "rebuy")}>
+                        onClick={() =>
+                          updateParticipant(entry.membershipId, "rebuy")
+                        }
+                      >
                         Rebuy
                       </button>
-                      {entry.signed_out_at ? (
+                      {entry.signedOutAt ? (
                         <button
                           type="submit"
                           className="btn btn-primary"
                           onClick={() =>
-                            updateParticipant(entry.membership_id, "sign-in")
+                            updateParticipant(entry.membershipId, "sign-in")
                           }
                         >
                           Sign Back In
@@ -150,7 +138,7 @@ function EntriesTable({
                           type="submit"
                           className="btn btn-info"
                           onClick={() =>
-                            updateParticipant(entry.membership_id, "sign-out")
+                            updateParticipant(entry.membershipId, "sign-out")
                           }
                         >
                           Sign Out
@@ -159,7 +147,7 @@ function EntriesTable({
                       <button
                         type="submit"
                         className="btn btn-warning"
-                        onClick={() => deleteParticipant(entry.membership_id)}
+                        onClick={() => deleteParticipant(entry.membershipId)}
                       >
                         Remove
                       </button>

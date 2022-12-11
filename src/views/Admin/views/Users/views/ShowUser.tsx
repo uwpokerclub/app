@@ -1,7 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
-import { GetUserResponse, User } from "../../../../../types";
+import { User } from "../../../../../types";
 
 function ShowUser(): ReactElement {
   const { userId } = useParams<{ userId: string }>();
@@ -10,18 +11,17 @@ function ShowUser(): ReactElement {
   const [user, setUser] = useState<User>();
 
   // Fetch user info
+  const { data } = useFetch<User>(`users/${userId}`);
   useEffect(() => {
-    fetch(`/api/users/${userId}`)
-      .then((res) => res.json())
-      .then((data: GetUserResponse) => {
-        setUser({
-          ...data.user,
-          created_at: new Date(data.user.created_at)
-        });
-
-        setIsLoading(false);
+    if (data) {
+      setUser({
+        ...data,
+        createdAt: new Date(data.createdAt),
       });
-  }, [userId]);
+
+      setIsLoading(false);
+    }
+  }, [data]);
 
   if (isLoading || !user) {
     return <></>;
@@ -30,7 +30,7 @@ function ShowUser(): ReactElement {
   return (
     <>
       <h1>
-        {user.first_name} {user.last_name}
+        {user.firstName} {user.lastName}
       </h1>
       <div className="panel panel-default">
         <div className="panel-heading">
@@ -44,7 +44,7 @@ function ShowUser(): ReactElement {
               <input
                 type="text"
                 name="first_name"
-                value={user.first_name}
+                value={user.firstName}
                 className="form-control"
                 readOnly
               ></input>
@@ -55,7 +55,7 @@ function ShowUser(): ReactElement {
               <input
                 type="text"
                 name="last_name"
-                value={user.last_name}
+                value={user.lastName}
                 className="form-control"
                 readOnly
               ></input>
@@ -99,7 +99,7 @@ function ShowUser(): ReactElement {
               <input
                 type="text"
                 name="created_at"
-                value={user.created_at.toLocaleDateString("en-US", {
+                value={user.createdAt.toLocaleDateString("en-US", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",

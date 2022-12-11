@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
 import { Semester } from "../../../../../types";
 
@@ -8,19 +9,19 @@ import SemestersTable from "../components/SemestersTable";
 function SemestersList(): ReactElement {
   const [semesters, setSemesters] = useState<Semester[]>([]);
 
+  const { data } = useFetch<Semester[]>("semesters");
+
   useEffect(() => {
-    fetch("/api/semesters")
-      .then((res) => res.json())
-      .then((data) =>
-        setSemesters(
-          data.semesters.map((s: Semester) => ({
-            ...s,
-            start_date: new Date(s.start_date),
-            end_date: new Date(s.end_date),
-          }))
-        )
+    if (data) {
+      setSemesters(
+        data.map((s) => ({
+          ...s,
+          startDate: new Date(s.startDate),
+          endDate: new Date(s.endDate),
+        }))
       );
-  }, []);
+    }
+  }, [data]);
 
   return (
     <div>

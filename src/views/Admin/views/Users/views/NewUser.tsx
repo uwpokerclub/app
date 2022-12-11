@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { faculties } from "../../../../../constants";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 function NewUser(): ReactElement {
   const [firstName, setFirstName] = useState("");
@@ -16,24 +17,18 @@ function NewUser(): ReactElement {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id,
-        firstName,
-        lastName,
-        email,
-        faculty,
-        questId,
-      }),
+    sendAPIRequest("users", "POST", {
+      id,
+      firstName,
+      lastName,
+      email,
+      faculty,
+      questId,
+    }).then(({ status }) => {
+      if (status === 201) {
+        return navigate("/users");
+      }
     });
-
-    if (res.status === 201) {
-      return navigate("/users");
-    }
   };
 
   return (

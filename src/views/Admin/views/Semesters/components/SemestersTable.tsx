@@ -25,7 +25,7 @@ function SemestersTable({ semesters }: { semesters: Semester[] }): ReactElement 
               <td>{semester.name}</td>
 
               <td>
-                {semester.start_date.toLocaleDateString("en-US", {
+                {new Date(semester.startDate).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
@@ -33,7 +33,7 @@ function SemestersTable({ semesters }: { semesters: Semester[] }): ReactElement 
               </td>
 
               <td>
-                {semester.end_date.toLocaleDateString("en-US", {
+                {new Date(semester.endDate).toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",

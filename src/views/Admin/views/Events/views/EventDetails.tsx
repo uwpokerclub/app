@@ -1,11 +1,12 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 import {
+  APIErrorResponse,
   Entry,
   Event,
-  GetEventResponse,
-  ListEntriesForEvent,
 } from "../../../../../types";
 import EntriesTable from "../components/EntriesTable";
 
@@ -23,100 +24,93 @@ function EventDetails(): ReactElement {
     setFilteredParticipants(
       participants.filter((participant) =>
         (
-          participant.first_name.toLowerCase() +
+          participant.firstName.toLowerCase() +
           " " +
-          participant.last_name.toLowerCase()
+          participant.lastName.toLowerCase()
         ).includes(query.toLocaleLowerCase())
       )
     );
   };
 
   const updateParticipants = (): void => {
-    fetch(`/api/participants/?eventId=${eventId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setParticipants(data.participants);
-        setFilteredParticipants(data.participants);
-      });
+    sendAPIRequest<Entry[]>(`participants/?eventId=${eventId}`).then(({ data }) => {
+      if (data) {
+        setParticipants(data);
+        setFilteredParticipants(data);
+      }
+    });
   };
 
-  const endEvent = async (e: React.FormEvent): Promise<void> => {
+  const endEvent = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    await fetch(`/api/events/${eventId}/end`, {
-      method: "POST",
-    }).then((res) => {
-      if (res.status === 200) {
-        return;
-      }
-
-      res.json().then((data) => {
-        setError(data.message);
-
-        if (!data.message && event && eventId) {
-          setEvent({
-            id: eventId,
-            name: event.name,
-            start_date: event.start_date,
-            format: event.format,
-            notes: event.notes,
-            semester_id: event.semester_id,
-            state: 1,
-          });
+    sendAPIRequest<APIErrorResponse>(`events/${eventId}/end`, "POST").then(({ status, data }) => {
+      if (data && status !== 204) {
+        setError(data.message)
+      } else {
+        if (!eventId || !event) {
+          return
         }
-      });
+
+        setEvent({
+          id: eventId,
+          name: event.name,
+          startDate: event.startDate,
+          format: event.format,
+          notes: event.notes,
+          semesterId: event.semesterId,
+          state: 1,
+        });
+
+        updateParticipants();
+      }
     });
   };
 
+  const { data: eventData } = useFetch<Event>(`events/${eventId}`);
+  const { data: entries } = useFetch<Entry[]>(`participants?eventId=${eventId}`)
+
   useEffect(() => {
-    const requests = [];
-
-    requests.push(
-      fetch(`/api/events/${eventId}`).then(
-        (res) => res.json() as Promise<GetEventResponse>
-      )
-    );
-    requests.push(
-      fetch(`/api/participants?eventId=${eventId}`).then(
-        (res) => res.json() as Promise<ListEntriesForEvent>
-      )
-    );
-
-    Promise.all(requests).then(([eventData, participantsData]) => {
+    if (eventData) {
       setEvent({
-        id: (eventData as GetEventResponse).event.id,
-        name: (eventData as GetEventResponse).event.name,
-        format: (eventData as GetEventResponse).event.format,
-        notes: (eventData as GetEventResponse).event.notes,
-        semester_id: (eventData as GetEventResponse).event.semester_id,
-        start_date: new Date((eventData as GetEventResponse).event.start_date),
-        state: (eventData as GetEventResponse).event.state,
+        id: eventData.id,
+        name: eventData.name,
+        format: eventData.format,
+        notes: eventData.notes,
+        semesterId: eventData.semesterId,
+        startDate: new Date(eventData.startDate),
+        state: eventData.state,
       });
+    }
+
+    if (entries) {
       setParticipants(
-        (participantsData as ListEntriesForEvent).participants.map(
+        entries.map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at !== null
-                ? new Date(p.signed_out_at)
+              p.signedOutAt !== undefined && p.signedOutAt !== null
+                ? new Date(p.signedOutAt)
                 : undefined,
           })
         )
       );
+
       setFilteredParticipants(
-        (participantsData as ListEntriesForEvent).participants.map(
+        entries.map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
-              p.signed_out_at !== undefined && p.signed_out_at
-                ? new Date(p.signed_out_at)
+              p.signedOutAt !== undefined && p.signedOutAt
+                ? new Date(p.signedOutAt)
                 : undefined,
           })
         )
       );
-      setIsLoading(false);
-    });
-  }, [eventId]);
+    }
+
+    setIsLoading(false)
+  }, [eventId, entries, eventData]);
 
   return (
     <>
@@ -134,7 +128,7 @@ function EventDetails(): ReactElement {
           </p>
           <p>
             <strong>Date:</strong>{" "}
-            {event.start_date.toLocaleString("en-US", {
+            {event.startDate.toLocaleString("en-US", {
               hour12: true,
               month: "short",
               day: "numeric",

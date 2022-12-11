@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Entry, Membership } from "../../../../../types";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { Entry, Event, Membership } from "../../../../../types";
 
 import "./Events.scss";
 
@@ -10,53 +12,51 @@ function RegisterEntires(): ReactElement {
 
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState<Membership[]>([]);
-  const [selectedMembers, setSelectedMembers] = useState(new Set());
+  const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
 
-  const registerMembersForEvent = async (e: React.FormEvent) => {
+  const registerMembersForEvent = (e: React.FormEvent) => {
     e.preventDefault();
     const newParticipants = Array.from(selectedMembers);
 
-    const res = await fetch("/api/participants", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        eventId: eventId,
-        participants: newParticipants,
-      }),
-    });
+    const requests = [];
+    for (const p of newParticipants) {
+      const res = sendAPIRequest("participants", "POST", {
+        eventId: Number(eventId),
+        membershipId: p,
+      });
 
-    if (res.status === 200) {
-      return navigate(`../${eventId}`);
+      requests.push(res);
     }
+
+    Promise.all(requests).then((res) => {
+      if (res[0].status === 201) {
+        navigate(`../${eventId}`);
+      }
+    });
   };
 
+  const { data: event } = useFetch<Event>(`events/${eventId}`);
+  const { data: participants } = useFetch<Entry[]>(
+    `participants?eventId=${eventId}`
+  );
+  const { data: memberships } = useFetch<Membership[]>(
+    `memberships?semesterId=${event ? event.semesterId : ""}`
+  );
+
   useEffect(() => {
-    fetch(`/api/events/${eventId}`)
-      .then((res) => res.json())
-      .then((eventData) => {
-        fetch(`/api/participants?eventId=${eventId}`)
-          .then((res) => res.json())
-          .then((participantsData) => {
-            fetch(`/api/memberships?semesterId=${eventData.event.semester_id}`)
-              .then((res) => res.json())
-              .then((membersData) => {
-                setMembers(
-                  membersData.memberships.filter(
-                    (member: Membership) =>
-                      !new Set(
-                        participantsData.participants.map(
-                          (entry: Entry) => entry.user_id
-                        )
-                      ).has(member.user_id)
-                  )
-                );
-                setIsLoading(false);
-              });
-          });
-      });
-  }, [eventId]);
+    if (memberships && participants) {
+      setMembers(
+        memberships.filter(
+          (member: Membership) =>
+            !new Set(
+              participants.map((entry: Entry) => entry.membershipId)
+            ).has(member.id)
+        )
+      );
+
+      setIsLoading(false);
+    }
+  }, [memberships, participants]);
   return (
     <div className="row">
       {!isLoading && (
@@ -68,7 +68,14 @@ function RegisterEntires(): ReactElement {
 
               <form onSubmit={registerMembersForEvent}>
                 {members.map((member) => (
-                  <div key={member.id} className={`Participants__item ${Number(member.attendance) >= 1 && !member.paid ? "Participants__item-danger" : ""}`}>
+                  <div
+                    key={member.id}
+                    className={`Participants__item ${
+                      Number(member.attendance) >= 1 && !member.paid
+                        ? "Participants__item-danger"
+                        : ""
+                    }`}
+                  >
                     <div className="Participants__item-checkbox">
                       <input
                         type="checkbox"
@@ -91,12 +98,12 @@ function RegisterEntires(): ReactElement {
 
                     <div className="Participants__item-title">
                       <span>
-                        {member.first_name} {member.last_name}
+                        {member.firstName} {member.lastName}
                       </span>
                     </div>
 
                     <div className="Participants__item-student_id">
-                      <span>{member.user_id}</span>
+                      <span>{member.userId}</span>
                     </div>
                   </div>
                 ))}

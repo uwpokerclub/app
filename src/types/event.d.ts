@@ -1,14 +1,10 @@
 export type Event = {
   id: string;
   name: string;
-  start_date: Date;
+  startDate: Date;
   format: string;
   notes: string;
-  semester_id: string;
+  semesterId: string;
   state: number;
   count?: number;
-};
-
-export type GetEventResponse = {
-  event: Event;
 };
