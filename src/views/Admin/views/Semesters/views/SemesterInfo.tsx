@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
 import { Membership, Semester, Transaction, User } from "../../../../../types";
 import NewMembershipModal from "../components/NewMembershipModal";
@@ -32,26 +33,20 @@ function SemesterInfo(): ReactElement {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [showMembershipModal, setShowMembershipModal] = useState(false);
 
+  const { data: semesterData } = useFetch<Semester>(`semesters/${semesterId}`);
+  const { data: membershipsData } = useFetch<Membership[]>(`memberships?semesterId=${semesterId}`);
+  const { data: transactionsData } = useFetch<Transaction[]>(`semesters/${semesterId}/transactions`);
+
   useEffect(() => {
-    fetch(`/api/semesters/${semesterId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setSemester(data);
-      });
+    if (semesterData && membershipsData && transactionsData) {
+      setSemester(semesterData);
 
-    fetch(`/api/memberships?semesterId=${semesterId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMemberships(data);
-        setFilteredMemberships(data)
-      });
+      setMemberships(membershipsData);
+      setFilteredMemberships(membershipsData)
 
-    fetch(`/api/semesters/${semesterId}/transactions`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTransactions(data);
-      });
-  }, [semesterId]);
+      setTransactions(transactionsData);
+    }
+  }, [semesterData, membershipsData, transactionsData]);
 
   const updateMembership = (membershipId: string, isPaid: boolean, isDiscounted: boolean) => {
     fetch(`/api/memberships/${membershipId}`, {

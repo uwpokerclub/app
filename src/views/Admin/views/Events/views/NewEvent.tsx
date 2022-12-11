@@ -1,5 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 import { Semester } from "../../../../../types";
 
@@ -13,32 +15,28 @@ function NewEvent(): ReactElement {
   const [notes, setNotes] = useState("");
   const [semesterId, setSemesterId] = useState("");
 
-  useEffect(() => {
-    fetch("/api/semesters")
-      .then((res) => res.json())
-      .then((data) => setSemesters(data));
-  }, []);
+  const { data } = useFetch<Semester[]>("semesters");
 
-  const createEvent = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (data) {
+      setSemesters(data);
+    }
+  }, [data]);
+
+  const createEvent = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        startDate: new Date(startDate),
-        format: format,
-        notes: notes,
-        semesterId: semesterId,
-      }),
+    sendAPIRequest("events", "POST", {
+      name: name,
+      startDate: new Date(startDate),
+      format: format,
+      notes: notes,
+      semesterId: semesterId,
+    }).then(({ status }) => {
+      if (status === 201) {
+        navigate("../");
+      }
     });
-
-    if (res.status === 201) {
-      return navigate("../");
-    }
   };
 
   return (

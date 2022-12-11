@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Entry, Membership } from "../../../../../types";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { Entry, Event, Membership } from "../../../../../types";
 
 import "./Events.scss";
 
@@ -12,58 +14,49 @@ function RegisterEntires(): ReactElement {
   const [members, setMembers] = useState<Membership[]>([]);
   const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
 
-  const registerMembersForEvent = async (e: React.FormEvent) => {
+  const registerMembersForEvent = (e: React.FormEvent) => {
     e.preventDefault();
     const newParticipants = Array.from(selectedMembers);
 
     const requests = [];
     for (const p of newParticipants) {
-      const res = fetch("/api/participants", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eventId: Number(eventId),
-          membershipId: p,
-        }),
+      const res = sendAPIRequest("participants", "POST", {
+        eventId: Number(eventId),
+        membershipId: p,
       });
 
-      requests.push(res)
+      requests.push(res);
     }
 
     Promise.all(requests).then((res) => {
       if (res[0].status === 201) {
-        navigate(`../${eventId}`)
+        navigate(`../${eventId}`);
       }
-    })
+    });
   };
 
+  const { data: event } = useFetch<Event>(`events/${eventId}`);
+  const { data: participants } = useFetch<Entry[]>(
+    `participants?eventId=${eventId}`
+  );
+  const { data: memberships } = useFetch<Membership[]>(
+    `memberships?semesterId=${event ? event.semesterId : ""}`
+  );
+
   useEffect(() => {
-    fetch(`/api/events/${eventId}`)
-      .then((res) => res.json())
-      .then((event) => {
-        fetch(`/api/participants?eventId=${eventId}`)
-          .then((res) => res.json())
-          .then((participants) => {
-            fetch(`/api/memberships?semesterId=${event.semesterId}`)
-              .then((res) => res.json())
-              .then((memberships) => {
-                setMembers(
-                  memberships.filter(
-                    (member: Membership) =>
-                      !new Set(
-                        participants.map(
-                          (entry: Entry) => entry.membershipId
-                        )
-                      ).has(member.id)
-                  )
-                );
-                setIsLoading(false);
-              });
-          });
-      });
-  }, [eventId]);
+    if (memberships && participants) {
+      setMembers(
+        memberships.filter(
+          (member: Membership) =>
+            !new Set(
+              participants.map((entry: Entry) => entry.membershipId)
+            ).has(member.id)
+        )
+      );
+
+      setIsLoading(false);
+    }
+  }, [memberships, participants]);
   return (
     <div className="row">
       {!isLoading && (
@@ -75,7 +68,14 @@ function RegisterEntires(): ReactElement {
 
               <form onSubmit={registerMembersForEvent}>
                 {members.map((member) => (
-                  <div key={member.id} className={`Participants__item ${Number(member.attendance) >= 1 && !member.paid ? "Participants__item-danger" : ""}`}>
+                  <div
+                    key={member.id}
+                    className={`Participants__item ${
+                      Number(member.attendance) >= 1 && !member.paid
+                        ? "Participants__item-danger"
+                        : ""
+                    }`}
+                  >
                     <div className="Participants__item-checkbox">
                       <input
                         type="checkbox"

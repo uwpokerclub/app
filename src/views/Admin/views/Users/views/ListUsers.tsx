@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
 import { User } from "../../../../../types";
 import UsersTable from "../components/UsersTable";
@@ -11,27 +12,14 @@ function ListUsers(): ReactElement {
   const [query, setQuery] = useState("");
 
   // This will fetch the users and add them to state
+  const { data } = useFetch<User[]>("users");
+
   useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data: User[]) => {
-        setUsers(data);
-        setFilteredUsers(data);
-      });
-  }, []);
-
-  // handleExport makes a POST request to the export users endpoint, and then makes the file downloadable
-  // in the browser.
-  const handleExport = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-
-    fetch("/api/users/export", { method: "POST" })
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = window.URL.createObjectURL(blob);
-        window.location.assign(file);
-      });
-  };
+    if (data) {
+      setUsers(data);
+      setFilteredUsers(data);
+    }
+  }, [data]);
 
   // handleSearch is called when the search bar updates and updates the filteredUsers state. If the query is empty,
   // all users are returned.
@@ -69,14 +57,6 @@ function ListUsers(): ReactElement {
               <div className="form-group">
                 <input type="hidden" className="form-control"></input>
               </div>
-
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={(e) => handleExport(e)}
-              >
-                Export
-              </button>
             </form>
           </div>
         </div>

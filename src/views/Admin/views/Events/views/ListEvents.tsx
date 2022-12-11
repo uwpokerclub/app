@@ -1,13 +1,14 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
 import NoResults from "../../../../../shared/components/NoResults/NoResults";
 import TermSelector from "../../../../../shared/components/TermSelector/TermSelector";
-import { Event } from "../../../../../types";
+import { Event, Semester } from "../../../../../types";
 
 function ListEvents(): ReactElement {
   const [isLoading, setIsLoading] = useState(true);
-  const [semesters, setSemesters] = useState([]);
+  const [semesters, setSemesters] = useState<Semester[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
 
@@ -21,19 +22,17 @@ function ListEvents(): ReactElement {
     }
   };
 
+  const { data: eventsData } = useFetch<Event[]>("events");
+  const { data: semestersData } = useFetch<Semester[]>("semesters");
+
   useEffect(() => {
-    const requests = [];
-
-    requests.push(fetch("/api/events").then((res) => res.json()));
-    requests.push(fetch("/api/semesters").then((res) => res.json()));
-
-    Promise.all(requests).then(([eventsData, semesterData]) => {
+    if (eventsData && semestersData) {
       setEvents(eventsData);
       setFilteredEvents(eventsData);
-      setSemesters(semesterData);
+      setSemesters(semestersData);
       setIsLoading(false);
-    });
-  }, []);
+    }
+  }, [eventsData, semestersData]);
 
 
   return (

@@ -1,5 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { APIErrorResponse } from "../../../../../types";
 
 function NewSemester(): ReactElement {
   const navigate = useNavigate();
@@ -17,36 +19,24 @@ function NewSemester(): ReactElement {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let status = 0;
-    fetch("/api/semesters", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        startDate,
-        endDate,
-        startingBudget: Number(startingBudget),
-        membershipFee: Number(membershipFee),
-        discountedMembershipFee: Number(discountedMembershipFee),
-        rebuyFee: Number(rebuyFee),
-        meta,
-      }),
-    })
-      .then((res) => {
-        status = res.status;
-        return res.json();
-      })
-      .then((data) => {
-        if (status === 201) {
-          return navigate("../");
-        }
+    sendAPIRequest<APIErrorResponse>("semesters", "POST", {
+      name,
+      startDate,
+      endDate,
+      startingBudget: Number(startingBudget),
+      membershipFee: Number(membershipFee),
+      discountedMembershipFee: Number(discountedMembershipFee),
+      rebuyFee: Number(rebuyFee),
+      meta,
+    }).then(({ status, data }) => {
+      if (status === 201) {
+        return navigate("../");
+      }
 
-        if (status === 400) {
-          setErrorMessage(data.message);
-        }
-      });
+      if (status === 400) {
+        setErrorMessage(data ? data.message : "")
+      }
+    })
   };
 
   return (

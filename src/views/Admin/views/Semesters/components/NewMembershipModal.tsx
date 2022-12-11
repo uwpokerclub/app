@@ -10,6 +10,7 @@ import { Membership, User } from "../../../../../types";
 
 import "./NewMembershipModal.scss";
 import { faculties } from "../../../../../constants";
+import useFetch from "../../../../../hooks/useFetch";
 
 type UserSelectionType = {
   value: string;
@@ -61,39 +62,33 @@ function NewMembershipModal({
   const [errorMessage, setErrorMessage] = useState("")
 
   // Will fetch all the users that are not already registered for this semester
+  const { data: usersData } = useFetch<User[]>("users");
+  const { data: memberships } = useFetch<Membership[]>(`memberships?semesterId=${semesterId}`);
+
   useEffect(() => {
-    const requests = [];
-
-    requests.push(fetch(`/api/users`).then((res) => res.json()));
-    requests.push(
-      fetch(`/api/memberships?semesterId=${semesterId}`).then((res) =>
-        res.json()
-      )
-    );
-
-    Promise.all(requests).then(([users, memberships]) => {
-      const userIds: string[] = users.map((u: User) => u.id);
-      const membershipUserIds: string[] = memberships.map(
+    if (usersData && memberships) {
+      const userIds = usersData.map((u) => u.id);
+      const membershipUserIds = memberships.map(
         (m: Membership) => m.userId
       );
-
+        
       const userSet = new Set(userIds);
       const memberSet = new Set(membershipUserIds);
-
+      
       const unregisteredUserSet = setDifference(userSet, memberSet);
-
+      
       const unregisteredUserIds = Array.from(unregisteredUserSet);
-
+      
       setUsers(
-        users
-          .filter((u: User) => unregisteredUserIds.includes(u.id))
-          .map((u: User) => ({
-            value: u.id,
-            label: `${u.firstName} ${u.lastName}`,
-          }))
+        usersData
+        .filter((u) => unregisteredUserIds.includes(u.id))
+        .map((u) => ({
+          value: u.id,
+          label: `${u.firstName} ${u.lastName}`
+        }))
       );
-    });
-  }, [semesterId]);
+    }
+  }, [usersData, memberships]);
 
   const handleSubmit = (): void => {
     if (showExistingUserTab) {

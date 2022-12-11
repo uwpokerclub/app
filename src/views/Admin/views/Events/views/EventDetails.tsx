@@ -1,7 +1,10 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 import {
+  APIErrorResponse,
   Entry,
   Event,
 } from "../../../../../types";
@@ -30,21 +33,21 @@ function EventDetails(): ReactElement {
   };
 
   const updateParticipants = (): void => {
-    fetch(`/api/participants/?eventId=${eventId}`)
-      .then((res) => res.json())
-      .then((data) => {
+    sendAPIRequest<Entry[]>(`participants/?eventId=${eventId}`).then(({ data }) => {
+      if (data) {
         setParticipants(data);
         setFilteredParticipants(data);
-      });
+      }
+    });
   };
 
-  const endEvent = async (e: React.FormEvent): Promise<void> => {
+  const endEvent = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    await fetch(`/api/events/${eventId}/end`, {
-      method: "POST",
-    }).then((res) => {
-      if (res.status === 204) {
+    sendAPIRequest<APIErrorResponse>(`events/${eventId}/end`, "POST").then(({ status, data }) => {
+      if (data && status !== 204) {
+        setError(data.message)
+      } else {
         if (!eventId || !event) {
           return
         }
@@ -59,41 +62,30 @@ function EventDetails(): ReactElement {
           state: 1,
         });
 
-        updateParticipants()
-      } else {
-        res.json().then((data) => {
-          setError(data.message);
-        });
+        updateParticipants();
       }
     });
   };
 
+  const { data: eventData } = useFetch<Event>(`events/${eventId}`);
+  const { data: entries } = useFetch<Entry[]>(`participants?eventId=${eventId}`)
+
   useEffect(() => {
-    const requests = [];
-
-    requests.push(
-      fetch(`/api/events/${eventId}`).then(
-        (res) => res.json() as Promise<Event>
-      )
-    );
-    requests.push(
-      fetch(`/api/participants?eventId=${eventId}`).then(
-        (res) => res.json() as Promise<Entry[]>
-      )
-    );
-
-    Promise.all(requests).then(([event, participants]) => {
+    if (eventData) {
       setEvent({
-        id: (event as Event).id,
-        name: (event as Event).name,
-        format: (event as Event).format,
-        notes: (event as Event).notes,
-        semesterId: (event as Event).semesterId,
-        startDate: new Date((event as Event).startDate),
-        state: (event as Event).state,
+        id: eventData.id,
+        name: eventData.name,
+        format: eventData.format,
+        notes: eventData.notes,
+        semesterId: eventData.semesterId,
+        startDate: new Date(eventData.startDate),
+        state: eventData.state,
       });
+    }
+
+    if (entries) {
       setParticipants(
-        (participants as Entry[]).map(
+        entries.map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
@@ -103,8 +95,9 @@ function EventDetails(): ReactElement {
           })
         )
       );
+
       setFilteredParticipants(
-        (participants as Entry[]).map(
+        entries.map(
           (p: Entry) => ({
             ...p,
             signed_out_at:
@@ -114,11 +107,10 @@ function EventDetails(): ReactElement {
           })
         )
       );
-      setIsLoading(false);
+    }
 
-      console.log(participants)
-    });
-  }, [eventId]);
+    setIsLoading(false)
+  }, [eventId, entries, eventData]);
 
   return (
     <>

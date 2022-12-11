@@ -1,5 +1,6 @@
 import React, { Dispatch, ReactElement, SetStateAction, useState } from "react";
-import { Entry, Event } from "../../../../../types";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
+import { APIErrorResponse, Entry, Event } from "../../../../../types";
 
 function EntriesTable({
   entries,
@@ -17,45 +18,29 @@ function EntriesTable({
   const [search, setSearch] = useState("");
 
   const updateParticipant = (membershipId: string, action: string) => {
-    fetch(`/api/participants/${action}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipId,
-        eventId: event.id,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    sendAPIRequest<APIErrorResponse>(`participants/${action}`, "POST", {
+      membershipId,
+      eventId: event.id,
+    }).then(({ data }) => {
+      if (data && data.message) {
         setError(data.message);
-
-        if (!data.message) {
-          updateParticipants();
-        }
-      });
+      } else {
+        updateParticipants();
+      }
+    });
   };
 
-  const deleteParticipant = async (membershipId: string) => {
-    await fetch("/api/participants", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        membershipId,
-        eventId: event.id,
-      }),
-    }).then((response) => {
-        if (response.status !== 204) {
-          response.json().then((data) => {
-            setError(data.message);
-          });  
-        } else {
-          updateParticipants();
-        }
-      });
+  const deleteParticipant = (membershipId: string) => {
+    sendAPIRequest<APIErrorResponse>("participants", "DELETE", {
+      membershipId,
+      eventId: event.id,
+    }).then(({ status, data }) => {
+      if (data && status !== 204) {
+        setError(data.message);
+      } else {
+        updateParticipants();
+      }
+    });
   };
 
   return (
@@ -132,7 +117,10 @@ function EntriesTable({
                       <button
                         type="button"
                         className="btn btn-success"
-                        onClick={() => updateParticipant(entry.membershipId, "rebuy")}>
+                        onClick={() =>
+                          updateParticipant(entry.membershipId, "rebuy")
+                        }
+                      >
                         Rebuy
                       </button>
                       {entry.signedOutAt ? (

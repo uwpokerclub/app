@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import useFetch from "../../../../../hooks/useFetch";
 
 import { User } from "../../../../../types";
 
@@ -10,19 +11,17 @@ function ShowUser(): ReactElement {
   const [user, setUser] = useState<User>();
 
   // Fetch user info
+  const { data } = useFetch<User>(`users/${userId}`);
   useEffect(() => {
-    fetch(`/api/users/${userId}`)
-      .then((res) => res.json())
-      .then((user: User) => {
-        console.log(user)
-        setUser({
-          ...user,
-          createdAt: new Date(user.createdAt)
-        });
-
-        setIsLoading(false);
+    if (data) {
+      setUser({
+        ...data,
+        createdAt: new Date(data.createdAt),
       });
-  }, [userId]);
+
+      setIsLoading(false);
+    }
+  }, [data]);
 
   if (isLoading || !user) {
     return <></>;
