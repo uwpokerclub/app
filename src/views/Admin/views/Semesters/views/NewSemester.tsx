@@ -21,11 +21,11 @@ function NewSemester(): ReactElement {
 
     sendAPIRequest<APIErrorResponse>("semesters", "POST", {
       name,
-      startDate,
-      endDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       startingBudget: Number(startingBudget),
       membershipFee: Number(membershipFee),
-      discountedMembershipFee: Number(discountedMembershipFee),
+      membershipDiscountFee: Number(discountedMembershipFee),
       rebuyFee: Number(rebuyFee),
       meta,
     }).then(({ status, data }) => {
