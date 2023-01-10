@@ -31,6 +31,8 @@ gh repo clone uwpokerclub/app
 
 # Change into project directory
 cd app
+## first time installation
+yarn install
 ```
 
 ## Development
