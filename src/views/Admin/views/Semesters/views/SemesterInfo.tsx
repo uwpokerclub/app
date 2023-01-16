@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../../../hooks/useFetch";
+import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
 import { Membership, Semester, Transaction, User } from "../../../../../types";
 import NewMembershipModal from "../components/NewMembershipModal";
@@ -49,59 +50,47 @@ function SemesterInfo(): ReactElement {
   }, [semesterData, membershipsData, transactionsData]);
 
   const updateMembership = (membershipId: string, isPaid: boolean, isDiscounted: boolean) => {
-    fetch(`/api/memberships/${membershipId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        paid: isPaid,
-        discounted: isDiscounted
-      }),
+    sendAPIRequest(`memberships/${membershipId}`, "POST", {
+      paid: isPaid,
+      discounted: isDiscounted
+    }).then(({ status, res }) => {
+      if (status === 200) {
+        setMemberships(
+          memberships.map((m) => {
+            if (m.id !== membershipId) return m;
+    
+            return {
+              ...m,
+              paid: isPaid,
+              discounted: isDiscounted
+            };
+          })
+        );
+    
+        setFilteredMemberships(
+          filteredMemberships.map((m) => {
+            if (m.id !== membershipId) return m;
+    
+            return {
+              ...m,
+              paid: isPaid,
+              discounted: isDiscounted
+            };
+          })
+        );
+      }
     });
-
-    setMemberships(
-      memberships.map((m) => {
-        if (m.id !== membershipId) return m;
-
-        return {
-          ...m,
-          paid: isPaid,
-          discounted: isDiscounted
-        };
-      })
-    );
-
-    setFilteredMemberships(
-      filteredMemberships.map((m) => {
-        if (m.id !== membershipId) return m;
-
-        return {
-          ...m,
-          paid: isPaid,
-          discounted: isDiscounted
-        };
-      })
-    );
   };
 
   const onTransactionSubmit = (description: string, amount: number): void => {
-    fetch(`/api/semesters/${semesterId}/transactions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        description,
-        amount
-      })
-    }).then((res) => {
-      if (res.status === 201) {
-        fetch(`/api/semesters/${semesterId}/transactions`)
-        .then((res) => res.json())
-        .then((data) => {
-          setTransactions(data.transactions);
-        });  
+    sendAPIRequest(`semesters/${semesterId}/transactions`, "POST", {
+      description,
+      amount
+    }).then(({ status }) => {
+      if (status === 201) {
+        sendAPIRequest(`semesters/${semesterId}/transactions`).then(({ data }) => {
+          setTransactions(data);
+        });
       }
     });
 
@@ -109,71 +98,49 @@ function SemesterInfo(): ReactElement {
   }
 
   const onMembershipSubmit = (userId: string, paid: boolean, discounted: boolean): void => {
-    fetch(`/api/memberships`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        semesterId,
-        userId,
-        paid,
-        discounted
-      }),
-    }).then((res) => setShowMembershipModal(false));
+    sendAPIRequest("memberships", "POST", {
+      semesterId,
+      userId,
+      paid,
+      discounted
+    }).then(({ status }) => {
+      if (status === 201) {
+        setShowMembershipModal(false);
+      }
+    });
   };
 
   const onUserSubmit = (user: Partial<User>, paid: boolean, discounted: boolean): Promise<boolean> => {
     // Create user first
-    return fetch("/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        faculty: user.faculty,
-        questId: user.questId
-      }),
-    }).then((res) => {
-      if (res.status !== 201) {
+    return sendAPIRequest("users", "POST", {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      faculty: user.faculty,
+      questId: user.questId
+    }).then(({ status }) => {
+      if (status !== 201) {
         return false;
       }
 
-      fetch(`/api/memberships`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          semesterId,
-          userId: user.id,
-          paid,
-          discounted
-        }),
-      }).then((res) => setShowMembershipModal(false));
+      sendAPIRequest("memberships", "POST", {
+        semesterId,
+        userId: user.id,
+        paid,
+        discounted
+      }).then(({ status }) => {
+        if (status === 201) setShowMembershipModal(false);
+      });
 
       return true;
     });
-
   }
 
   const handleDelete = (id: number): void => {
-    fetch(`/api/semesters/${semesterId}/transactions/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then((res) => {
-      if (res.status === 200) {
-        fetch(`/api/semesters/${semesterId}/transactions`)
-          .then((res) => res.json())
-          .then((data) => {
-            setTransactions(data.transactions);
-        });
+    sendAPIRequest(`semesters/${semesterId}/transactions/${id}`, "DELETE").then(({ status }) => {
+      if (status === 200) {
+        sendAPIRequest(`semesters/${semesterId}/transactions`).then(({ data }) => setTransactions(data))
       }
     });
   }
@@ -211,7 +178,7 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.membershipFeeDiscount).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.membershipDiscountFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Membership Fee (Discounted)</h6>
           </div>

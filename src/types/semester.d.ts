@@ -7,6 +7,6 @@ export type Semester = {
   startingBudget: number;
   currentBudget: number;
   membershipFee: number;
-  membershipFeeDiscount: number;
+  membershipDiscountFee: number;
   rebuyFee: number;
 };
