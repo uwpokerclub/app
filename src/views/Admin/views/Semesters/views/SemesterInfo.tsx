@@ -53,7 +53,7 @@ function SemesterInfo(): ReactElement {
     sendAPIRequest(`memberships/${membershipId}`, "POST", {
       paid: isPaid,
       discounted: isDiscounted
-    }).then(({ status, res }) => {
+    }).then(({ status }) => {
       if (status === 200) {
         setMemberships(
           memberships.map((m) => {
@@ -88,8 +88,10 @@ function SemesterInfo(): ReactElement {
       amount
     }).then(({ status }) => {
       if (status === 201) {
-        sendAPIRequest(`semesters/${semesterId}/transactions`).then(({ data }) => {
-          setTransactions(data);
+        sendAPIRequest<Transaction[]>(`semesters/${semesterId}/transactions`).then(({ data }) => {
+          if (data) {
+            setTransactions(data);
+          }
         });
       }
     });
@@ -140,7 +142,11 @@ function SemesterInfo(): ReactElement {
   const handleDelete = (id: number): void => {
     sendAPIRequest(`semesters/${semesterId}/transactions/${id}`, "DELETE").then(({ status }) => {
       if (status === 200) {
-        sendAPIRequest(`semesters/${semesterId}/transactions`).then(({ data }) => setTransactions(data))
+        sendAPIRequest<Transaction[]>(`semesters/${semesterId}/transactions`).then(({ data }) => {
+          if (data) {
+            setTransactions(data)
+          }
+        })
       }
     });
   }
