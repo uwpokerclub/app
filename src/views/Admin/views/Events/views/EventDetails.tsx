@@ -33,7 +33,7 @@ function EventDetails(): ReactElement {
   };
 
   const updateParticipants = (): void => {
-    sendAPIRequest<Entry[]>(`participants/?eventId=${eventId}`).then(({ data }) => {
+    sendAPIRequest<Entry[]>(`participants?eventId=${eventId}`).then(({ data }) => {
       if (data) {
         setParticipants(data);
         setFilteredParticipants(data);
