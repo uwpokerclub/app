@@ -13,6 +13,9 @@ function RegisterEntires(): ReactElement {
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState<Membership[]>([]);
   const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
+  const [query, setQuery] = useState("");
+
+  const filteredMembers = members.filter((m) => RegExp(query, "i").test(`${m.firstName} ${m.lastName}`))
 
   const registerMembersForEvent = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,8 +69,12 @@ function RegisterEntires(): ReactElement {
             <div className="Participants">
               <h3 className="center bold">Sign In Members</h3>
 
-              <form onSubmit={registerMembersForEvent}>
-                {members.map((member) => (
+              <div className="Participants__header">
+                <input className="form-control" type="search" placeholder="Search" onChange={(e) => setQuery(e.target.value)}></input>
+                <button className="btn btn-primary" onClick={registerMembersForEvent}>Sign In</button>
+              </div>
+              <form className="Participants__list">
+                {filteredMembers.map((member) => (
                   <div
                     key={member.id}
                     className={`Participants__item ${
@@ -107,14 +114,6 @@ function RegisterEntires(): ReactElement {
                     </div>
                   </div>
                 ))}
-
-                <div className="Participants__submit">
-                  <div className="row">
-                    <button type="submit" className="mx-auto btn btn-primary">
-                      Sign In
-                    </button>
-                  </div>
-                </div>
               </form>
             </div>
           </div>

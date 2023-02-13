@@ -29,47 +29,56 @@
   border: 1px solid rgba(15, 19, 24, 0.12);
   padding: 1em;
   margin-top: 1em;
-}
 
-.Participants__submit {
-  padding-top: 1em;
-}
-
-.Participants__item {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  padding: 0.5em;
-
-  &-danger {
-    background-color: #f0bcc2 !important;
+  &__header {
+    display: flex
   }
-}
 
-.Participants__item:nth-child(even) {
-  background-color: #f2f2f2;
-}
+  &__submit {
+    padding-top: 1em;
+  }
 
-.Participants__item:hover {
-  background-color: #d3d3d3 !important;
-  cursor: pointer;
-}
+  &__list {
+    max-height: 75vh;
+    overflow-y: scroll;
+  }
 
-.Participants__item-checkbox {
-  padding: 0 1em;
-}
+  &__item {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.5em;
+  
+    &-danger {
+      background-color: #f0bcc2 !important;
+    }
 
-.Participants__item-checkbox input[type="checkbox"] {
-  height: 1em;
-  width: 1em;
-  border: 3px solid transparent black;
-}
+    &:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  
+    &:hover {
+      background-color: #d3d3d3 !important;
+      cursor: pointer;
+    }
 
-.Participants__item-title {
-  font-size: 1rem;
-}
+    &-checkbox {
+      padding: 0 1em;
+    }
 
-.Participants__item-student_id {
-  padding: 0 1em;
-  font-size: 1rem;
+    &-checkbox input[type="checkbox"] {
+      height: 1em;
+      width: 1em;
+      border: 3px solid transparent black;
+    }
+
+    &-title {
+      font-size: 1rem;
+    }
+
+    &-student_id {
+      padding: 0 1em;
+      font-size: 1rem;
+    }
+  }
 }
