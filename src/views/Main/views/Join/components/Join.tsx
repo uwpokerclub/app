@@ -1,6 +1,6 @@
 import React from "react";
 
-import { discordLine, instagramLine, facebookLine, emailLine } from "../../../../../assets"
+import { discordLine, instagramLine, facebookLine, emailLine, formsLine } from "../../../../../assets"
 import "./Join.scss"
 
 const Join = () => {
@@ -38,6 +38,12 @@ const Join = () => {
                 <a className="text-link" href="https://www.facebook.com/uwpokerstudies" target="_blank" rel="noreferrer">
                   <img src={facebookLine} className="mr-4 pl-1 pr-2" alt=""/>
                   LIKE US ON FACEBOOK
+                </a>
+              </li>
+              <li>
+              <a className="text-link" href="https://forms.gle/p7hB6XbTPfsdijrE6" target="_blank" rel="noreferrer">
+              <img src={formsLine} className="mr-4 pl-1 pr-2" alt=""/>
+                  2023 WINTER MIDTERM
                 </a>
               </li>
               <li>
