@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const useFetch = <T>(path: string, method = "GET", body?: any): {status: number, data: T | null, isLoading: boolean} => {
+export default function useFetch<T>(path: string, method = "GET", body?: any): {status: number, data: T | null, isLoading: boolean} {
   const [fetchedData, setFetchedData] = useState<{status: number, data: T | null, isLoading: boolean}>({
     status: 0,
     data: null,
@@ -40,5 +40,3 @@ const useFetch = <T>(path: string, method = "GET", body?: any): {status: number,
 
   return fetchedData;
 };
-
-export default useFetch;
