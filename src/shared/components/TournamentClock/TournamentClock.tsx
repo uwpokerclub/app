@@ -151,6 +151,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
 
     setMinutes(minutesRemaining);
     setSeconds(secondsRemaining);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   // Updates the timer based on the current blind level. If there are no
@@ -161,7 +162,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
       setTimerOver(true);
     } else {
       // Reset timer to new level time
-      now = new Date();
+      const now = new Date();
       setCountdownDate(
         new Date(now).setMinutes(now.getMinutes() + levels[currLevel].time)
       );
