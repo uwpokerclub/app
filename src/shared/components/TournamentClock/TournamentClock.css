@@ -1,0 +1,99 @@
+.grid {
+  background-color: #2b2b2b;
+
+  color: #fff;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr 0.25fr 1fr;
+  grid-template-areas: 
+    "timer timer"
+    "progressbar progressbar" 
+    "blinds ante";
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.progress[value] {
+  margin: 1rem 0;
+
+  width: 100%;
+
+  grid-area: progressbar;
+}
+
+.timer {
+  grid-area: timer;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timer__header {
+  font-size: 1.5rem;
+  background-color: #1b1c1e;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+}
+
+.timer__display {
+  font-size: 15rem;
+}
+
+.timer__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0 4rem;
+}
+
+.timer__buttons span {
+  cursor: pointer;
+}
+
+.blinds {
+  grid-area: blinds;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ante {  
+  grid-area: ante;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.blinds__header, .ante__header {
+  font-size: 1.25rem;
+  color: #aeaeae;
+}
+
+.blinds__amount, .ante__amount {
+  font-size: 5rem;
+}
+
+.blinds__next, .ante__next {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.blinds__next__header, .ante__next__header {
+  font-size: 1.15rem;
+  color: #aeaeae;
+}
+
+.blinds__next__amount, .ante__next__amount {
+  color: #909090;
+}
+
