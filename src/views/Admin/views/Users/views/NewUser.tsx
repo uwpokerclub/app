@@ -11,6 +11,7 @@ function NewUser(): ReactElement {
   const [faculty, setFaculty] = useState("");
   const [questId, setQuestId] = useState("");
   const [id, setId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,6 +29,10 @@ function NewUser(): ReactElement {
       if (status === 201) {
         return navigate("../");
       }
+
+      if (status === 500) {
+        setErrorMessage("This user already exists.");
+      }
     });
   };
 
@@ -35,6 +40,11 @@ function NewUser(): ReactElement {
     <div className="row">
       <div className="col-md-3"></div>
       <div className="col-md-6">
+        {errorMessage && (
+          <div role="alert" className="alert alert-danger">
+            <span>{errorMessage}</span>
+          </div>
+        )}
         <h1 className="center">Sign Up</h1>
         <div className="mx-auto">
           <form onSubmit={handleSubmit}>
