@@ -82,3 +82,31 @@
     }
   }
 }
+
+.Structures {
+  &__tab-group {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 0.5rem;
+  }
+
+  &__tab {
+    cursor: pointer;
+    padding: 0 2rem 0.25rem;
+    
+    &-active, &:hover {
+      border-bottom: 1px solid #5497ef;
+    }
+  }
+}
+
+.StructureBlinds {
+  &__header {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__add {
+    margin-top: 1rem;
+  }
+}
