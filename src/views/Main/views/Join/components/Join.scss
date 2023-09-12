@@ -11,7 +11,7 @@
   align-items: center;
 }
 
-.socials-list li {  
+.socials-list li {
   padding: 0px;
   background-color: rgba(0, 0, 0, 0.35);
   border: 0.08rem solid white;
@@ -24,8 +24,8 @@
   align-items: center;
 }
 
-li:nth-child(1){
-    border: 0.08rem solid goldenrod;
+.highlited-item {
+  border: 0.08rem solid goldenrod;
 }
 
 .socials-list a,
@@ -38,4 +38,3 @@ li:nth-child(1){
   width: 100%;
   height: 100%;
 }
-
