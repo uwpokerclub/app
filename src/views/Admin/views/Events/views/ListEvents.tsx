@@ -80,14 +80,19 @@ function ListEvents(): ReactElement {
                       </p>
                       <p>
                         <strong>Date:</strong>{" "}
-                        {event.startDate.toLocaleString("en-US", {
-                          hour12: true,
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
+                        {
+                          new Date(event.startDate).toLocaleDateString(
+                            "en-US",
+                            {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            }
+                          )
+                        }
                       </p>
                       <p>
                         <strong>Additional Details:</strong> {event.notes}
