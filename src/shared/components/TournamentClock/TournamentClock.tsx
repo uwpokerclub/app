@@ -33,10 +33,10 @@ export function TournamentClock({ levels }: Props): ReactElement {
 
   let now = new Date();
   const [countdownDate, setCountdownDate] = useState(
-    new Date(now).setMinutes(now.getMinutes() + levels[0].time)
+    new Date(now).setMinutes(now.getMinutes() + levels[0].time),
   );
   const [countdown, setCountdown] = useState(
-    countdownDate - new Date().getTime()
+    countdownDate - new Date().getTime(),
   );
 
   // toggleTimer toggles the state of the timer from paused to unpaused and
@@ -50,8 +50,8 @@ export function TournamentClock({ levels }: Props): ReactElement {
       setCountdownDate(
         new Date(now).setMinutes(
           now.getMinutes() + minutes,
-          now.getSeconds() + seconds
-        )
+          now.getSeconds() + seconds,
+        ),
       );
     }
 
@@ -78,7 +78,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
       now = new Date();
       setCountdownDate((d) => {
         const newTime = new Date(now).setMinutes(
-          now.getMinutes() + levels[n].time
+          now.getMinutes() + levels[n].time,
         );
         setCountdown(Math.ceil((newTime - new Date().getTime()) / 1000) * 1000);
         return newTime;
@@ -99,7 +99,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
       now = new Date();
       setCountdownDate((d) => {
         const newTime = new Date(now).setMinutes(
-          now.getMinutes() + levels[n].time
+          now.getMinutes() + levels[n].time,
         );
         setCountdown(Math.ceil((newTime - new Date().getTime()) / 1000) * 1000);
         return newTime;
@@ -126,7 +126,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
   // updates. If the timer has completed it will stop updating.
   useEffect(() => {
     const minutesRemaining = Math.floor(
-      (countdown % (1000 * 60 * 60)) / (1000 * 60)
+      (countdown % (1000 * 60 * 60)) / (1000 * 60),
     );
     const secondsRemaining = Math.floor((countdown % (1000 * 60)) / 1000);
 
@@ -151,7 +151,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
 
     setMinutes(minutesRemaining);
     setSeconds(secondsRemaining);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   // Updates the timer based on the current blind level. If there are no
@@ -164,7 +164,7 @@ export function TournamentClock({ levels }: Props): ReactElement {
       // Reset timer to new level time
       const now = new Date();
       setCountdownDate(
-        new Date(now).setMinutes(now.getMinutes() + levels[currLevel].time)
+        new Date(now).setMinutes(now.getMinutes() + levels[currLevel].time),
       );
     }
   }, [currLevel, levels]);

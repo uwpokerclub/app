@@ -14,7 +14,9 @@ function SemesterInfo(): ReactElement {
 
   const [semester, setSemester] = useState<Semester>();
   const [memberships, setMemberships] = useState<Membership[]>([]);
-  const [filteredMemberships, setFilteredMemberships] = useState<Membership[]>([]);
+  const [filteredMemberships, setFilteredMemberships] = useState<Membership[]>(
+    [],
+  );
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [query, setQuery] = useState("");
@@ -27,56 +29,66 @@ function SemesterInfo(): ReactElement {
     }
 
     setFilteredMemberships(
-      memberships.filter((m) => RegExp(search, "i").test(`${m.firstName} ${m.lastName}`))
+      memberships.filter((m) =>
+        RegExp(search, "i").test(`${m.firstName} ${m.lastName}`),
+      ),
     );
-  }
+  };
 
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [showMembershipModal, setShowMembershipModal] = useState(false);
 
   const { data: semesterData } = useFetch<Semester>(`semesters/${semesterId}`);
-  const { data: membershipsData } = useFetch<Membership[]>(`memberships?semesterId=${semesterId}`);
-  const { data: transactionsData } = useFetch<Transaction[]>(`semesters/${semesterId}/transactions`);
+  const { data: membershipsData } = useFetch<Membership[]>(
+    `memberships?semesterId=${semesterId}`,
+  );
+  const { data: transactionsData } = useFetch<Transaction[]>(
+    `semesters/${semesterId}/transactions`,
+  );
 
   useEffect(() => {
     if (semesterData && membershipsData && transactionsData) {
       setSemester(semesterData);
 
       setMemberships(membershipsData);
-      setFilteredMemberships(membershipsData)
+      setFilteredMemberships(membershipsData);
 
       setTransactions(transactionsData);
     }
   }, [semesterData, membershipsData, transactionsData]);
 
-  const updateMembership = (membershipId: string, isPaid: boolean, isDiscounted: boolean) => {
+  const updateMembership = (
+    membershipId: string,
+    isPaid: boolean,
+    isDiscounted: boolean,
+  ) => {
     sendAPIRequest(`memberships/${membershipId}`, "PATCH", {
       paid: isPaid,
-      discounted: isDiscounted
+      discounted: isDiscounted,
     }).then(({ status }) => {
       if (status === 200) {
         setMemberships(
           memberships.map((m) => {
             if (m.id !== membershipId) return m;
-    
+
             return {
               ...m,
               paid: isPaid,
-              discounted: isDiscounted
+              discounted: isDiscounted,
             };
-          })
+          }),
         );
-    
+
         setFilteredMemberships(
           filteredMemberships.map((m) => {
             if (m.id !== membershipId) return m;
-    
+
             return {
               ...m,
               paid: isPaid,
-              discounted: isDiscounted
+              discounted: isDiscounted,
             };
-          })
+          }),
         );
       }
     });
@@ -85,10 +97,12 @@ function SemesterInfo(): ReactElement {
   const onTransactionSubmit = (description: string, amount: number): void => {
     sendAPIRequest(`semesters/${semesterId}/transactions`, "POST", {
       description,
-      amount
+      amount,
     }).then(({ status }) => {
       if (status === 201) {
-        sendAPIRequest<Transaction[]>(`semesters/${semesterId}/transactions`).then(({ data }) => {
+        sendAPIRequest<Transaction[]>(
+          `semesters/${semesterId}/transactions`,
+        ).then(({ data }) => {
           if (data) {
             setTransactions(data);
           }
@@ -97,14 +111,18 @@ function SemesterInfo(): ReactElement {
     });
 
     setShowTransactionModal(false);
-  }
+  };
 
-  const onMembershipSubmit = (userId: string, paid: boolean, discounted: boolean): void => {
+  const onMembershipSubmit = (
+    userId: string,
+    paid: boolean,
+    discounted: boolean,
+  ): void => {
     sendAPIRequest("memberships", "POST", {
       semesterId,
       userId,
       paid,
-      discounted
+      discounted,
     }).then(({ status }) => {
       if (status === 201) {
         setShowMembershipModal(false);
@@ -112,7 +130,11 @@ function SemesterInfo(): ReactElement {
     });
   };
 
-  const onUserSubmit = (user: Partial<User>, paid: boolean, discounted: boolean): Promise<boolean> => {
+  const onUserSubmit = (
+    user: Partial<User>,
+    paid: boolean,
+    discounted: boolean,
+  ): Promise<boolean> => {
     // Create user first
     return sendAPIRequest("users", "POST", {
       id: Number(user.id),
@@ -120,7 +142,7 @@ function SemesterInfo(): ReactElement {
       lastName: user.lastName,
       email: user.email,
       faculty: user.faculty,
-      questId: user.questId
+      questId: user.questId,
     }).then(({ status }) => {
       if (status !== 201) {
         return false;
@@ -130,26 +152,30 @@ function SemesterInfo(): ReactElement {
         semesterId,
         userId: Number(user.id),
         paid,
-        discounted
+        discounted,
       }).then(({ status }) => {
         if (status === 201) setShowMembershipModal(false);
       });
 
       return true;
     });
-  }
+  };
 
   const handleDelete = (id: number): void => {
-    sendAPIRequest(`semesters/${semesterId}/transactions/${id}`, "DELETE").then(({ status }) => {
-      if (status === 204) {
-        sendAPIRequest<Transaction[]>(`semesters/${semesterId}/transactions`).then(({ data }) => {
-          if (data) {
-            setTransactions(data)
-          }
-        })
-      }
-    });
-  }
+    sendAPIRequest(`semesters/${semesterId}/transactions/${id}`, "DELETE").then(
+      ({ status }) => {
+        if (status === 204) {
+          sendAPIRequest<Transaction[]>(
+            `semesters/${semesterId}/transactions`,
+          ).then(({ data }) => {
+            if (data) {
+              setTransactions(data);
+            }
+          });
+        }
+      },
+    );
+  };
 
   return (
     <div>
@@ -157,7 +183,10 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.startingBudget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.startingBudget).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Starting Budget</h6>
           </div>
@@ -166,7 +195,10 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.currentBudget).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.currentBudget).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Current Budget</h6>
           </div>
@@ -175,7 +207,10 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.membershipFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.membershipFee).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Membership Fee</h6>
           </div>
@@ -184,16 +219,24 @@ function SemesterInfo(): ReactElement {
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.membershipDiscountFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.membershipDiscountFee).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </h2>
-            <h6 className="card-subtitle mb-2 text-muted">Membership Fee (Discounted)</h6>
+            <h6 className="card-subtitle mb-2 text-muted">
+              Membership Fee (Discounted)
+            </h6>
           </div>
         </div>
-    
+
         <div className="card Semester__highlight-item">
           <div className="card-body">
             <h2 className="card-title">
-              {Number(semester?.rebuyFee).toLocaleString("en-US", { style: "currency", currency: "USD"})}
+              {Number(semester?.rebuyFee).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
             </h2>
             <h6 className="card-subtitle mb-2 text-muted">Rebuy Fee</h6>
           </div>
@@ -210,7 +253,13 @@ function SemesterInfo(): ReactElement {
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
           ></input>
-          <button type="button" className="btn btn-primary" onClick={() => setShowMembershipModal(true)}>New member</button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setShowMembershipModal(true)}
+          >
+            New member
+          </button>
         </div>
       </div>
 
@@ -266,7 +315,13 @@ function SemesterInfo(): ReactElement {
 
       <div className="Transactions__header">
         <h3>Transactions</h3>
-        <button type="button" className="btn btn-primary" onClick={() => setShowTransactionModal(true)}>New transaction</button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setShowTransactionModal(true)}
+        >
+          New transaction
+        </button>
       </div>
       <table className="table">
         <thead>
@@ -286,20 +341,30 @@ function SemesterInfo(): ReactElement {
 
               <td>{t.description}</td>
 
-              <td>{t.amount >= 0 ? `$${Number(t.amount).toFixed(2)}` : `-$${Number(t.amount * -1).toFixed(2)}`}</td>
+              <td>
+                {t.amount >= 0
+                  ? `$${Number(t.amount).toFixed(2)}`
+                  : `-$${Number(t.amount * -1).toFixed(2)}`}
+              </td>
 
               <td style={{ textAlign: "right" }}>
-                <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(t.id)}>Delete</button>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => handleDelete(t.id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <NewTransactionModal 
-        show={showTransactionModal} 
-        onClose={() => setShowTransactionModal(false)} 
-        onSubmit={onTransactionSubmit} 
+      <NewTransactionModal
+        show={showTransactionModal}
+        onClose={() => setShowTransactionModal(false)}
+        onSubmit={onTransactionSubmit}
       />
 
       <NewMembershipModal

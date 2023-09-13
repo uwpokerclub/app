@@ -11,7 +11,7 @@ function SemesterCards(): ReactElement {
 
   useEffect(() => {
     if (data) {
-      setSemesters(data)
+      setSemesters(data);
     }
   }, [data]);
 
@@ -25,9 +25,7 @@ function SemesterCards(): ReactElement {
             to={`${semester.id}`}
             className="list-group-item"
           >
-            <h4 className="list-group-item-heading bold">
-              {semester.name}
-            </h4>
+            <h4 className="list-group-item-heading bold">{semester.name}</h4>
           </Link>
         ))}
       </div>

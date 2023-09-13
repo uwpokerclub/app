@@ -28,7 +28,7 @@ function Admin(): ReactElement {
         <div className="col-md-1" />
       </div>
     </>
-  )
+  );
 }
 
 export default Admin;

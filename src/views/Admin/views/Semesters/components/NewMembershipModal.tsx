@@ -38,7 +38,7 @@ function NewMembershipModal({
   onUserSubmit: (
     user: Partial<User>,
     paid: boolean,
-    discounted: boolean
+    discounted: boolean,
   ) => Promise<boolean>;
 }): ReactElement {
   const { semesterId } = useParams<{ semesterId: string }>();
@@ -58,34 +58,34 @@ function NewMembershipModal({
   const [faculty, setFaculty] = useState("");
   const [questId, setQuestId] = useState("");
   const [id, setId] = useState("");
-  
-  const [errorMessage, setErrorMessage] = useState("")
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Will fetch all the users that are not already registered for this semester
   const { data: usersData } = useFetch<User[]>("users");
-  const { data: memberships } = useFetch<Membership[]>(`memberships?semesterId=${semesterId}`);
+  const { data: memberships } = useFetch<Membership[]>(
+    `memberships?semesterId=${semesterId}`,
+  );
 
   useEffect(() => {
     if (usersData && memberships) {
       const userIds = usersData.map((u) => u.id);
-      const membershipUserIds = memberships.map(
-        (m: Membership) => m.userId
-      );
-        
+      const membershipUserIds = memberships.map((m: Membership) => m.userId);
+
       const userSet = new Set(userIds);
       const memberSet = new Set(membershipUserIds);
-      
+
       const unregisteredUserSet = setDifference(userSet, memberSet);
-      
+
       const unregisteredUserIds = Array.from(unregisteredUserSet);
-      
+
       setUsers(
         usersData
-        .filter((u) => unregisteredUserIds.includes(u.id))
-        .map((u) => ({
-          value: u.id,
-          label: `${u.firstName} ${u.lastName}`
-        }))
+          .filter((u) => unregisteredUserIds.includes(u.id))
+          .map((u) => ({
+            value: u.id,
+            label: `${u.firstName} ${u.lastName}`,
+          })),
       );
     }
   }, [usersData, memberships]);
@@ -107,7 +107,7 @@ function NewMembershipModal({
           questId,
         },
         paid,
-        discounted
+        discounted,
       ).then((success) => {
         if (success) {
           setId("");
@@ -118,9 +118,11 @@ function NewMembershipModal({
           setQuestId("");
           setPaid(false);
           setDiscounted(false);
-          setErrorMessage("")
+          setErrorMessage("");
         } else {
-          setErrorMessage("Failed to create the user. Either they already exist or the server has errored.")
+          setErrorMessage(
+            "Failed to create the user. Either they already exist or the server has errored.",
+          );
         }
       });
     }
@@ -188,9 +190,7 @@ function NewMembershipModal({
       ) : (
         <form onSubmit={handleSubmit}>
           {errorMessage && (
-            <div className="alert alert-danger">
-              {errorMessage}
-            </div>
+            <div className="alert alert-danger">{errorMessage}</div>
           )}
           <div className="form-group">
             <label htmlFor="first_name">First Name:</label>

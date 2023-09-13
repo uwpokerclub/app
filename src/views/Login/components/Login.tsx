@@ -17,7 +17,7 @@ function Login(): ReactElement {
         <div className="col-md-1" />
       </div>
     </>
-  )
+  );
 }
 
 export default Login;

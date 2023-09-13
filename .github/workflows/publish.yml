@@ -7,8 +7,8 @@ jobs:
     name: Push Docker image to GCP Artifact Registry
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: "read"
+      id-token: "write"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -16,8 +16,8 @@ jobs:
         name: Authenticate to GCP
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: '${{ secrets.GCP_WIP }}'
-          service_account: '${{ secrets.GCP_SA }}'
+          workload_identity_provider: "${{ secrets.GCP_WIP }}"
+          service_account: "${{ secrets.GCP_SA }}"
       - name: Configure Docker
         run: gcloud auth configure-docker us-east1-docker.pkg.dev
       # - name: Login to Artifact Registry

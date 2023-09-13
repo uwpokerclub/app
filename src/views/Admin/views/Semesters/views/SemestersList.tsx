@@ -18,7 +18,7 @@ function SemestersList(): ReactElement {
           ...s,
           startDate: new Date(s.startDate),
           endDate: new Date(s.endDate),
-        }))
+        })),
       );
     }
   }, [data]);

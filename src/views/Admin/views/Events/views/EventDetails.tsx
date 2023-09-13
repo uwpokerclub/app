@@ -3,11 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import useFetch from "../../../../../hooks/useFetch";
 import sendAPIRequest from "../../../../../shared/utils/sendAPIRequest";
 
-import {
-  APIErrorResponse,
-  Entry,
-  Event,
-} from "../../../../../types";
+import { APIErrorResponse, Entry, Event } from "../../../../../types";
 import EntriesTable from "../components/EntriesTable";
 
 function EventDetails(): ReactElement {
@@ -27,48 +23,54 @@ function EventDetails(): ReactElement {
           participant.firstName.toLowerCase() +
           " " +
           participant.lastName.toLowerCase()
-        ).includes(query.toLocaleLowerCase())
-      )
+        ).includes(query.toLocaleLowerCase()),
+      ),
     );
   };
 
   const updateParticipants = (): void => {
-    sendAPIRequest<Entry[]>(`participants?eventId=${eventId}`).then(({ data }) => {
-      if (data) {
-        setParticipants(data);
-        setFilteredParticipants(data);
-      }
-    });
+    sendAPIRequest<Entry[]>(`participants?eventId=${eventId}`).then(
+      ({ data }) => {
+        if (data) {
+          setParticipants(data);
+          setFilteredParticipants(data);
+        }
+      },
+    );
   };
 
   const endEvent = (e: React.FormEvent): void => {
     e.preventDefault();
 
-    sendAPIRequest<APIErrorResponse>(`events/${eventId}/end`, "POST").then(({ status, data }) => {
-      if (data && status !== 204) {
-        setError(data.message)
-      } else {
-        if (!eventId || !event) {
-          return
+    sendAPIRequest<APIErrorResponse>(`events/${eventId}/end`, "POST").then(
+      ({ status, data }) => {
+        if (data && status !== 204) {
+          setError(data.message);
+        } else {
+          if (!eventId || !event) {
+            return;
+          }
+
+          setEvent({
+            id: eventId,
+            name: event.name,
+            startDate: event.startDate,
+            format: event.format,
+            notes: event.notes,
+            semesterId: event.semesterId,
+            state: 1,
+          });
+
+          updateParticipants();
         }
-
-        setEvent({
-          id: eventId,
-          name: event.name,
-          startDate: event.startDate,
-          format: event.format,
-          notes: event.notes,
-          semesterId: event.semesterId,
-          state: 1,
-        });
-
-        updateParticipants();
-      }
-    });
+      },
+    );
   };
 
   const { data: eventData } = useFetch<Event>(`events/${eventId}`);
-  const { data: entries } = useFetch<Entry[]>(`participants?eventId=${eventId}`)
+  const { data: entries } = useFetch<Entry[]>(
+    `participants?eventId=${eventId}`,
+  );
 
   useEffect(() => {
     if (eventData) {
@@ -85,31 +87,27 @@ function EventDetails(): ReactElement {
 
     if (entries) {
       setParticipants(
-        entries.map(
-          (p: Entry) => ({
-            ...p,
-            signed_out_at:
-              p.signedOutAt !== undefined && p.signedOutAt !== null
-                ? new Date(p.signedOutAt)
-                : undefined,
-          })
-        )
+        entries.map((p: Entry) => ({
+          ...p,
+          signed_out_at:
+            p.signedOutAt !== undefined && p.signedOutAt !== null
+              ? new Date(p.signedOutAt)
+              : undefined,
+        })),
       );
 
       setFilteredParticipants(
-        entries.map(
-          (p: Entry) => ({
-            ...p,
-            signed_out_at:
-              p.signedOutAt !== undefined && p.signedOutAt
-                ? new Date(p.signedOutAt)
-                : undefined,
-          })
-        )
+        entries.map((p: Entry) => ({
+          ...p,
+          signed_out_at:
+            p.signedOutAt !== undefined && p.signedOutAt
+              ? new Date(p.signedOutAt)
+              : undefined,
+        })),
       );
     }
 
-    setIsLoading(false)
+    setIsLoading(false);
   }, [eventId, entries, eventData]);
 
   return (
@@ -128,19 +126,14 @@ function EventDetails(): ReactElement {
           </p>
           <p>
             <strong>Date:</strong>{" "}
-            {
-              new Date(event.startDate).toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                }
-              )
-            }
+            {new Date(event.startDate).toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}
           </p>
           <p>
             <strong>Additional Details:</strong> {event.notes}

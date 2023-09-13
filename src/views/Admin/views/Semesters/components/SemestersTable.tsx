@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 
 import { Semester } from "../../../../../types";
 
-function SemestersTable({ semesters }: { semesters: Semester[] }): ReactElement {
+function SemestersTable({
+  semesters,
+}: {
+  semesters: Semester[];
+}): ReactElement {
   return (
     <div className="table-responsive">
       <table className="table">

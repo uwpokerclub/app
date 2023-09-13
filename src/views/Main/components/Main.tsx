@@ -1,11 +1,13 @@
 import React, { ReactElement } from "react";
 import { Route, Routes } from "react-router-dom";
 
-import "../main.scss"
+import "../main.scss";
 
 import Join from "../views/Join";
 import { Navigate, useLocation } from "react-router-dom";
 import ResponsiveNavbar from "../../../shared/components/ResponsiveNavbar/ResponsiveNavbar";
+import Gallery from "../views/Gallery";
+import Sponsors from "../views/Sponsors";
 
 function Main(): ReactElement {
   const location = useLocation();
@@ -14,11 +16,16 @@ function Main(): ReactElement {
     <>
       <ResponsiveNavbar />
       <Routes>
-        <Route path="/*" element={<Navigate to="/join" state={{ from: location }} replace />} />
+        <Route
+          path="/*"
+          element={<Navigate to="/join" state={{ from: location }} replace />}
+        />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/sponsors" element={<Sponsors />} />
         <Route path="/join" element={<Join />} />
       </Routes>
     </>
-  )
+  );
 }
 
 export default Main;

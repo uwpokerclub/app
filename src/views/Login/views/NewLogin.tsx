@@ -31,7 +31,7 @@ function NewLogin(): ReactElement {
         } else {
           setErrorMessage("An unknown error occurred. Contact an admin.");
         }
-      }
+      },
     );
   };
 

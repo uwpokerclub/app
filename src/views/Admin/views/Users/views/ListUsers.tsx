@@ -34,10 +34,11 @@ function ListUsers(): ReactElement {
     }
 
     setFilteredUsers(
-      users.filter((u) => RegExp(e.target.value, "i").test(`${u.firstName} ${u.lastName}`))
+      users.filter((u) =>
+        RegExp(e.target.value, "i").test(`${u.firstName} ${u.lastName}`),
+      ),
     );
-  }
-
+  };
 
   return (
     <div id="members">
@@ -46,10 +47,7 @@ function ListUsers(): ReactElement {
       <div className="row">
         <div className="col-lg-6 col-md-6 col-sm-6">
           <div className="btn-group">
-            <Link
-              to={`new`}
-              className="btn btn-primary btn-responsive"
-            >
+            <Link to={`new`} className="btn btn-primary btn-responsive">
               Add Members
             </Link>
 

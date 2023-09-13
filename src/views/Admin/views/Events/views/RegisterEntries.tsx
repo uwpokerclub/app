@@ -15,7 +15,9 @@ function RegisterEntires(): ReactElement {
   const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
   const [query, setQuery] = useState("");
 
-  const filteredMembers = members.filter((m) => RegExp(query, "i").test(`${m.firstName} ${m.lastName}`))
+  const filteredMembers = members.filter((m) =>
+    RegExp(query, "i").test(`${m.firstName} ${m.lastName}`),
+  );
 
   const registerMembersForEvent = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,10 +42,10 @@ function RegisterEntires(): ReactElement {
 
   const { data: event } = useFetch<Event>(`events/${eventId}`);
   const { data: participants } = useFetch<Entry[]>(
-    `participants?eventId=${eventId}`
+    `participants?eventId=${eventId}`,
   );
   const { data: memberships } = useFetch<Membership[]>(
-    `memberships?semesterId=${event ? event.semesterId : ""}`
+    `memberships?semesterId=${event ? event.semesterId : ""}`,
   );
 
   useEffect(() => {
@@ -52,9 +54,9 @@ function RegisterEntires(): ReactElement {
         memberships.filter(
           (member: Membership) =>
             !new Set(
-              participants.map((entry: Entry) => entry.membershipId)
-            ).has(member.id)
-        )
+              participants.map((entry: Entry) => entry.membershipId),
+            ).has(member.id),
+        ),
       );
 
       setIsLoading(false);
@@ -70,8 +72,18 @@ function RegisterEntires(): ReactElement {
               <h3 className="center bold">Sign In Members</h3>
 
               <div className="Participants__header">
-                <input className="form-control" type="search" placeholder="Search" onChange={(e) => setQuery(e.target.value)}></input>
-                <button className="btn btn-primary" onClick={registerMembersForEvent}>Sign In</button>
+                <input
+                  className="form-control"
+                  type="search"
+                  placeholder="Search"
+                  onChange={(e) => setQuery(e.target.value)}
+                ></input>
+                <button
+                  className="btn btn-primary"
+                  onClick={registerMembersForEvent}
+                >
+                  Sign In
+                </button>
               </div>
               <form className="Participants__list">
                 {filteredMembers.map((member) => (
@@ -96,7 +108,7 @@ function RegisterEntires(): ReactElement {
                             setSelectedMembers(selectedMembersCopy);
                           } else {
                             setSelectedMembers(
-                              selectedMembers.add(e.target.value)
+                              selectedMembers.add(e.target.value),
                             );
                           }
                         }}

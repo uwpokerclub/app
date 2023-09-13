@@ -1,16 +1,17 @@
 import React from "react";
 
-import './Header.scss'
+import "./Header.scss";
 
-import { logo } from "../../../assets"
+import { logo } from "../../../assets";
 // import { navLinks } from "../../../constants";
 
 const Header = () => {
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark fixed-top px-4 py-2">
-        <a className="navbar-brand" href="/"><img src={logo} alt="UWPSC Logo"/></a>
+        <a className="navbar-brand" href="/">
+          <img src={logo} alt="UWPSC Logo" />
+        </a>
         {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerContent">
           <img src={menu} alt="" />
         </button> */}

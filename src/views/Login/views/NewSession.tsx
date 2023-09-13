@@ -27,7 +27,7 @@ function NewSession(): ReactElement {
         } else {
           setErrorMessage("An internal error occurred.");
         }
-      }
+      },
     );
   };
 

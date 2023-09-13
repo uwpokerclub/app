@@ -1,7 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 
-export default function useFetch<T>(path: string, method = "GET", body?: any): {status: number, data: T | null, isLoading: boolean} {
-  const [fetchedData, setFetchedData] = useState<{status: number, data: T | null, isLoading: boolean}>({
+export default function useFetch<T>(
+  path: string,
+  method = "GET",
+  body?: any,
+): { status: number; data: T | null; isLoading: boolean } {
+  const [fetchedData, setFetchedData] = useState<{
+    status: number;
+    data: T | null;
+    isLoading: boolean;
+  }>({
     status: 0,
     data: null,
     isLoading: true,
@@ -9,13 +17,17 @@ export default function useFetch<T>(path: string, method = "GET", body?: any): {
 
   // Determine which API url to send requests to, default is local development
   const fetchData = useCallback(async () => {
-    const apiUrl = process.env.NODE_ENV === "development" ? "/api" : "https://api.uwpokerclub.com"
+    const apiUrl =
+      process.env.NODE_ENV === "development"
+        ? "/api"
+        : "https://api.uwpokerclub.com";
 
     const res = await fetch(`${apiUrl}/${path}`, {
       credentials: "include",
       method,
-      headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
-      body: body !== undefined ? JSON.stringify(body) : undefined
+      headers:
+        body !== undefined ? { "Content-Type": "application/json" } : undefined,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
     });
 
     // Save response status for later.
@@ -30,8 +42,8 @@ export default function useFetch<T>(path: string, method = "GET", body?: any): {
     setFetchedData({
       status,
       data,
-      isLoading: false
-    })
+      isLoading: false,
+    });
   }, [path, body, method]);
 
   useEffect(() => {
@@ -39,4 +51,4 @@ export default function useFetch<T>(path: string, method = "GET", body?: any): {
   }, [path, method, body, fetchData]);
 
   return fetchedData;
-};
+}

@@ -34,7 +34,11 @@ export default function Navbar(): ReactElement {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent" style={{ justifyContent: "inherit" }}>
+        <div
+          className="collapse navbar-collapse"
+          id="navbarSupportedContent"
+          style={{ justifyContent: "inherit" }}
+        >
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to="/admin/users" className="nav-link">

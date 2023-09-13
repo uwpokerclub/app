@@ -2,7 +2,7 @@ export function playSound(
   audioContext: AudioContext,
   frequency: number,
   startTime: number,
-  duration: number
+  duration: number,
 ): void {
   const osc1 = audioContext.createOscillator();
   const volume = audioContext.createGain();

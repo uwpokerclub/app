@@ -3,7 +3,7 @@ import React, { ReactElement, useState } from "react";
 function LoginForm({
   onClick,
 }: {
-  onClick(username: string, password: string): void
+  onClick(username: string, password: string): void;
 }): ReactElement {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +12,7 @@ function LoginForm({
     e.preventDefault();
 
     onClick(username, password);
-  }
+  };
 
   return (
     <form className="content-wrap">
@@ -46,7 +46,7 @@ function LoginForm({
         Login
       </button>
     </form>
-  )
+  );
 }
 
 export default LoginForm;

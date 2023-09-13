@@ -1,3 +1,3 @@
-import Rankings from "./components/Rankings"
+import Rankings from "./components/Rankings";
 
 export default Rankings;

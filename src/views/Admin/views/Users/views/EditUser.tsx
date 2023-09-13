@@ -52,7 +52,7 @@ function EditUser(): ReactElement {
       setFaculty(user.faculty);
       setId(user.id);
       setCreatedAt(new Date(user.createdAt));
-  
+
       setIsLoading(false);
     }
   }, [user]);

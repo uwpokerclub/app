@@ -322,7 +322,7 @@ export const FREEZEOUT_EVENT_LEVELS = [
     small: 40000,
     big: 80000,
     ante: 80000,
-    time: 8
+    time: 8,
   },
   {
     small: 50000,

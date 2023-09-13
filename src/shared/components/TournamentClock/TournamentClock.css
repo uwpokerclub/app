@@ -6,9 +6,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 2fr 0.25fr 1fr;
-  grid-template-areas: 
+  grid-template-areas:
     "timer timer"
-    "progressbar progressbar" 
+    "progressbar progressbar"
     "blinds ante";
 
   width: 100vw;
@@ -63,7 +63,7 @@
   align-items: center;
 }
 
-.ante {  
+.ante {
   grid-area: ante;
 
   display: flex;
@@ -72,28 +72,32 @@
   align-items: center;
 }
 
-.blinds__header, .ante__header {
+.blinds__header,
+.ante__header {
   font-size: 1.25rem;
   color: #aeaeae;
 }
 
-.blinds__amount, .ante__amount {
+.blinds__amount,
+.ante__amount {
   font-size: 5rem;
 }
 
-.blinds__next, .ante__next {
+.blinds__next,
+.ante__next {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.blinds__next__header, .ante__next__header {
+.blinds__next__header,
+.ante__next__header {
   font-size: 1.15rem;
   color: #aeaeae;
 }
 
-.blinds__next__amount, .ante__next__amount {
+.blinds__next__amount,
+.ante__next__amount {
   color: #909090;
 }
-

@@ -34,9 +34,9 @@ function NewSemester(): ReactElement {
       }
 
       if (status === 400) {
-        setErrorMessage(data ? data.message : "")
+        setErrorMessage(data ? data.message : "");
       }
-    })
+    });
   };
 
   return (

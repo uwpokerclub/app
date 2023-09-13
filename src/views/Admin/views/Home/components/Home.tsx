@@ -8,7 +8,6 @@ import Blog from "./Blog";
 import { blogPosts } from "./posts";
 import BlogItem from "./BlogItem";
 
-
 function Home(): ReactElement {
   return (
     <div className="center">
@@ -39,8 +38,10 @@ function Home(): ReactElement {
       </div>
 
       <Blog>
-        { blogPosts.map((post) => (
-          <BlogItem key={post.title} header={post.title} subHeader={post.date}>{post.body}</BlogItem>
+        {blogPosts.map((post) => (
+          <BlogItem key={post.title} header={post.title} subHeader={post.date}>
+            {post.body}
+          </BlogItem>
         ))}
       </Blog>
     </div>

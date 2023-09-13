@@ -36,15 +36,13 @@ function NewMembership(): ReactElement {
   // Will fetch all the users that are not already registered for this semester
   const { data: usersData } = useFetch<User[]>("users");
   const { data: membershipsData } = useFetch<Membership[]>(
-    `memberships?semesterId=${semesterId}`
+    `memberships?semesterId=${semesterId}`,
   );
 
   useEffect(() => {
     if (usersData && membershipsData) {
       const userIds = usersData.map((u: User) => u.id);
-      const membershipUserIds = membershipsData.map(
-        (m) => m.userId
-      );
+      const membershipUserIds = membershipsData.map((m) => m.userId);
       const userSet = new Set(userIds);
       const memberSet = new Set(membershipUserIds);
 
@@ -58,7 +56,7 @@ function NewMembership(): ReactElement {
           .map((u) => ({
             value: u.id,
             label: `${u.firstName} ${u.lastName}`,
-          }))
+          })),
       );
     }
   }, [usersData, membershipsData]);

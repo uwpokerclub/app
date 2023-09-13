@@ -18,9 +18,15 @@ export function useAuth(): AuthContextType {
   return useContext(authContext);
 }
 
-export default function AuthProvider({ children }: { children: ReactNode }): ReactElement {
+export default function AuthProvider({
+  children,
+}: {
+  children: ReactNode;
+}): ReactElement {
   const [authenticated, setAuthenticated] = useState(
-    document.cookie.split(";").some((item) => item.trim().startsWith("pctoken"))
+    document.cookie
+      .split(";")
+      .some((item) => item.trim().startsWith("pctoken")),
   );
 
   const signIn = (cb: () => void) => {

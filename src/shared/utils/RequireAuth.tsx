@@ -7,7 +7,7 @@ function RequireAuth({ children }: { children: JSX.Element }): ReactElement {
   const location = useLocation();
 
   if (!auth.authenticated) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   return children;
