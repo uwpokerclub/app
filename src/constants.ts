@@ -64,6 +64,12 @@ export const EVENT_LEVELS = [
     time: 10,
   },
   {
+    small: 300,
+    big: 600,
+    ante: 0,
+    time: 10,
+  },
+  {
     small: 400,
     big: 800,
     ante: 0,
@@ -79,12 +85,6 @@ export const EVENT_LEVELS = [
     small: 600,
     big: 1200,
     ante: 1200,
-    time: 8,
-  },
-  {
-    small: 700,
-    big: 1400,
-    ante: 1400,
     time: 8,
   },
   {
@@ -118,21 +118,21 @@ export const EVENT_LEVELS = [
     time: 8,
   },
   {
-    small: 4000,
-    big: 8000,
-    ante: 8000,
-    time: 8,
-  },
-  {
     small: 5000,
     big: 10000,
     ante: 10000,
     time: 6,
   },
   {
-    small: 7500,
-    big: 15000,
-    ante: 15000,
+    small: 6000,
+    big: 12000,
+    ante: 12000,
+    time: 6,
+  },
+  {
+    small: 8000,
+    big: 16000,
+    ante: 16000,
     time: 6,
   },
   {
