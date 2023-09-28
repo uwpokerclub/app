@@ -51,8 +51,10 @@ function ResponsiveNavbar(): ReactElement {
                 link.href === location.pathname
                   ? "ResponsiveNavbar__link-active"
                   : ""
-              }`}
+              }`
+            }
               key={link.label}
+              onClick={()=> setMenuOpen(!menuOpen)}
             >
               <Link to={link.href}>{link.label}</Link>
             </li>
