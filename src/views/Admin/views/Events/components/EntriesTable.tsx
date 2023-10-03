@@ -46,8 +46,10 @@ function EntriesTable({
   return (
     <div className="panel panel-default">
       <div className="panel-heading">
-        <strong>Registered Entries </strong>
-        <span className="spaced faded">{entries.length}</span>
+        <strong>{entries.length + event.rebuys} Entries </strong>
+        <span className="spaced faded">
+          ({entries.length} Players, {event.rebuys} Rebuys)
+        </span>
       </div>
 
       <div className="list-registered">
@@ -68,7 +70,6 @@ function EntriesTable({
               <th>First Name</th>
               <th>Last Name</th>
               <th>Student Number</th>
-              <th>Rebuys</th>
               <th>Signed Out At</th>
               <th className="center">Place</th>
               <th className="center">Actions</th>
@@ -85,8 +86,6 @@ function EntriesTable({
                 <td className="lname">{entry.lastName}</td>
 
                 <td className="studentno">{entry.id}</td>
-
-                <td className="rebuys">{entry.rebuys}</td>
 
                 <td className="signed_out_at">
                   {entry.signedOutAt !== null ? (
@@ -114,15 +113,6 @@ function EntriesTable({
                 <td className="center">
                   {event.state !== 1 && (
                     <div className="btn-group">
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() =>
-                          updateParticipant(entry.membershipId, "rebuy")
-                        }
-                      >
-                        Rebuy
-                      </button>
                       {entry.signedOutAt ? (
                         <button
                           type="submit"

@@ -7,4 +7,7 @@ export type Event = {
   semesterId: string;
   state: number;
   count?: number;
+  rebuys: number;
+  pointsMultiplier: number;
+  structureId: number;
 };

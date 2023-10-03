@@ -93,8 +93,9 @@
   &__tab {
     cursor: pointer;
     padding: 0 2rem 0.25rem;
-    
-    &-active, &:hover {
+
+    &-active,
+    &:hover {
       border-bottom: 1px solid #5497ef;
     }
   }

@@ -6,6 +6,7 @@ import { playSound } from "../../utils/playSound";
 import Icon from "../Icon/Icon";
 
 import "./TournamentClock.css";
+import { FullScreen } from "@chiragrupani/fullscreen-react";
 
 type BlindLevel = {
   small: number;
@@ -30,6 +31,8 @@ export function TournamentClock({ levels }: Props): ReactElement {
   const [currLevel, setCurrLevel] = useState(levelIndex);
 
   const [timerOver, setTimerOver] = useState(false);
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   let now = new Date();
   const [countdownDate, setCountdownDate] = useState(
@@ -168,91 +171,103 @@ export function TournamentClock({ levels }: Props): ReactElement {
       );
     }
   }, [currLevel, levels]);
+
   return (
-    <div className="grid">
-      <section className="timer">
-        <header className="timer__header">
-          <span>Level {currLevel + 1}</span>
-        </header>
-
-        <div className="timer__display">
-          <span>
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-          </span>
-        </div>
-
-        <div className="timer__buttons">
-          <span onClick={previousLevel}>
-            <Icon iconType="backward_step" scale={4} />
-          </span>
-          <span onClick={subtractMinute}>
-            <Icon iconType="minus" scale={4} />
-          </span>
-          <span onClick={toggleTimer}>
-            {paused ? (
-              <Icon iconType="circle-play" scale={4} />
-            ) : (
-              <Icon iconType="circle-pause" scale={4} />
-            )}
-          </span>
-          <span onClick={addMinute}>
-            <Icon iconType="plus" scale={4} />
-          </span>
-          <span onClick={nextLevel}>
-            <Icon iconType="forward_step" scale={4} />
-          </span>
-        </div>
-      </section>
-
-      <progress
-        className="progress"
-        max={1}
-        value={
-          currLevel !== levels.length
-            ? countdown / (levels[currLevel].time * 60 * 1000)
-            : 1
-        }
-      ></progress>
-
-      <section className="blinds">
-        <header className="blinds__header">Blinds</header>
-        <span className="blinds__amount">
-          {currLevel !== levels.length
-            ? `${levels[currLevel].small} / ${levels[currLevel].big}`
-            : `${levels[currLevel - 1].small} / ${levels[currLevel - 1].big}`}
+    <FullScreen
+      isFullScreen={isFullscreen}
+      onChange={(isFull: boolean) => setIsFullscreen(isFull)}
+    >
+      <div className={`grid ${isFullscreen ? "grid-fullscreen" : ""}`}>
+        <span
+          onClick={() => setIsFullscreen(!isFullscreen)}
+          className="fullscreen"
+        >
+          <Icon scale={2} iconType="expand" />
         </span>
-        {currLevel < levels.length && (
-          <div className="blinds__next">
-            <header className="blinds__next__header">Next Level</header>
-            <span className="blinds__next__amount">
-              {currLevel + 1 < levels.length
-                ? `${levels[currLevel + 1].small} / ${
-                    levels[currLevel + 1].big
-                  }`
-                : `${levels[currLevel].small} / ${levels[currLevel].big}`}
+        <section className="timer">
+          <header className="timer__header">
+            <span>Level {currLevel + 1}</span>
+          </header>
+
+          <div className="timer__display">
+            <span>
+              {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             </span>
           </div>
-        )}
-      </section>
 
-      <section className="ante">
-        <header className="ante__header">Ante</header>
-        <span className="ante__amount">
-          {currLevel !== levels.length
-            ? `${levels[currLevel].ante}`
-            : `${levels[currLevel - 1].ante}`}
-        </span>
-        {currLevel < levels.length && (
-          <div className="ante__next">
-            <header className="ante__next__header">Next Level</header>
-            <span className="ante__next__amount">
-              {currLevel + 1 < levels.length
-                ? `${levels[currLevel + 1].ante}`
-                : `${levels[currLevel].ante}`}
+          <div className="timer__buttons">
+            <span onClick={previousLevel}>
+              <Icon iconType="backward_step" scale={4} />
+            </span>
+            <span onClick={subtractMinute}>
+              <Icon iconType="minus" scale={4} />
+            </span>
+            <span onClick={toggleTimer}>
+              {paused ? (
+                <Icon iconType="circle-play" scale={4} />
+              ) : (
+                <Icon iconType="circle-pause" scale={4} />
+              )}
+            </span>
+            <span onClick={addMinute}>
+              <Icon iconType="plus" scale={4} />
+            </span>
+            <span onClick={nextLevel}>
+              <Icon iconType="forward_step" scale={4} />
             </span>
           </div>
-        )}
-      </section>
-    </div>
+        </section>
+
+        <progress
+          className="progress"
+          max={1}
+          value={
+            currLevel !== levels.length
+              ? countdown / (levels[currLevel].time * 60 * 1000)
+              : 1
+          }
+        ></progress>
+
+        <section className="blinds">
+          <header className="blinds__header">Blinds</header>
+          <span className="blinds__amount">
+            {currLevel !== levels.length
+              ? `${levels[currLevel].small} / ${levels[currLevel].big}`
+              : `${levels[currLevel - 1].small} / ${levels[currLevel - 1].big}`}
+          </span>
+          {currLevel < levels.length && (
+            <div className="blinds__next">
+              <header className="blinds__next__header">Next Level</header>
+              <span className="blinds__next__amount">
+                {currLevel + 1 < levels.length
+                  ? `${levels[currLevel + 1].small} / ${
+                      levels[currLevel + 1].big
+                    }`
+                  : `${levels[currLevel].small} / ${levels[currLevel].big}`}
+              </span>
+            </div>
+          )}
+        </section>
+
+        <section className="ante">
+          <header className="ante__header">Ante</header>
+          <span className="ante__amount">
+            {currLevel !== levels.length
+              ? `${levels[currLevel].ante}`
+              : `${levels[currLevel - 1].ante}`}
+          </span>
+          {currLevel < levels.length && (
+            <div className="ante__next">
+              <header className="ante__next__header">Next Level</header>
+              <span className="ante__next__amount">
+                {currLevel + 1 < levels.length
+                  ? `${levels[currLevel + 1].ante}`
+                  : `${levels[currLevel].ante}`}
+              </span>
+            </div>
+          )}
+        </section>
+      </div>
+    </FullScreen>
   );
 }

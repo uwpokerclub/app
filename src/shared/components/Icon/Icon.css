@@ -54,3 +54,11 @@
   width: 1rem;
   height: 1rem;
 }
+
+.i-expand {
+  content: url("../../../assets/expand.svg");
+  width: 1rem;
+  height: 1rem;
+  filter: invert(99%) sepia(93%) saturate(0%) hue-rotate(131deg)
+    brightness(109%) contrast(101%);
+}

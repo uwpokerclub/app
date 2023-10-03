@@ -7,5 +7,4 @@ export type Entry = {
   signedOutAt: Date;
   placement?: number;
   membershipId: string;
-  rebuys: number;
 };

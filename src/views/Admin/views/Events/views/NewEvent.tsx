@@ -50,7 +50,7 @@ function NewEvent(): ReactElement {
       format === "Invalid" ||
       semesterId === "" ||
       startDate === "",
-    [name, semesterId, startDate, format]
+    [name, semesterId, startDate, format],
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function NewEvent(): ReactElement {
     }
     if (structuresData) {
       if (structuresData.length === 0) {
-        setShowSelectStructure(false)
+        setShowSelectStructure(false);
       }
       setStructures(structuresData);
     }
@@ -69,7 +69,7 @@ function NewEvent(): ReactElement {
     e.preventDefault();
 
     // User has selected "Create a structure"
-    let createdStructureId = -1
+    let createdStructureId = -1;
     if (!showSelectStructure) {
       const { data } = await sendAPIRequest<StructureWithBlinds>(
         "structures",
@@ -77,7 +77,7 @@ function NewEvent(): ReactElement {
         {
           name: structureNameRef.current?.value,
           blinds,
-        }
+        },
       );
       if (data) {
         createdStructureId = data.id;
@@ -91,7 +91,8 @@ function NewEvent(): ReactElement {
       notes,
       semesterId,
       pointsMultiplier: Number(pointsMultiplier),
-      structureId: createdStructureId === -1 ? Number(structureId) : createdStructureId,
+      structureId:
+        createdStructureId === -1 ? Number(structureId) : createdStructureId,
     }).then(({ status }) => {
       if (status === 201) {
         navigate("../");
@@ -228,11 +229,21 @@ function NewEvent(): ReactElement {
               <div className="form-group">
                 <header className="Structures__tab-group">
                   {structures.length !== 0 && (
-                    <div className={`Structures__tab ${showSelectStructure ? "Structures__tab-active" : ""}`} onClick={() => setShowSelectStructure(true)}>
+                    <div
+                      className={`Structures__tab ${
+                        showSelectStructure ? "Structures__tab-active" : ""
+                      }`}
+                      onClick={() => setShowSelectStructure(true)}
+                    >
                       <span>Select a structure</span>
                     </div>
                   )}
-                  <div className={`Structures__tab ${showSelectStructure ? "" : "Structures__tab-active"}`} onClick={() => setShowSelectStructure(false)}>
+                  <div
+                    className={`Structures__tab ${
+                      showSelectStructure ? "" : "Structures__tab-active"
+                    }`}
+                    onClick={() => setShowSelectStructure(false)}
+                  >
                     <span>Create a new structure</span>
                   </div>
                 </header>
