@@ -66,7 +66,7 @@ export const EVENT_LEVELS = [
   {
     small: 300,
     big: 600,
-    ante: 600,
+    ante: 0,
     time: 10,
   },
   {
