@@ -67,6 +67,36 @@ function EventDetails(): ReactElement {
     );
   };
 
+  const unEndEvent = (e: React.FormEvent): void => {
+    e.preventDefault();
+
+    sendAPIRequest<APIErrorResponse>(`events/${eventId}/unend`, "POST").then(
+      ({ status, data }) => {
+        if (data && status !== 204) {
+          setError(data.message);
+        } else {
+          if (!eventId || !event) {
+            return;
+          }
+
+          setEvent({
+            id: eventId,
+            name: event.name,
+            startDate: event.startDate,
+            format: event.format,
+            notes: event.notes,
+            semesterId: event.semesterId,
+            state: 0,
+          });
+          updateParticipants();
+        }
+      },
+    );
+  };
+
+
+
+
   const { data: eventData } = useFetch<Event>(`events/${eventId}`);
   const { data: entries } = useFetch<Entry[]>(
     `participants?eventId=${eventId}`,
@@ -152,6 +182,17 @@ function EventDetails(): ReactElement {
               </form>
             </div>
           )}
+
+          {event.state === 1 && (
+            <div className="Button__group">
+              <form onSubmit={unEndEvent}>
+                <button type="submit" className="btn btn-danger">
+                  Restart Event
+                </button>
+              </form>
+            </div>
+          )}
+
 
           <EntriesTable
             entries={filteredParticipants}
