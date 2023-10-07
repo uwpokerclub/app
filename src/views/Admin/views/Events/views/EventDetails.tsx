@@ -85,6 +85,39 @@ function EventDetails(): ReactElement {
     );
   };
 
+  const unEndEvent = (e: React.FormEvent): void => {
+    e.preventDefault();
+
+    sendAPIRequest<APIErrorResponse>(`events/${eventId}/unend`, "POST").then(
+      ({ status, data }) => {
+        if (data && status !== 204) {
+          setError(data.message);
+        } else {
+          if (!eventId || !event) {
+            return;
+          }
+          setEvent({
+            id: eventId,
+            name: event.name,
+            startDate: event.startDate,
+            format: event.format,
+            notes: event.notes,
+            semesterId: event.semesterId,
+            state: 0,
+            rebuys: event.rebuys,
+            pointsMultiplier: event.pointsMultiplier,
+            structureId: event.structureId,
+          });
+
+          updateParticipants();
+
+        }
+      },
+    );
+  };
+
+
+
   const handleRebuy = async () => {
     const { status } = await sendAPIRequest(`events/${eventId}/rebuy`, "POST");
     if (status === 200) {
@@ -222,10 +255,24 @@ function EventDetails(): ReactElement {
                         type="button"
                         className="btn btn-danger"
                       >
+                      
                         End Event
                       </button>
                     </>
                   )}
+                  {event.state === 1 && (
+                    <>
+                      <button
+                        onClick={unEndEvent}
+                        type="button"
+                        className="btn btn-danger"
+                      >
+                        Restart Event
+                      
+                      </button>
+                    </>
+                  )}
+
                 </section>
               </header>
 
