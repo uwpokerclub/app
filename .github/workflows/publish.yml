@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish And Deploy
 on:
   release:
     types: [created]
@@ -20,15 +20,25 @@ jobs:
           service_account: "${{ secrets.GCP_SA }}"
       - name: Configure Docker
         run: gcloud auth configure-docker us-east1-docker.pkg.dev
-      # - name: Login to Artifact Registry
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: us-east1-docker.pkg.dev
-      #     username: oauth2accesstoken
-      #     password: ${{ steps.auth.outputs.access_token }}
       - name: Build the tagged Docker image
         run: docker build --rm --no-cache -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:${GITHUB_REF##*/} -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:latest .
       - name: Push the tagged Docker image
         run: docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:${GITHUB_REF##*/}
       - name: Push the latest Docker image
         run: docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:latest
+  deploy:
+    name: Deploy version to Google Cloud
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    needs: push_to_artifact_registry
+    steps:
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: '${{ secrets.GCP_WIP }}'
+          service_account: '${{ secrets.GCP_SA }}'
+      - name: Deploy
+        run: gcloud run deploy app --region=us-east1 --image=us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:${GITHUB_REF##*/}
+    
