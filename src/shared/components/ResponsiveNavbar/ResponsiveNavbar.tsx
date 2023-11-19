@@ -27,6 +27,10 @@ const links = [
     label: "JOIN",
     href: "/join",
   },
+  { // TODO: Temporary, remove after election period
+    label: "VOTE NOW",
+    href: "/election"
+  }
 ];
 
 function ResponsiveNavbar(): ReactElement {

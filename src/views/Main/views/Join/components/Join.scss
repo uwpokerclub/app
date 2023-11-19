@@ -24,8 +24,13 @@
   align-items: center;
 }
 
-.highlited-item {
+.socials-list li.highlight {
   border: 0.08rem solid goldenrod;
+  border-radius: 1rem;
+}
+
+.socials-list li.highlight a.text-link {
+  color: goldenrod !important;
 }
 
 .socials-list a,

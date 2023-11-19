@@ -7,6 +7,7 @@ import {
   emailLine,
 } from "../../../../../assets";
 import "./Join.scss";
+import { Link } from "react-router-dom";
 
 const Join = () => {
   return (
@@ -26,15 +27,11 @@ const Join = () => {
           </div>
           <div className="col-lg">
             <ul className="socials-list">
-              {/* <li>
-                <a className="nav-link" href=""></a>
-              </li> */}
-              {/*<li>
-              <a className="form-link" href="https://forms.gle/p7hB6XbTPfsdijrE6" target="_blank" rel="noreferrer">
-              <img src={formsLine} className="mr-4 pl-1 pr-2" alt=""/>
-                  2023 WINTER MIDTERM
-                </a>
-            </li>*/}
+              <li className="highlight">
+                <Link className="text-link center" to={"/election"}>
+                  VOTE FOR THE WINTER 2024 EXEC TEAM
+                </Link>
+              </li>
               <li>
                 <a
                   className="text-link"
