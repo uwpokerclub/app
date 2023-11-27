@@ -29,7 +29,7 @@ const Join = () => {
             <ul className="socials-list">
               <li className="highlight">
                 <Link className="text-link center" to={"/election"}>
-                  VOTE FOR THE WINTER 2024 EXEC TEAM
+                  VIEW THE RESULTS FOR THE WINTER 2024 ELECTION
                 </Link>
               </li>
               <li>

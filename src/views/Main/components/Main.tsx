@@ -8,7 +8,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import ResponsiveNavbar from "../../../shared/components/ResponsiveNavbar/ResponsiveNavbar";
 import Gallery from "../views/Gallery";
 import Sponsors from "../views/Sponsors";
-import { ElectionEmbed } from "./ElectionEmbed";
+import { ResultsEmbed } from "./ElectionEmbed";
 
 function Main(): ReactElement {
   const location = useLocation();
@@ -24,7 +24,7 @@ function Main(): ReactElement {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/sponsors" element={<Sponsors />} />
         <Route path="/join" element={<Join />} />
-        <Route path="/election" element={<ElectionEmbed />} />
+        <Route path="/election" element={<ResultsEmbed />} />
       </Routes>
     </>
   );
