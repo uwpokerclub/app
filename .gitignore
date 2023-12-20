@@ -26,3 +26,5 @@ yarn-error.log*
 
 # VSCode settings
 .vscode*
+
+**/node_modules
