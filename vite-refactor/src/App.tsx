@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Index } from "./pages";
-import { AuthProvider } from "./contexts";
-import { Login } from "./pages/Login";
+import { Admin, Index, Login } from "./pages";
+import { AuthProvider, RequireAuth } from "./contexts";
 
 function App() {
   return (
@@ -10,6 +9,14 @@ function App() {
         <Routes>
           <Route path="/*" element={<Index />} />
           <Route path="/admin/login/*" element={<Login />} />
+          <Route
+            path="/admin/*"
+            element={
+              <RequireAuth>
+                <Admin />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </Router>
     </AuthProvider>
