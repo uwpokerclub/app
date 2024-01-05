@@ -27,7 +27,7 @@ export function SocialsList() {
             </li>*/}
               <li>
                 <a className={styles.textLink} href="https://discord.gg/2k4h9sM" target="_blank" rel="noreferrer">
-                  <img src={discordLine} className="mr-4" alt="" />
+                  <img src={discordLine} className="me-4" alt="" />
                   JOIN THE DISCORD
                 </a>
               </li>
@@ -38,7 +38,7 @@ export function SocialsList() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={instagramLine} className="mr-4" alt="" />
+                  <img src={instagramLine} className="me-4" alt="" />
                   FOLLOW ON INSTAGRAM
                 </a>
               </li>
@@ -49,13 +49,13 @@ export function SocialsList() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={facebookLine} className="mr-4 pl-1 pr-2" alt="" />
+                  <img src={facebookLine} className="me-4 ps-1 pe-2" alt="" />
                   LIKE US ON FACEBOOK
                 </a>
               </li>
               <li>
                 <a className={styles.textLink} href="mailto:uwaterloopoker@gmail.com" target="_blank" rel="noreferrer">
-                  <img src={emailLine} className="mr-4" alt="" />
+                  <img src={emailLine} className="me-4" alt="" />
                   CONTACT US VIA EMAIL
                 </a>
               </li>
