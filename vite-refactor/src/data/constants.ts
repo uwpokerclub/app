@@ -1,3 +1,5 @@
+export const FACULTIES = ["AHS", "Arts", "Engineering", "Environment", "Math", "Science"];
+
 export const images = [
   {
     src: "https://res.cloudinary.com/dvwr9wizl/image/upload/w_278,h_180,c_scale/v1694631034/Final%20Tournament%20Summer%20%2723/ghqb10sahv1qujtk3jra.webp",
