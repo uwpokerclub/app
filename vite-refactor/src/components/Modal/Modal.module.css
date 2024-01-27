@@ -1,0 +1,55 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.content {
+  background-color: #fff;
+  transform: translateY(-200px);
+  transition: all 0.3s ease-in-out;
+}
+
+.header, .footer {
+  padding: 1rem;
+}
+
+.title {
+  margin: 0
+}
+
+.body {
+  padding: 1rem;
+
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.modalEnterDone {
+  opacity: 1;
+  pointer-events: visible;
+}
+
+.modalExit {
+  opacity: 0;
+}
+
+.modal.modalEnterDone .content {
+  transform: translateY(0);
+}
+
+.modal.modalExit .content {
+  transform: translateY(-200px);
+}

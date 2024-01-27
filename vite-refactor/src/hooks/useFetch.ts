@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
 export function useFetch<T>(path: string, method = "GET", body?: Record<string, unknown>) {
-  const [fetchedData, setFetchedData] = useState<{
-    status: number;
-    data?: T;
-    isLoading: boolean;
-  }>({
-    status: 0,
-    data: undefined,
-    isLoading: true,
-  });
+  const [status, setStatus] = useState(0);
+  const [data, setData] = useState<T | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
@@ -21,25 +15,20 @@ export function useFetch<T>(path: string, method = "GET", body?: Record<string, 
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const status = res.status;
+    setStatus(res.status);
 
-    let data = {} as T;
     try {
-      data = await res.json();
+      setData(await res.json());
     } catch (err) {
       /* empty */
     }
 
-    setFetchedData({
-      status,
-      data,
-      isLoading: false,
-    });
+    setIsLoading(false);
   }, [path, body, method]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return fetchedData;
+  return { status, data, setData, isLoading };
 }

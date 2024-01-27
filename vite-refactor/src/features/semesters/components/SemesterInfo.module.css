@@ -1,0 +1,8 @@
+.highlights {
+  margin: 0.5rem 0;
+  display: flex;
+}
+
+.item {
+  margin: 0 0.5rem;
+}

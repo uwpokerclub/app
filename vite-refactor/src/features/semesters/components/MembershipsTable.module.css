@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  white-space: nowrap;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+}
