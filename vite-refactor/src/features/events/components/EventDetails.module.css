@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.info {
+  flex-grow: 4;
+}
+
+.actions {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  row-gap: 0.5rem;
+}
+
+.tabGroup {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 0.5rem;
+}
+
+.tabGroup .tab {
+  cursor: pointer;
+  padding: 0 2rem 0.25rem;
+}
+
+.tab:hover {
+  border-bottom: 1px solid #5497ef;
+}
+
+.tab.tabActive {
+  border-bottom: 1px solid #5497ef;
+}
+
+.inputGroup .form-control {
+  margin: 0.5rem 0;
+
+}
+
+.blindsHeader {
+  display: flex;
+  justify-content: space-around;
+}

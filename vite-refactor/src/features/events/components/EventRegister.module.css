@@ -1,0 +1,53 @@
+.container {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(15, 19, 24, 0.12);
+  padding: 1em;
+  margin-top: 1em; 
+}
+
+.header {
+  display: flex
+}
+
+.list {
+  max-height: 75vh;
+  overflow-y: scroll;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.5em;
+}
+
+.item:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.item:hover {
+  background-color: #dedede !important;
+}
+
+.itemDanger {
+  background-color: #f0bcc2 !important;
+}
+
+.itemCheckbox {
+  padding: 0 1em;
+}
+
+.itemCheckbox input[type="checkbox"] {
+  height: 1em;
+  width: 1em;
+  border: 3px solid transparent black;
+}
+
+.itemTitle {
+  font-size: 1rem;
+}
+
+.itemStudentId {
+  padding: 0 1em;
+  font-size: 1rem;
+}

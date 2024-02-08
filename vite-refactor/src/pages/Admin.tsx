@@ -4,6 +4,7 @@ import { Home } from "./Home";
 import { Users } from "./Users";
 import { Semesters } from "./Semesters";
 import { Rankings } from "./Rankings";
+import { Events } from "./Events";
 
 export function Admin() {
   return (
@@ -16,6 +17,7 @@ export function Admin() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/users/*" element={<Users />} />
+            <Route path="/events/*" element={<Events />} />
             <Route path="/semesters/*" element={<Semesters />} />
             <Route path="/rankings/*" element={<Rankings />} />
           </Routes>
