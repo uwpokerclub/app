@@ -1,0 +1,28 @@
+name: Publish Docker image
+on:
+  release:
+    types: [created]
+jobs:
+  push_to_artifact_registry:
+    name: Push Docker image to GCP Artifact Registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - id: auth
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: "${{ secrets.GCP_WIP }}"
+          service_account: "${{ secrets.GCP_SA }}"
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-east1-docker.pkg.dev
+      - name: Build the tagged Docker image
+        run: docker build --rm --no-cache -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:${GITHUB_REF##*/} -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:latest .
+      - name: Push the tagged Docker image
+        run: docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:${GITHUB_REF##*/}
+      - name: Push the latest Docker image
+        run: docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/uwpokerclub-docker/app:latest
