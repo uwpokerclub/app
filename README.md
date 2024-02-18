@@ -20,7 +20,6 @@ Before starting development or usage of the frontend app, ensure you have all of
 
 - [Docker](https://www.docker.com/) (with Docker Compose)
 - [NodeJS](https://nodejs.org/en/)
-- [Yarn](https://classic.yarnpkg.com/lang/en/docs/install)
 
 ### Clone the repository
 
@@ -37,7 +36,7 @@ gh repo clone uwpokerclub/app
 # Change into project directory
 cd app
 ## first time installation
-yarn install
+npm install
 ```
 
 ## Development
@@ -47,7 +46,7 @@ yarn install
 To start the app for local development you can run the following command:
 
 ```sh
-yarn start
+npm start
 ```
 
 **_Note: If you are working on the admin portion of the app, you will also need to have the [API server](https://github.com/uwpokerclub/api) running locally as well._**
@@ -59,7 +58,7 @@ This will start the React development server on [http://localhost:3000](http://l
 To run tests, run the following command:
 
 ```sh
-yarn test
+npm test
 ```
 
 ## Production
