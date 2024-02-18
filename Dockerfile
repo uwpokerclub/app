@@ -1,23 +1,29 @@
-FROM node:16.15.1-alpine3.14 AS node_stage
+FROM node:18.18.2-alpine as node_stage
 
 WORKDIR /usr/app
 
 COPY . .
 
-ENV NODE_ENV=production
-
 # Install system dependencies
-RUN apk add --no-cache --virtual .gyp python3 make g++
+# RUN apk add --no-cache --virtual .gyp python3 make g++
 
 # Install Node dependencies
-RUN yarn install --frozen-lockfile
+RUN npm install --frozen-lockfile
+
+# Set NODE_ENV to production
+ENV NODE_ENV=production
 
 # Build production ready application
-RUN yarn build
+RUN npm run build
 
-FROM nginx:stable-alpine
+FROM nginx:1.25.4-alpine
+
 WORKDIR /usr/share/nginx/html
-COPY --from=node_stage /usr/app/build .
+
+COPY --from=node_stage /usr/app/dist .
+
 COPY nginx/templates/default.conf.template /etc/nginx/templates/
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,54 +1,34 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export default function useFetch<T>(
-  path: string,
-  method = "GET",
-  body?: any,
-): { status: number; data: T | null; isLoading: boolean } {
-  const [fetchedData, setFetchedData] = useState<{
-    status: number;
-    data: T | null;
-    isLoading: boolean;
-  }>({
-    status: 0,
-    data: null,
-    isLoading: true,
-  });
+export function useFetch<T>(path: string, method = "GET", body?: Record<string, unknown>) {
+  const [status, setStatus] = useState(0);
+  const [data, setData] = useState<T | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Determine which API url to send requests to, default is local development
   const fetchData = useCallback(async () => {
-    const apiUrl =
-      process.env.NODE_ENV === "development"
-        ? "/api"
-        : "https://api.uwpokerclub.com";
+    const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
 
     const res = await fetch(`${apiUrl}/${path}`, {
       credentials: "include",
       method,
-      headers:
-        body !== undefined ? { "Content-Type": "application/json" } : undefined,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      headers: body ? { "Content-Type": "application/json" } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
     });
 
-    // Save response status for later.
-    const status = res.status;
+    setStatus(res.status);
 
-    // Attempt to convert response body to JSON. If this fails that means there is no body.
-    let data: T | null = null;
     try {
-      data = await res.json();
-    } catch (err) {}
+      setData(await res.json());
+    } catch (err) {
+      /* empty */
+    }
 
-    setFetchedData({
-      status,
-      data,
-      isLoading: false,
-    });
+    setIsLoading(false);
   }, [path, body, method]);
 
   useEffect(() => {
     fetchData();
-  }, [path, method, body, fetchData]);
+  }, [fetchData]);
 
-  return fetchedData;
+  return { status, data, setData, isLoading };
 }
