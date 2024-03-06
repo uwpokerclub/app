@@ -1,5 +1,3 @@
-import React from "react";
-
 export function ResultsEmbed() {
   return (
     <div
@@ -62,10 +60,7 @@ export function ResultsEmbed() {
           <strong>
             <em>
               Powered by{" "}
-              <a
-                href="https://www.rankedvote.co"
-                style={{ color: "#7540EE", fontSize: "14px" }}
-              >
+              <a href="https://www.rankedvote.co" style={{ color: "#7540EE", fontSize: "14px" }}>
                 RankedVote
               </a>
             </em>
@@ -138,10 +133,7 @@ export function ElectionEmbed() {
           <strong>
             <em>
               Powered by{" "}
-              <a
-                href="https://www.rankedvote.co"
-                style={{ color: "#7540EE", fontSize: "14px" }}
-              >
+              <a href="https://www.rankedvote.co" style={{ color: "#7540EE", fontSize: "14px" }}>
                 RankedVote
               </a>
             </em>
