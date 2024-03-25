@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.important {
+  border: 0.08rem solid goldenrod !important;
+}
+
 .socialsList li {
   padding: 0px;
   background-color: rgba(0, 0, 0, 0.35);
@@ -38,4 +42,8 @@
 a.textLink {
   color: white !important;
   text-decoration: none !important;
+}
+
+.important a {
+  color: goldenrod !important;
 }

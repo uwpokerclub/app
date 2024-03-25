@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { discordLine, instagramLine, facebookLine, emailLine } from "../../../assets";
 import styles from "./SocialsList.module.css";
+import { Icon } from "../../../components";
 
 export function SocialsList() {
   return (
@@ -16,15 +18,14 @@ export function SocialsList() {
           </div>
           <div className="col-lg">
             <ul className={styles.socialsList}>
-              {/* <li>
-                <a className="nav-link" href=""></a>
-              </li> */}
-              {/*<li>
-              <a className="form-link" href="https://forms.gle/p7hB6XbTPfsdijrE6" target="_blank" rel="noreferrer">
-              <img src={formsLine} className="mr-4 pl-1 pr-2" alt=""/>
-                  2023 WINTER MIDTERM
-                </a>
-            </li>*/}
+              <li className={styles.important}>
+                <Link className={styles.textLink} to="/vote">
+                  <span className="me-4">
+                    <Icon iconType="ballot" scale={2} />
+                  </span>
+                  VOTE FOR THE SPRING 2024 EXCUTIVE TEAM
+                </Link>
+              </li>
               <li>
                 <a className={styles.textLink} href="https://discord.gg/2k4h9sM" target="_blank" rel="noreferrer">
                   <img src={discordLine} className="me-4" alt="" />

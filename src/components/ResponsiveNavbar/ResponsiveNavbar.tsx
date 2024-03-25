@@ -27,6 +27,10 @@ const links = [
     label: "JOIN",
     href: "/join",
   },
+  {
+    label: "VOTE NOW!",
+    href: "/vote",
+  },
 ];
 
 export function ResponsiveNavbar(): ReactElement {

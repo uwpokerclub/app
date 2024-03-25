@@ -91,9 +91,9 @@ export function ElectionEmbed() {
           borderRadius: "10px",
           maxWidth: "1140px",
         }}
-        title="Winter 2024 Election election powered by RankedVote"
+        title="Spring 2024 Election election powered by RankedVote"
         loading="lazy"
-        src="https://app.rankedvote.co/rv/uwpsc-w24/vote/embed-rv/"
+        src="https://app.rankedvote.co/rv/uwpsc-s24/vote/embed-rv/"
       ></iframe>
       <div
         style={{
@@ -114,7 +114,7 @@ export function ElectionEmbed() {
           <strong>
             Not loading?{" "}
             <a
-              href="https://app.rankedvote.co/rv/uwpsc-w24/vote/embed-rv/"
+              href="https://app.rankedvote.co/rv/uwpsc-s24/vote/embed-rv/"
               style={{ color: "#B0B7C3", fontSize: "14px" }}
             >
               Click here
