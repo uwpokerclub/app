@@ -1,5 +1,5 @@
 export async function sendAPIRequest<T>(path: string, method = "GET", body?: Record<string, unknown>) {
-  const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwaterloo.com";
+  const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
 
   const res = await fetch(`${apiUrl}/${path}`, {
     credentials: "include",
