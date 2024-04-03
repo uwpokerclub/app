@@ -18,12 +18,20 @@ export function SocialsList() {
           </div>
           <div className="col-lg">
             <ul className={styles.socialsList}>
-              <li className={styles.important}>
+              {/* <li className={styles.important}>
                 <Link className={styles.textLink} to="/vote">
                   <span className="me-4">
                     <Icon iconType="ballot" scale={2} />
                   </span>
                   VOTE FOR THE SPRING 2024 EXCUTIVE TEAM
+                </Link>
+              </li> */}
+              <li className={styles.important}>
+                <Link className={styles.textLink} to="/election">
+                  <span className="me-4">
+                    <Icon iconType="ballot" scale={2} />
+                  </span>
+                  SPRING 2024 EXECUTIVE ELECTION RESULTS
                 </Link>
               </li>
               <li>
