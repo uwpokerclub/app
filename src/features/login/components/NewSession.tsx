@@ -13,19 +13,16 @@ export function NewSession() {
 
   const from = (location.state as { from: { pathname: string } })?.from?.pathname || "/admin";
 
-  const handleLogin = (username: string, password: string): void => {
-    sendAPIRequest("login/session", "POST", { username, password }).then(({ status }) => {
-      if (status === 201) {
-        auth.signIn(() => navigate(from, { replace: true }));
-        return;
-      }
+  const handleLogin = async (username: string, password: string) => {
+    const { status } = await sendAPIRequest("session", "POST", { username, password });
 
-      if (status === 400 || status === 401) {
-        setErrorMessage("Invalid username or password.");
-      } else {
-        setErrorMessage("An internal error occurred.");
-      }
-    });
+    if (status === 201) {
+      auth.signIn(() => navigate(from, { replace: true }));
+    } else if (status === 400 || status === 401) {
+      setErrorMessage("Invalid username or password.");
+    } else {
+      setErrorMessage("An internal error occurred. Please report this issue to the Webmaster.");
+    }
   };
 
   return (

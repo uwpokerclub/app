@@ -1,16 +1,30 @@
-import { MouseEvent, useRef } from "react";
+import { MouseEvent, useRef, useState } from "react";
 
 type LoginFormProps = {
-  onSubmit: (username: string, password: string) => void;
+  onSubmit: (username: string, password: string) => Promise<void>;
 };
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
-  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+
+  /**
+   * handleClick handles the form submission after the user clicks on the submit button
+   * @param e MouseEvent<HTMLButtonElement>
+   */
+  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    onSubmit(usernameRef.current?.value || "", passwordRef.current?.value || "");
+
+    // Disable submit button so requests can't be spammed
+    setSubmitDisabled(true);
+
+    // Call onSubmit event handler
+    await onSubmit(usernameRef.current?.value || "", passwordRef.current?.value || "");
+
+    // Enable button, so in case of an error state it can be used again
+    setSubmitDisabled(false);
   };
 
   return (
@@ -25,7 +39,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         <input ref={passwordRef} type="password" name="password" className="form-control" />
       </div>
 
-      <button type="button" className="btn btn-success" onClick={(e) => handleClick(e)}>
+      <button type="submit" className="btn btn-success" disabled={submitDisabled} onClick={(e) => handleClick(e)}>
         Login
       </button>
     </form>
