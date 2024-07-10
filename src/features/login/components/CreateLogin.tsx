@@ -16,18 +16,17 @@ export function CreateLogin() {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (username: string, password: string): void => {
-    sendAPIRequest("login", "POST", { username, password }).then(({ status }) => {
-      if (status === 201) {
-        navigate("/login", { replace: true });
-      } else if (status === 400 || status === 401) {
-        setErrorMessage("Invalid username or password.");
-      } else if (status === 403) {
-        setErrorMessage("You are not authorized to create a new login.");
-      } else {
-        setErrorMessage("An unknown error occurred. Contact an admin.");
-      }
-    });
+  const handleSubmit = async (username: string, password: string) => {
+    const { status } = await sendAPIRequest("login", "POST", { username, password });
+    if (status === 201) {
+      navigate("/login", { replace: true });
+    } else if (status === 400 || status === 401) {
+      setErrorMessage("Invalid username or password.");
+    } else if (status === 403) {
+      setErrorMessage("You are not authorized to create a new login.");
+    } else {
+      setErrorMessage("An unknown error occurred. Contact a system admin.");
+    }
   };
 
   return (

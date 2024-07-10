@@ -2,8 +2,10 @@ import { ReactNode, useState } from "react";
 import { authContext } from "./context";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const cookieKey = import.meta.env.DEV ? "uwpsc-dev-session-id" : "uwpsc-session-id";
+
   const [authenticated, setAuthenticated] = useState(
-    document.cookie.split(";").some((item) => item.trim().startsWith("pctoken")),
+    document.cookie.split(";").some((item) => item.trim().startsWith(cookieKey)),
   );
 
   const signIn = (cb: () => void) => {
@@ -12,7 +14,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = (cb: () => void) => {
-    document.cookie = "pctoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     setAuthenticated(false);
     return cb();
   };
