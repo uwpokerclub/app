@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function useFetch<T>(path: string, method = "GET", body?: Record<string, unknown>) {
   const [status, setStatus] = useState(0);
   const [data, setData] = useState<T | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
@@ -17,6 +19,11 @@ export function useFetch<T>(path: string, method = "GET", body?: Record<string, 
 
     setStatus(res.status);
 
+    if (res.status === 401) {
+      navigate("/admin/login");
+      return {};
+    }
+
     try {
       setData(await res.json());
     } catch (err) {
@@ -24,7 +31,7 @@ export function useFetch<T>(path: string, method = "GET", body?: Record<string, 
     }
 
     setIsLoading(false);
-  }, [path, body, method]);
+  }, [path, body, method, navigate]);
 
   useEffect(() => {
     fetchData();

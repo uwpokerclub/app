@@ -1,3 +1,5 @@
+import { redirect } from "react-router-dom";
+
 export async function sendAPIRequest<T>(path: string, method = "GET", body?: Record<string, unknown>) {
   const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
 
@@ -9,6 +11,11 @@ export async function sendAPIRequest<T>(path: string, method = "GET", body?: Rec
   });
 
   const status = res.status;
+
+  if (status === 401) {
+    redirect("/admin/login");
+    return { status, data: undefined };
+  }
 
   let data: T | null = null;
 
