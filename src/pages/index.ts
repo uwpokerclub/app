@@ -1,3 +1,3 @@
-export * from "./Index";
+export * from "./Index.tsx";
 export * from "./Login";
 export * from "./Admin";
