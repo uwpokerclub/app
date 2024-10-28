@@ -28,7 +28,7 @@ export function NewSession() {
   return (
     <div className="center">
       {errorMessage && (
-        <div role="alert" className="alert alert-danger">
+        <div data-qa="login-error-banner" role="alert" className="alert alert-danger">
           <span>{errorMessage}</span>
         </div>
       )}

@@ -147,30 +147,30 @@ export function TournamentClock({ levels }: Props) {
           <Icon scale={2} iconType="expand" />
         </span>
         <section className={styles.timer}>
-          <header className={styles.timerHeader}>
+          <header data-qa="level" className={styles.timerHeader}>
             <span>Level {currLevel + 1}</span>
           </header>
 
-          <div className={styles.timerDisplay}>
+          <div data-qa="timer" className={styles.timerDisplay}>
             <span>
               {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
             </span>
           </div>
 
           <div className={styles.timerButtons}>
-            <span onClick={previousLevel}>
+            <span data-qa="prev-level-btn" onClick={previousLevel}>
               <Icon iconType="backward_step" scale={4} />
             </span>
-            <span onClick={subtractMinute}>
+            <span data-qa="sub-btn" onClick={subtractMinute}>
               <Icon iconType="minus" scale={4} />
             </span>
-            <span onClick={toggleTimer}>
+            <span data-qa="toggle-timer-btn" onClick={toggleTimer}>
               {paused ? <Icon iconType="circle-play" scale={4} /> : <Icon iconType="circle-pause" scale={4} />}
             </span>
-            <span onClick={addMinute}>
+            <span data-qa="add-btn" onClick={addMinute}>
               <Icon iconType="plus" scale={4} />
             </span>
-            <span onClick={nextLevel}>
+            <span data-qa="advance-level-btn" onClick={nextLevel}>
               <Icon iconType="forward_step" scale={4} />
             </span>
           </div>

@@ -85,14 +85,26 @@ export function EventDetails() {
     <>
       {event !== undefined && !isLoading && (
         <div>
-          {event.state === 1 && <div className="alert alert-danger">This event has ended.</div>}
+          {event.state === 1 && (
+            <div data-qa="event-ended-banner" className="alert alert-danger">
+              This event has ended.
+            </div>
+          )}
           {error && <div className="alert alert-danger">{error}</div>}
 
           <section className={styles.tabGroup}>
-            <div onClick={() => setShowInfo(true)} className={`${styles.tab} ${showInfo ? styles.tabActive : ""}`}>
+            <div
+              data-qa="tournament-tab"
+              onClick={() => setShowInfo(true)}
+              className={`${styles.tab} ${showInfo ? styles.tabActive : ""}`}
+            >
               Tournament Info
             </div>
-            <div onClick={() => setShowInfo(false)} className={`${styles.tab} ${!showInfo ? styles.tabActive : ""}`}>
+            <div
+              data-qa="clock-tab"
+              onClick={() => setShowInfo(false)}
+              className={`${styles.tab} ${!showInfo ? styles.tabActive : ""}`}
+            >
               Clock
             </div>
           </section>
@@ -124,22 +136,32 @@ export function EventDetails() {
                 <section className={styles.actions}>
                   {event.state !== 1 && (
                     <>
-                      <Link to={`register`} className="btn btn-primary">
+                      <Link data-qa="register-members-btn" to={`register`} className="btn btn-primary">
                         Register Members
                       </Link>
 
-                      <button onClick={handleRebuy} type="button" className="btn btn-success">
+                      <button data-qa="rebuy-btn" onClick={handleRebuy} type="button" className="btn btn-success">
                         Rebuy
                       </button>
 
-                      <button onClick={() => setShowModal(true)} type="button" className="btn btn-danger">
+                      <button
+                        data-qa="end-event-btn"
+                        onClick={() => setShowModal(true)}
+                        type="button"
+                        className="btn btn-danger"
+                      >
                         End Event
                       </button>
                     </>
                   )}
                   {event.state === 1 && (
                     <>
-                      <button onClick={restartEvent} type="button" className="btn btn-danger">
+                      <button
+                        data-qa="restart-event-btn"
+                        onClick={restartEvent}
+                        type="button"
+                        className="btn btn-danger"
+                      >
                         Restart Event
                       </button>
                     </>

@@ -1,0 +1,10 @@
+{
+  "name": "Winter 2025",
+  "startDate": "2025-01-01T00:00:00.000Z",
+  "endDate": "2025-04-30T00:00:00.000Z",
+  "startingBudget": 1000,
+  "membershipFee": 10,
+  "membershipDiscountFee": 7,
+  "rebuyFee": 2,
+  "meta": "Integration test run"
+}

@@ -54,16 +54,19 @@ export function Modal({
       unmountOnExit
       timeout={{ enter: 0, exit: 300 }}
     >
-      <div ref={nodeRef} className={styles.modal} onClick={onClose}>
+      <div data-qa="modal" ref={nodeRef} className={styles.modal} onClick={onClose}>
         <div className={styles.content} onClick={(e) => e.stopPropagation()}>
           <div className={styles.header}>
-            <h4 className={styles.title}>{title}</h4>
+            <h4 data-qa="modal-title" className={styles.title}>
+              {title}
+            </h4>
           </div>
 
           <div className={styles.body}>{children}</div>
 
           <div className={`${styles.footer} d-grid gap-2 d-md-flex justify-content-md-end`}>
             <button
+              data-qa="modal-close-btn"
               type="button"
               className={`btn btn-${closeButtonType}`}
               onClick={handleCloseClick}
@@ -72,6 +75,7 @@ export function Modal({
               {closeButtonText}
             </button>
             <button
+              data-qa="modal-submit-btn"
               type="button"
               className={`btn btn-${primaryButtonType}`}
               onClick={handleSubmitClick}

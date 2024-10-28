@@ -130,12 +130,19 @@ export function NewEvent() {
             <form>
               <div className="mb-3">
                 <label htmlFor="name">Name</label>
-                <input ref={nameRef} type="text" placeholder="Name" name="name" className="form-control" />
+                <input
+                  data-qa="input-name"
+                  ref={nameRef}
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  className="form-control"
+                />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="semester_id">Term</label>
-                <select ref={semesterIdRef} name="semester_id" className="form-control">
+                <select data-qa="select-semester" ref={semesterIdRef} name="semester_id" className="form-control">
                   <option value="">Select Semester</option>
                   {semesters?.map((semester) => (
                     <option key={semester.id} value={semester.id}>
@@ -147,12 +154,18 @@ export function NewEvent() {
 
               <div className="mb-3">
                 <label htmlFor="start_date">Date</label>
-                <input ref={dateRef} type="datetime-local" name="start_date" className="form-control" />
+                <input
+                  data-qa="input-date"
+                  ref={dateRef}
+                  type="datetime-local"
+                  name="start_date"
+                  className="form-control"
+                />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="format">Format</label>
-                <select ref={formatRef} className="form-control">
+                <select data-qa="select-format" ref={formatRef} className="form-control">
                   <option disabled value="Invalid">
                     Select a format
                   </option>
@@ -165,13 +178,19 @@ export function NewEvent() {
 
               <div className="mb-3">
                 <label htmlFor="pointsMultiplier">Points Multiplier</label>
-                <input ref={pointsMultiplierRef} className="form-control" type="text"></input>
+                <input
+                  data-qa="input-points-multiplier"
+                  ref={pointsMultiplierRef}
+                  className="form-control"
+                  type="text"
+                ></input>
               </div>
 
               <div className="mb-3">
                 <header className={styles.tabs}>
                   {structures?.length !== 0 && (
                     <div
+                      data-qa="tab-select-structure"
                       className={`${styles.tab} ${showSelectStructure ? styles.tabActive : ""}`}
                       onClick={() => setShowSelectStructure(true)}
                     >
@@ -179,6 +198,7 @@ export function NewEvent() {
                     </div>
                   )}
                   <div
+                    data-qa="tab-new-structure"
                     className={`${styles.tab} ${showSelectStructure ? "" : styles.tabActive}`}
                     onClick={() => setShowSelectStructure(false)}
                   >
@@ -186,7 +206,12 @@ export function NewEvent() {
                   </div>
                 </header>
                 {showSelectStructure ? (
-                  <select className="form-control" value={structureId} onChange={(e) => setStructureId(e.target.value)}>
+                  <select
+                    data-qa="select-structure"
+                    className="form-control"
+                    value={structureId}
+                    onChange={(e) => setStructureId(e.target.value)}
+                  >
                     <option value="">Select a structure</option>
                     {structures?.map((structure) => (
                       <option key={structure.id} value={structure.id}>
@@ -197,6 +222,7 @@ export function NewEvent() {
                 ) : (
                   <>
                     <input
+                      data-qa="input-structure-name"
                       ref={structureNameRef}
                       name="structureName"
                       className="form-control"
@@ -211,24 +237,28 @@ export function NewEvent() {
                     {blinds.map((blind, i) => (
                       <div key={i} className="input-group">
                         <input
+                          data-qa={`blind-${i}-small`}
                           className="form-control"
                           type="text"
                           value={blind.small}
                           onChange={(e) => setLevel(i, { small: Number(e.target.value) })}
                         ></input>
                         <input
+                          data-qa={`blind-${i}-big`}
                           className="form-control"
                           type="text"
                           value={blind.big}
                           onChange={(e) => setLevel(i, { big: Number(e.target.value) })}
                         ></input>
                         <input
+                          data-qa={`blind-${i}-ante`}
                           className="form-control"
                           type="text"
                           value={blind.ante}
                           onChange={(e) => setLevel(i, { ante: Number(e.target.value) })}
                         ></input>
                         <input
+                          data-qa={`blind-${i}-time`}
                           className="form-control"
                           type="text"
                           value={blind.time}
@@ -237,7 +267,11 @@ export function NewEvent() {
                       </div>
                     ))}
 
-                    <button className={`btn btn-primary ${styles.addBtn}`} onClick={(e) => newLevel(e)}>
+                    <button
+                      data-qa="add-level-btn"
+                      className={`btn btn-primary ${styles.addBtn}`}
+                      onClick={(e) => newLevel(e)}
+                    >
                       Add level
                     </button>
                   </>
@@ -246,12 +280,19 @@ export function NewEvent() {
 
               <div className="mb-3">
                 <label htmlFor="notes">Additional Details</label>
-                <textarea ref={notesRef} rows={6} name="notes" className="form-control" />
+                <textarea
+                  data-qa="input-additional-details"
+                  ref={notesRef}
+                  rows={6}
+                  name="notes"
+                  className="form-control"
+                />
               </div>
 
               <div className="row">
                 <div className="text-center">
                   <button
+                    data-qa="submit-btn"
                     type="submit"
                     value="create"
                     className="btn btn-success btn-responsive"

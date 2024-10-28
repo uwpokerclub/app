@@ -48,6 +48,7 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
 
       <div className="list-registered">
         <input
+          data-qa="input-search"
           type="text"
           placeholder="Find entry..."
           className="form-control search"
@@ -70,16 +71,22 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
 
             <tbody className="list">
               {filteredEntries.map((entry, index) => (
-                <tr key={entry.id}>
+                <tr data-qa={`entry-${entry.membershipId}`} key={entry.id}>
                   <th>{index + 1}</th>
 
-                  <td className="fname">{entry.firstName}</td>
+                  <td data-qa={`first-name`} className="fname">
+                    {entry.firstName}
+                  </td>
 
-                  <td className="lname">{entry.lastName}</td>
+                  <td data-qa={`last-name`} className="lname">
+                    {entry.lastName}
+                  </td>
 
-                  <td className="studentno">{entry.id}</td>
+                  <td data-qa={`student-num`} className="studentno">
+                    {entry.id}
+                  </td>
 
-                  <td className="signed_out_at">
+                  <td data-qa={`signed-out-at`} className="signed_out_at">
                     {entry.signedOutAt !== null ? (
                       <span>
                         {new Date(entry.signedOutAt).toLocaleString("en-US", {
@@ -96,15 +103,16 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
                     )}
                   </td>
 
-                  <td className="center placement">
+                  <td data-qa={`placement`} className="center placement">
                     <span className="margin-center">{entry.placement ? entry.placement : "--"}</span>
                   </td>
 
-                  <td className="center">
+                  <td data-qa={`actions`} className="center">
                     {event.state !== 1 && (
                       <div className="btn-group">
                         {entry.signedOutAt ? (
                           <button
+                            data-qa="sign-in-btn"
                             type="submit"
                             className="btn btn-primary"
                             onClick={() => updateParticipant(entry.membershipId, "sign-in")}
@@ -113,6 +121,7 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
                           </button>
                         ) : (
                           <button
+                            data-qa="sign-out-btn"
                             type="submit"
                             className="btn btn-info"
                             onClick={() => updateParticipant(entry.membershipId, "sign-out")}
@@ -121,6 +130,7 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
                           </button>
                         )}
                         <button
+                          data-qa="remove-btn"
                           type="submit"
                           className="btn btn-warning"
                           onClick={() => deleteParticipant(entry.membershipId)}

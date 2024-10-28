@@ -12,8 +12,8 @@ export function SemestersList() {
 
   return (
     <div>
-      <h1>Semesters</h1>
-      <Link to="new" className="btn btn-primary btn-responsive">
+      <h1 data-qa="semesters-header">Semesters</h1>
+      <Link data-qa="create-semester-btn" to="new" className="btn btn-primary btn-responsive">
         Create a Semester
       </Link>
       <div className="table-responsive">
@@ -29,7 +29,7 @@ export function SemestersList() {
           <tbody>
             {semesters.map((semester) => (
               <tr key={semester.id}>
-                <td>{semester.name}</td>
+                <td data-qa="semester-name">{semester.name}</td>
 
                 <td>
                   {new Date(semester.startDate).toLocaleDateString("en-US", {
@@ -48,7 +48,7 @@ export function SemestersList() {
                 </td>
 
                 <td>
-                  <Link to={`${semester.id}`} className="btn btn-primary">
+                  <Link data-qa={`view-semester-${semester.id}`} to={`${semester.id}`} className="btn btn-primary">
                     View
                   </Link>
                 </td>
