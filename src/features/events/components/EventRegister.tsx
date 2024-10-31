@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useFetch } from "../../../hooks";
-import { Entry, Event, Membership } from "../../../types";
 import { useEffect, useState } from "react";
+
 import { sendAPIRequest } from "../../../lib";
+import { Membership, getEligibleMembers } from "../../../sdk/memberships";
 
 import styles from "./EventRegister.module.css";
 
@@ -11,25 +11,17 @@ export function EventRegister() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [members, setMembers] = useState<(Membership & { selected: false })[]>([]);
+  const [members, setMembers] = useState<(Membership & { selected: boolean })[]>([]);
   const [selectedMembers, setSelectedMembers] = useState(new Set<string>());
   const [query, setQuery] = useState("");
 
-  const { data: event } = useFetch<Event>(`events/${eventId}`);
-  const { data: participants } = useFetch<Entry[]>(`participants?eventId=${eventId}`);
-  const { data: memberships } = useFetch<Membership[]>(`memberships?semesterId=${event ? event.semesterId : ""}`);
-
   useEffect(() => {
-    if (!participants || !memberships) return;
-
-    setMembers(
-      memberships
-        .filter((member) => !new Set(participants.map((p) => p.membershipId)).has(member.id))
-        .map((m) => ({ ...m, selected: false })),
-    );
-
-    setIsLoading(false);
-  }, [memberships, participants]);
+    getEligibleMembers(Number(eventId))
+      .then((eligibleMembers) => {
+        setMembers(eligibleMembers.map((m) => ({ ...m, selected: false })));
+      })
+      .finally(() => setIsLoading(false));
+  }, [eventId]);
 
   const filteredMembers = members.filter((m) =>
     `${m.firstName} ${m.lastName}`.toLowerCase().includes(query.toLowerCase()),
