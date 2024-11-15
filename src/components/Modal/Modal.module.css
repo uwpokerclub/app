@@ -20,6 +20,7 @@
   background-color: #fff;
   transform: translateY(-200px);
   transition: all 0.3s ease-in-out;
+  max-width: 50%
 }
 
 .header, .footer {
@@ -35,6 +36,12 @@
 
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
+}
+
+@media only screen and (max-width: 768px) {
+  .content {
+    max-width: 95%;
+  }
 }
 
 .modalEnterDone {

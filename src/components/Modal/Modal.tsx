@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
@@ -10,10 +10,38 @@ type ModalProps = {
   onClose: () => void;
   onSubmit: () => void;
   children: ReactNode;
+  primaryButtonText?: string;
+  primaryButtonType?: string;
+  closeButtonText?: string;
+  closeButtonType?: string;
 };
 
-export function Modal({ title, show, onClose, onSubmit, children }: ModalProps) {
+export function Modal({
+  title,
+  show,
+  primaryButtonText = "Submit",
+  primaryButtonType = "primary",
+  closeButtonText = "Close",
+  closeButtonType = "outline-danger",
+  onClose,
+  onSubmit,
+  children,
+}: ModalProps) {
   const nodeRef = useRef(null);
+
+  const [disabled, setDisabled] = useState(false);
+
+  const handleSubmitClick = () => {
+    setDisabled(true);
+    onSubmit();
+    setDisabled(false);
+  };
+
+  const handleCloseClick = () => {
+    setDisabled(true);
+    onClose();
+    setDisabled(false);
+  };
 
   return ReactDOM.createPortal(
     <CSSTransition
@@ -35,11 +63,21 @@ export function Modal({ title, show, onClose, onSubmit, children }: ModalProps) 
           <div className={styles.body}>{children}</div>
 
           <div className={`${styles.footer} d-grid gap-2 d-md-flex justify-content-md-end`}>
-            <button type="button" className="btn btn-outline-danger" onClick={onClose}>
-              Close
+            <button
+              type="button"
+              className={`btn btn-${closeButtonType}`}
+              onClick={handleCloseClick}
+              disabled={disabled}
+            >
+              {closeButtonText}
             </button>
-            <button type="button" className="btn btn-primary" onClick={onSubmit}>
-              Submit
+            <button
+              type="button"
+              className={`btn btn-${primaryButtonType}`}
+              onClick={handleSubmitClick}
+              disabled={disabled}
+            >
+              {primaryButtonText}
             </button>
           </div>
         </div>

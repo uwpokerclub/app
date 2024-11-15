@@ -1,14 +1,16 @@
 import { Link, useParams } from "react-router-dom";
 import { useFetch } from "../../../hooks";
 import { APIErrorResponse, Entry, Event, StructureWithBlinds } from "../../../types";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { sendAPIRequest } from "../../../lib";
 import { EntriesTable } from "./EntriesTable";
 
 import styles from "./EventDetails.module.css";
 import { TournamentClock } from "./TournamentClock";
+import { EndEventModal } from "./EndEventModal";
 
 export function EventDetails() {
+  const [showModal, setShowModal] = useState(false);
   const { eventId = "" } = useParams<{ eventId: string }>();
 
   const { data: event, setData: setEvent, isLoading } = useFetch<Event>(`events/${eventId}`);
@@ -27,23 +29,20 @@ export function EventDetails() {
     }
   };
 
-  const endEvent = async (e: FormEvent) => {
-    e.preventDefault();
-
-    const { status, data } = await sendAPIRequest<APIErrorResponse>(`events/${eventId}/end`, "POST");
-
-    if (data && status !== 204) {
-      return setError(data.message);
-    }
-
-    setEvent((prev) => (prev ? { ...prev, state: 1 } : prev));
+  const handleModalSuccess = () => {
+    setEvent(
+      event
+        ? {
+            ...event,
+            state: 1,
+          }
+        : undefined,
+    );
 
     updateParticipants();
   };
 
-  const restartEvent = async (e: FormEvent) => {
-    e.preventDefault();
-
+  const restartEvent = async () => {
     const { status, data } = await sendAPIRequest<APIErrorResponse>(`events/${eventId}/unend`, "POST");
 
     if (data && status !== 204) {
@@ -133,7 +132,7 @@ export function EventDetails() {
                         Rebuy
                       </button>
 
-                      <button onClick={endEvent} type="button" className="btn btn-danger">
+                      <button onClick={() => setShowModal(true)} type="button" className="btn btn-danger">
                         End Event
                       </button>
                     </>
@@ -196,6 +195,7 @@ export function EventDetails() {
           )}
         </div>
       )}
+      <EndEventModal show={showModal} onClose={() => setShowModal(false)} onSuccess={handleModalSuccess} />
     </>
   );
 }

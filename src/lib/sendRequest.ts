@@ -21,7 +21,6 @@ export async function sendRequest<T>(path: string, method = "GET"): Promise<T> {
 
   if (res.status === 401) {
     redirect("/admin/login");
-    throw new Error(errorData.message);
   }
 
   throw new Error(errorData.message);
