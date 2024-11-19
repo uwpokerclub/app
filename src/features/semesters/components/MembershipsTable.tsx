@@ -62,55 +62,57 @@ export function MembershipsTable({ semesterId }: MembershipsTableProps) {
           </button>
         </div>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Student ID</th>
+      <div className="table-responsive">
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Student ID</th>
 
-            <th>First Name</th>
+              <th>First Name</th>
 
-            <th>Last Name</th>
+              <th>Last Name</th>
 
-            <th>Paid</th>
+              <th>Paid</th>
 
-            <th>Discounted</th>
+              <th>Discounted</th>
 
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {filteredMemberships.map((m) => (
-            <tr key={m.id}>
-              <td>{m.userId}</td>
-
-              <td>{m.firstName}</td>
-
-              <td>{m.lastName}</td>
-
-              <td>{m.paid ? "Yes" : "No"}</td>
-
-              <td>{m.discounted ? "Yes" : "No"}</td>
-
-              <td>
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => updateMembership(m.id, !m.paid, m.discounted)}
-                >
-                  Set {m.paid ? "Unpaid" : "Paid"}
-                </button>
-
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => updateMembership(m.id, m.paid, !m.discounted)}
-                >
-                  {m.discounted ? "Remove Discount" : "Discount"}
-                </button>
-              </td>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {filteredMemberships.map((m) => (
+              <tr key={m.id}>
+                <td>{m.userId}</td>
+
+                <td>{m.firstName}</td>
+
+                <td>{m.lastName}</td>
+
+                <td>{m.paid ? "Yes" : "No"}</td>
+
+                <td>{m.discounted ? "Yes" : "No"}</td>
+
+                <td>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => updateMembership(m.id, !m.paid, m.discounted)}
+                  >
+                    Set {m.paid ? "Unpaid" : "Paid"}
+                  </button>
+
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => updateMembership(m.id, m.paid, !m.discounted)}
+                  >
+                    {m.discounted ? "Remove Discount" : "Discount"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <NewMembershipModal show={showModal} onClose={() => setShowModal(false)} semesterId={semesterId} />
     </>
