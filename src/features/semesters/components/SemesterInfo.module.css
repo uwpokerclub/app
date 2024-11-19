@@ -1,8 +1,11 @@
 .highlights {
   margin: 0.5rem 0;
   display: flex;
+  overflow: auto;
 }
 
 .item {
   margin: 0 0.5rem;
+  text-wrap: nowrap;
+  min-width: fit-content;
 }

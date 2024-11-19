@@ -12,7 +12,7 @@ export function SemesterInfo() {
   const { data: semester } = useFetch<Semester>(`semesters/${semesterId}`);
 
   return (
-    <div>
+    <>
       <div className={styles.highlights}>
         <div className={`card ${styles.item}`}>
           <div className="card-body">
@@ -44,21 +44,19 @@ export function SemesterInfo() {
               {Number(semester?.membershipFee).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
-              })}
+              })}{" "}
+              <i>
+                (
+                {Number(semester?.membershipDiscountFee).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+                )
+              </i>
             </h2>
-            <h6 className="card-subtitle mb-2 text-muted">Membership Fee</h6>
-          </div>
-        </div>
-
-        <div className={`card ${styles.item}`}>
-          <div className="card-body">
-            <h2 className="card-title">
-              {Number(semester?.membershipDiscountFee).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-              })}
-            </h2>
-            <h6 className="card-subtitle mb-2 text-muted">Membership Fee (Discounted)</h6>
+            <h6 className="card-subtitle mb-2 text-muted">
+              Membership Fee <i>(Discount)</i>
+            </h6>
           </div>
         </div>
 
@@ -78,6 +76,6 @@ export function SemesterInfo() {
       <MembershipsTable semesterId={semesterId} />
 
       <TransactionsTable semesterId={semesterId} />
-    </div>
+    </>
   );
 }
