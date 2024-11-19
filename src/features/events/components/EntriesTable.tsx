@@ -54,85 +54,87 @@ export function EntriesTable({ entries, event, updateParticipants }: EntriesTabl
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <table className="table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Student Number</th>
-              <th>Signed Out At</th>
-              <th className="text-center">Place</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody className="list">
-            {filteredEntries.map((entry, index) => (
-              <tr key={entry.id}>
-                <th>{index + 1}</th>
-
-                <td className="fname">{entry.firstName}</td>
-
-                <td className="lname">{entry.lastName}</td>
-
-                <td className="studentno">{entry.id}</td>
-
-                <td className="signed_out_at">
-                  {entry.signedOutAt !== null ? (
-                    <span>
-                      {new Date(entry.signedOutAt).toLocaleString("en-US", {
-                        hour12: true,
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                  ) : (
-                    <i>Not Signed Out</i>
-                  )}
-                </td>
-
-                <td className="center placement">
-                  <span className="margin-center">{entry.placement ? entry.placement : "--"}</span>
-                </td>
-
-                <td className="center">
-                  {event.state !== 1 && (
-                    <div className="btn-group">
-                      {entry.signedOutAt ? (
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          onClick={() => updateParticipant(entry.membershipId, "sign-in")}
-                        >
-                          Sign Back In
-                        </button>
-                      ) : (
-                        <button
-                          type="submit"
-                          className="btn btn-info"
-                          onClick={() => updateParticipant(entry.membershipId, "sign-out")}
-                        >
-                          Sign Out
-                        </button>
-                      )}
-                      <button
-                        type="submit"
-                        className="btn btn-warning"
-                        onClick={() => deleteParticipant(entry.membershipId)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  )}
-                </td>
+        <div className="table-responsive">
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Student Number</th>
+                <th>Signed Out At</th>
+                <th className="text-center">Place</th>
+                <th className="text-center">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="list">
+              {filteredEntries.map((entry, index) => (
+                <tr key={entry.id}>
+                  <th>{index + 1}</th>
+
+                  <td className="fname">{entry.firstName}</td>
+
+                  <td className="lname">{entry.lastName}</td>
+
+                  <td className="studentno">{entry.id}</td>
+
+                  <td className="signed_out_at">
+                    {entry.signedOutAt !== null ? (
+                      <span>
+                        {new Date(entry.signedOutAt).toLocaleString("en-US", {
+                          hour12: true,
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    ) : (
+                      <i>Not Signed Out</i>
+                    )}
+                  </td>
+
+                  <td className="center placement">
+                    <span className="margin-center">{entry.placement ? entry.placement : "--"}</span>
+                  </td>
+
+                  <td className="center">
+                    {event.state !== 1 && (
+                      <div className="btn-group">
+                        {entry.signedOutAt ? (
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={() => updateParticipant(entry.membershipId, "sign-in")}
+                          >
+                            Sign Back In
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            className="btn btn-info"
+                            onClick={() => updateParticipant(entry.membershipId, "sign-out")}
+                          >
+                            Sign Out
+                          </button>
+                        )}
+                        <button
+                          type="submit"
+                          className="btn btn-warning"
+                          onClick={() => deleteParticipant(entry.membershipId)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
