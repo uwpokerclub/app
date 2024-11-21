@@ -10,19 +10,16 @@ COPY . .
 # Install Node dependencies
 RUN npm install --frozen-lockfile
 
-# Set NODE_ENV to production
-ENV NODE_ENV=production
-
 # Build production ready application
-RUN npm run build
+RUN NODE_ENV=development npm run build -- --mode development
 
-FROM nginx:1.27.3-alpine
+FROM nginx:1.27.2-alpine
 
 WORKDIR /usr/share/nginx/html
 
 COPY --from=node_stage /usr/app/dist .
 
-COPY nginx/templates/default.conf.template /etc/nginx/templates/
+COPY nginx/templates/integration_test.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
