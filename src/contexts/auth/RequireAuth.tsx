@@ -9,6 +9,10 @@ export function RequireAuth({ children }: RequireAuthProps) {
   const auth = useAuth();
   const location = useLocation();
 
+  if (auth.authenticated === null) {
+    return <></>;
+  }
+
   if (!auth.authenticated) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }

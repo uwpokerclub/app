@@ -1,13 +1,16 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { authContext } from "./context";
-import { sendAPIRequest } from "../../lib";
+import { sendRequest } from "../../lib";
+import { getSession } from "../../sdk/session";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const cookieKey = import.meta.env.DEV ? "uwpsc-dev-session-id" : "uwpsc-session-id";
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
 
-  const [authenticated, setAuthenticated] = useState(
-    document.cookie.split(";").some((item) => item.trim().startsWith(cookieKey)),
-  );
+  useEffect(() => {
+    getSession()
+      .then(() => setAuthenticated(true))
+      .catch(() => setAuthenticated(false));
+  }, []);
 
   const signIn = (cb: () => void) => {
     setAuthenticated(true);
@@ -15,14 +18,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = (cb: () => void) => {
-    sendAPIRequest("session/logout", "POST").then(({ status }) => {
-      if (status !== 204) {
-        throw new Error("API Logout request failed");
-      }
-
-      setAuthenticated(false);
-      return cb();
-    });
+    sendRequest("session/logout", "POST")
+      .then(() => {
+        setAuthenticated(false);
+        cb();
+      })
+      .catch((err) => {
+        if (err instanceof SyntaxError) {
+          setAuthenticated(false);
+          cb();
+        }
+      });
   };
 
   const value = { authenticated, signIn, signOut };
