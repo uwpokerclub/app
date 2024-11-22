@@ -36,10 +36,13 @@
 //   }
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
   interface Chainable {
     getByData(dataTestAttribute: string): Chainable<JQuery<HTMLElement>>;
     login(username: string, password: string): Chainable<void>;
+    setupLogin(username: string, password: string): Chainable<void>;
+    resetDB(): Chainable<void>;
   }
 }
 
@@ -59,7 +62,18 @@ Cypress.Commands.add("login", (username, password) => {
     {
       validate: () => {
         cy.getCookie("uwpsc-dev-session-id").should("exist");
-      }
-    }
+      },
+    },
   );
+});
+
+Cypress.Commands.add("setupLogin", (username, password) => {
+  cy.request("POST", "http://localhost:5000/login", {
+    username,
+    password,
+  });
+});
+
+Cypress.Commands.add("resetDB", () => {
+  cy.request("POST", "http://localhost:5000/database/reset");
 });

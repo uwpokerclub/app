@@ -1,11 +1,16 @@
-describe("Login", () => {
+describe("Login page", () => {
   beforeEach(() => {
+    cy.setupLogin("e2euser", "password");
     cy.visit("/admin/login");
+  });
+
+  afterEach(() => {
+    cy.resetDB();
   });
 
   it("should successfully login", () => {
     // Input username
-    cy.get("input[name=username]").type("adam");
+    cy.get("input[name=username]").type("e2euser");
 
     // Input password
     cy.get("input[name=password]").type("password");
