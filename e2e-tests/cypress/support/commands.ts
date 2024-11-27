@@ -51,20 +51,11 @@ Cypress.Commands.add("getByData", (selector) => {
 });
 
 Cypress.Commands.add("login", (username, password) => {
-  cy.session(
+  cy.request("POST", "http://localhost:5000/session", {
     username,
-    () => {
-      cy.visit("/admin/login");
-      cy.get("input[name=username]").type(username);
-      cy.get("input[name=password]").type(`${password}{enter}`, { log: false });
-      cy.location("pathname").should("eq", "/admin");
-    },
-    {
-      validate: () => {
-        cy.getCookie("uwpsc-dev-session-id").should("exist");
-      },
-    },
-  );
+    password,
+  });
+  cy.getCookie("uwpsc-dev-session-id").should("exist");
 });
 
 Cypress.Commands.add("setupLogin", (username, password) => {

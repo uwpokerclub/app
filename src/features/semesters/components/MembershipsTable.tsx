@@ -57,7 +57,12 @@ export function MembershipsTable({ semesterId }: MembershipsTableProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           ></input>
-          <button type="button" className=" btn btn-primary" onClick={() => setShowModal(true)}>
+          <button
+            data-qa="new-member-btn"
+            type="button"
+            className=" btn btn-primary"
+            onClick={() => setShowModal(true)}
+          >
             New member
           </button>
         </div>
@@ -82,8 +87,8 @@ export function MembershipsTable({ semesterId }: MembershipsTableProps) {
 
           <tbody>
             {filteredMemberships.map((m) => (
-              <tr key={m.id}>
-                <td>{m.userId}</td>
+              <tr data-qa={`member-${m.id}`} key={m.id}>
+                <td data-qa={`member-userId-${m.userId}`}>{m.userId}</td>
 
                 <td>{m.firstName}</td>
 

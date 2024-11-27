@@ -55,47 +55,65 @@ export function NewSemester() {
             <form onSubmit={(e) => handleSubmit(e)}>
               <div className="mb-3">
                 <label htmlFor="name">Name</label>
-                <input ref={nameRef} type="text" name="name" className="form-control" />
+                <input data-qa="name" ref={nameRef} type="text" name="name" className="form-control" />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="start_date">Start Date</label>
-                <input ref={startDateRef} type="date" name="start_date" className="form-control" />
+                <input data-qa="start-date" ref={startDateRef} type="date" name="start_date" className="form-control" />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="end_date">End Date</label>
-                <input ref={endDateRef} type="date" name="end_date" className="form-control" />
+                <input data-qa="end-date" ref={endDateRef} type="date" name="end_date" className="form-control" />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">Starting Budget</label>
-                <input ref={startingBudgetRef} type="number" className="form-control" />
+                <input
+                  data-qa="starting-budget"
+                  ref={startingBudgetRef}
+                  type="number"
+                  name="startingBudget"
+                  className="form-control"
+                />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">Membership Fee</label>
-                <input ref={membershipFeeRef} type="number" className="form-control" />
+                <input
+                  data-qa="membership-fee"
+                  ref={membershipFeeRef}
+                  type="number"
+                  name="membershipFee"
+                  className="form-control"
+                />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">Discounted Membership Fee</label>
-                <input ref={discountedMembershipFeeRef} type="number" className="form-control" />
+                <input
+                  data-qa="discounted-membership-fee"
+                  ref={discountedMembershipFeeRef}
+                  type="number"
+                  name="discountedMembershipFee"
+                  className="form-control"
+                />
               </div>
 
               <div className="mb-3">
                 <label className="form-label">Rebuy Fee</label>
-                <input ref={rebuyFeeRef} type="number" className="form-control" />
+                <input data-qa="rebuy-fee" ref={rebuyFeeRef} type="number" name="rebuyFee" className="form-control" />
               </div>
 
               <div className="mb-3">
                 <label htmlFor="meta">Additional Details</label>
-                <textarea ref={metaRef} rows={6} name="meta" className="form-control" />
+                <textarea data-qa="additional-details" ref={metaRef} rows={6} name="meta" className="form-control" />
               </div>
 
               <div className="row">
                 <div className="text-center">
-                  <button type="submit" value="submit" className="btn btn-success btn-responsive">
+                  <button data-qa="form-submit" type="submit" value="submit" className="btn btn-success btn-responsive">
                     Submit
                   </button>
                 </div>
