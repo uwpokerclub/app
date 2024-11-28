@@ -100,6 +100,7 @@ export function MembershipsTable({ semesterId }: MembershipsTableProps) {
 
                 <td>
                   <button
+                    data-qa="set-paid-btn"
                     className="btn btn-primary btn-sm"
                     onClick={() => updateMembership(m.id, !m.paid, m.discounted)}
                   >
@@ -107,6 +108,7 @@ export function MembershipsTable({ semesterId }: MembershipsTableProps) {
                   </button>
 
                   <button
+                    data-qa="set-discounted-btn"
                     className="btn btn-primary btn-sm"
                     onClick={() => updateMembership(m.id, m.paid, !m.discounted)}
                   >
