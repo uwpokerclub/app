@@ -1,9 +1,7 @@
 import { redirect } from "react-router-dom";
 
 export async function sendAPIRequest<T>(path: string, method = "GET", body?: Record<string, unknown>) {
-  const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
-
-  const res = await fetch(`${apiUrl}/${path}`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/${path}`, {
     credentials: "include",
     method,
     headers: body ? { "Content-Type": "applcation/json" } : undefined,

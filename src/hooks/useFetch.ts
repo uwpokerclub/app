@@ -7,34 +7,46 @@ export function useFetch<T>(path: string, method = "GET", body?: Record<string, 
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchData = useCallback(async () => {
-    const apiUrl = import.meta.env.DEV ? "http://localhost:5000" : "https://api.uwpokerclub.com";
+  const fetchData = useCallback(
+    async (controller: AbortController) => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/${path}`, {
+        credentials: "include",
+        method,
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal,
+      });
 
-    const res = await fetch(`${apiUrl}/${path}`, {
-      credentials: "include",
-      method,
-      headers: body ? { "Content-Type": "application/json" } : undefined,
-      body: body ? JSON.stringify(body) : undefined,
-    });
+      setStatus(res.status);
 
-    setStatus(res.status);
+      if (res.status === 401) {
+        navigate("/admin/login");
+        return {};
+      }
 
-    if (res.status === 401) {
-      navigate("/admin/login");
-      return {};
-    }
+      try {
+        setData(await res.json());
+      } catch (err) {
+        /* empty */
+      }
 
-    try {
-      setData(await res.json());
-    } catch (err) {
-      /* empty */
-    }
-
-    setIsLoading(false);
-  }, [path, body, method, navigate]);
+      setIsLoading(false);
+    },
+    [path, body, method, navigate],
+  );
 
   useEffect(() => {
-    fetchData();
+    const controller = new AbortController();
+
+    fetchData(controller).catch((err) => {
+      if (err.name === "AbortError") return;
+
+      throw err;
+    });
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchData]);
 
   return { status, data, setData, isLoading };

@@ -10,8 +10,12 @@ COPY . .
 # Install Node dependencies
 RUN npm install --frozen-lockfile
 
+# Setup "dummy" production environment variables
+RUN rm .env.production
+RUN mv .env .env.production
+
 # Build production ready application
-RUN NODE_ENV=development npm run build -- --mode development
+RUN npm run build
 
 FROM nginx:1.27.2-alpine
 

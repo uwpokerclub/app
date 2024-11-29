@@ -31,7 +31,12 @@ export function TransactionsTable({ semesterId }: TransactionsTableProps) {
     <>
       <div className={styles.header}>
         <h3>Transactions</h3>
-        <button type="button" className="btn btn-primary" onClick={() => setShowModal(true)}>
+        <button
+          data-qa="new-transaction-btn"
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setShowModal(true)}
+        >
           New transaction
         </button>
       </div>
@@ -48,15 +53,22 @@ export function TransactionsTable({ semesterId }: TransactionsTableProps) {
 
         <tbody>
           {transactions?.map((t) => (
-            <tr key={t.id}>
-              <td>{t.id}</td>
+            <tr data-qa={`transaction-${t.id}`} key={t.id}>
+              <td data-qa={`${t.id}-id`}>{t.id}</td>
 
-              <td>{t.description}</td>
+              <td data-qa={`${t.id}-description`}>{t.description}</td>
 
-              <td>{t.amount >= 0 ? `$${Number(t.amount).toFixed(2)}` : `-$${Number(t.amount * -1).toFixed(2)}`}</td>
+              <td data-qa={`${t.id}-amount`}>
+                {t.amount >= 0 ? `$${Number(t.amount).toFixed(2)}` : `-$${Number(t.amount * -1).toFixed(2)}`}
+              </td>
 
               <td style={{ textAlign: "right" }}>
-                <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(t.id)}>
+                <button
+                  data-qa={`${t.id}-delete-btn`}
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => handleDelete(t.id)}
+                >
                   Delete
                 </button>
               </td>
