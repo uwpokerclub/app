@@ -19,7 +19,7 @@ export function ListEvents() {
 
           <div className="row">
             <div className="col-md-6">
-              <Link to="new" className="btn btn-primary btn-responsive">
+              <Link data-qa="create-event-btn" to="new" className="btn btn-primary btn-responsive">
                 Create an Event
               </Link>
             </div>
@@ -43,13 +43,15 @@ export function ListEvents() {
           <div className="list-group">
             {filteredEvents.map((event) => (
               <Link key={event.id} to={`${event.id}`} className="list-group-item">
-                <h4 className="list-group-item-heading bold">{event.name}</h4>
+                <h4 data-qa={`${event.id}-name`} className="list-group-item-heading bold">
+                  {event.name}
+                </h4>
 
                 <div className="list-group-item-text">
-                  <p>
+                  <p data-qa={`${event.id}-format`}>
                     <strong>Format:</strong> {event.format}
                   </p>
-                  <p>
+                  <p data-qa={`${event.id}-date`}>
                     <strong>Date:</strong>{" "}
                     {new Date(event.startDate).toLocaleDateString("en-US", {
                       weekday: "long",
@@ -60,7 +62,7 @@ export function ListEvents() {
                       minute: "numeric",
                     })}
                   </p>
-                  <p>
+                  <p data-qa={`${event.id}-additional-details`}>
                     <strong>Additional Details:</strong> {event.notes}
                   </p>
                   <p> {event.count || "No"} Entries </p>

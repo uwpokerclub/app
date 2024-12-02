@@ -10,7 +10,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "jest --passWithNoTests",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@chiragrupani/fullscreen-react": "^1.2.5",
@@ -22,6 +23,7 @@
     "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.13",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",

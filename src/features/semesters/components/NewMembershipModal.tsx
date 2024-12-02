@@ -150,10 +150,18 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
   return (
     <Modal title="New Membership" onClose={onClose} onSubmit={handleSubmit} show={show}>
       <div className={styles.tabs}>
-        <div className={showMemberTab ? styles.tabActive : styles.tab} onClick={() => setShowMemberTab(true)}>
+        <div
+          data-qa="modal-existing-member-tab"
+          className={showMemberTab ? styles.tabActive : styles.tab}
+          onClick={() => setShowMemberTab(true)}
+        >
           <span>Existing User</span>
         </div>
-        <div className={!showMemberTab ? styles.tabActive : styles.tab} onClick={() => setShowMemberTab(false)}>
+        <div
+          data-qa="modal-new-member-tab"
+          className={!showMemberTab ? styles.tabActive : styles.tab}
+          onClick={() => setShowMemberTab(false)}
+        >
           <span>New User</span>
         </div>
       </div>
@@ -161,7 +169,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
         <form>
           <div className="mb-3">
             <label>User</label>
-            <Select options={unregisteredUsers} onChange={(e) => setUserId(e!.value)} />
+            <Select data-qa="select-members" options={unregisteredUsers} onChange={(e) => setUserId(e!.value)} />
           </div>
         </form>
       ) : (
@@ -170,6 +178,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="firstName">First Name:</label>
             <input
+              data-qa="input-firstName"
               type="text"
               placeholder="First name"
               name="firstName"
@@ -182,6 +191,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="lastName">Last Name:</label>
             <input
+              data-qa="input-lastName"
               type="text"
               placeholder="Last name"
               name="lastName"
@@ -194,6 +204,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="email">Email:</label>
             <input
+              data-qa="input-email"
               type="text"
               placeholder="Email"
               name="email"
@@ -205,7 +216,13 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
 
           <div className="mb-3">
             <label htmlFor="faculty">Faculty:</label>
-            <select name="faculty" className="form-control" value={formState.faculty} onChange={handleChange}>
+            <select
+              data-qa="select-faculty"
+              name="faculty"
+              className="form-control"
+              value={formState.faculty}
+              onChange={handleChange}
+            >
               <option>Choose one</option>
               {FACULTIES.map((f) => (
                 <option key={f} value={f}>
@@ -218,6 +235,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="questId">Quest ID:</label>
             <input
+              data-qa="input-questId"
               type="text"
               placeholder="Quest ID"
               name="questId"
@@ -230,6 +248,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="id">Student Number:</label>
             <input
+              data-qa="input-id"
               type="text"
               placeholder="Student Number"
               name="id"
@@ -242,11 +261,21 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
       )}
       <div className="form-check form-check-inline">
         <label className="form-check-label">Paid</label>
-        <input type="checkbox" className="form-check-input" onChange={() => setPaid(!paid)}></input>
+        <input
+          data-qa="checkbox-paid"
+          type="checkbox"
+          className="form-check-input"
+          onChange={() => setPaid(!paid)}
+        ></input>
       </div>
       <div className="form-check form-check-inline">
         <label className="form-check-label">Discounted</label>
-        <input type="checkbox" className="form-check-input" onChange={() => setDiscounted(!discounted)}></input>
+        <input
+          data-qa="checkbox-discounted"
+          type="checkbox"
+          className="form-check-input"
+          onChange={() => setDiscounted(!discounted)}
+        ></input>
       </div>
     </Modal>
   );
