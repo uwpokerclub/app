@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container.blinds {
+  grid-area: blinds;
+}
+
+.container.ante {
+  grid-area: ante;
+}
+
+.header {
+  font-size: 1.25rem;
+  color: #aeaeae;
+}
+
+.amount {
+  font-size: 5rem;
+}
+
+.next {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.next .header {
+  font-size: 1.15rem;
+}
+
+.next .amount {
+  color: #909090;
+  font-size: 1rem;
+}

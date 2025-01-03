@@ -14,7 +14,6 @@
     "cy:open": "cypress open"
   },
   "dependencies": {
-    "@chiragrupani/fullscreen-react": "^1.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.3.1",
     "react-photoswipe-gallery": "^2.2.7",

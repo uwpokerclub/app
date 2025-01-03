@@ -274,16 +274,13 @@ describe("Events", () => {
         // Check that the timer works and the level changes at the end of the timer
         cy.getByData("toggle-timer-btn").click();
         cy.tick(1000 * 60 * 5); // Tick 5 minutes;
-        cy.getByData("timer").should("contain", "0:00");
-        // Tick 1 extra second to ensure that the level gets switched and a new timer is tarted
-        cy.tick(1000);
         cy.getByData("level").should("contain", "Level 2");
-        cy.getByData("timer").should("contain", "4:59");
+        cy.getByData("timer").should("contain", "5:00");
 
         // Check that the timer can be paused
         cy.getByData("toggle-timer-btn").click();
         cy.tick(1000 * 60); // Advance 1 minute in time
-        cy.getByData("timer").should("contain", "4:59");
+        cy.getByData("timer").should("contain", "5:00");
 
         // Check that the back button works
         cy.getByData("prev-level-btn").click();

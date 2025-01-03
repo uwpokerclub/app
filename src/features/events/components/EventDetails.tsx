@@ -6,7 +6,7 @@ import { sendAPIRequest } from "../../../lib";
 import { EntriesTable } from "./EntriesTable";
 
 import styles from "./EventDetails.module.css";
-import { TournamentClock } from "./TournamentClock";
+import { TournamentClock } from "../../tournament-clock";
 import { EndEventModal } from "./EndEventModal";
 
 export function EventDetails() {

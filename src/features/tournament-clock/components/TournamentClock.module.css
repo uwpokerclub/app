@@ -1,0 +1,32 @@
+.grid {
+  position: relative;
+  background-color: #2b2b2b;
+
+  color: #fff;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.15fr 2fr 0.25fr 1fr;
+  grid-template-areas:
+    "header header"
+    "timer timer"
+    "progressbar progressbar"
+    "blinds ante";
+}
+
+.fullscreen {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 1rem;
+}
+
+.timerHeader {
+  grid-area: header;
+
+  font-size: 1.5rem;
+  background-color: #1b1c1e;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+}

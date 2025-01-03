@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 0 4rem;
+}
+
+.row span {
+  cursor: pointer;
+}
