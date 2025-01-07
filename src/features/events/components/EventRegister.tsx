@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { sendAPIRequest } from "../../../lib";
 import { Membership, getEligibleMembers } from "../../../sdk/memberships";
 
@@ -89,7 +88,7 @@ export function EventRegister() {
                   <div
                     key={member.id}
                     className={`${styles.item} ${
-                      Number(member.attendance) >= 4 && !member.paid ? styles.itemDanger : ""
+                      Number(member.attendance) >= 3 && !member.paid ? styles.itemDanger : ""
                     }`}
                   >
                     <div data-qa={`member-${member.id}`} className={styles.itemCheckbox}>
