@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useFetch } from "../../../hooks";
 import { APIErrorResponse, Entry, Event, StructureWithBlinds } from "../../../types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { sendAPIRequest } from "../../../lib";
 import { EntriesTable } from "./EntriesTable";
 
@@ -21,15 +21,18 @@ export function EventDetails() {
   const [showEntries, setShowEntries] = useState(true);
   const [error, setError] = useState("");
 
-  const updateParticipants = async () => {
+  const endEventBtnRef = useRef<HTMLButtonElement | null>(null);
+  const restartEventBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  const updateParticipants = useCallback(async () => {
     const { status, data } = await sendAPIRequest<Entry[]>(`participants?eventId=${eventId}`);
 
     if (status === 200 && data) {
       setEntries(data);
     }
-  };
+  }, [eventId, setEntries]);
 
-  const handleModalSuccess = () => {
+  const handleModalSuccess = useCallback(() => {
     setEvent(
       event
         ? {
@@ -40,9 +43,23 @@ export function EventDetails() {
     );
 
     updateParticipants();
-  };
 
-  const restartEvent = async () => {
+    // Re-enable the end event button
+    endEventBtnRef.current!.disabled = false;
+  }, [event, setEvent, updateParticipants]);
+
+  const handleModalClose = useCallback(() => {
+    // Close the modal
+    setShowModal(false);
+
+    // Re-enable the end event button
+    endEventBtnRef.current!.disabled = false;
+  }, []);
+
+  const handleRestartEvent = useCallback(async () => {
+    // Disable restart event button while data is processing
+    restartEventBtnRef.current!.disabled = true;
+
     const { status, data } = await sendAPIRequest<APIErrorResponse>(`events/${eventId}/unend`, "POST");
 
     if (data && status !== 204) {
@@ -52,7 +69,10 @@ export function EventDetails() {
     setEvent((prev) => (prev ? { ...prev, state: 0 } : prev));
 
     updateParticipants();
-  };
+
+    // Re-enable restart event button
+    restartEventBtnRef.current!.disabled = false;
+  }, [eventId, setEvent, updateParticipants]);
 
   const handleRebuy = async () => {
     const { status } = await sendAPIRequest(`events/${eventId}/rebuy`, "POST");
@@ -67,6 +87,14 @@ export function EventDetails() {
       });
     }
   };
+
+  const handleEndEventClick = useCallback(() => {
+    // Show the modal
+    setShowModal(true);
+
+    // Disable the button to prevent it from being clicked again
+    endEventBtnRef.current!.disabled = true;
+  }, []);
 
   useEffect(() => {
     if (!event) {
@@ -145,8 +173,9 @@ export function EventDetails() {
                       </button>
 
                       <button
+                        ref={endEventBtnRef}
                         data-qa="end-event-btn"
-                        onClick={() => setShowModal(true)}
+                        onClick={handleEndEventClick}
                         type="button"
                         className="btn btn-danger"
                       >
@@ -157,8 +186,9 @@ export function EventDetails() {
                   {event.state === 1 && (
                     <>
                       <button
+                        ref={restartEventBtnRef}
                         data-qa="restart-event-btn"
-                        onClick={restartEvent}
+                        onClick={handleRestartEvent}
                         type="button"
                         className="btn btn-danger"
                       >
@@ -217,7 +247,7 @@ export function EventDetails() {
           )}
         </div>
       )}
-      <EndEventModal show={showModal} onClose={() => setShowModal(false)} onSuccess={handleModalSuccess} />
+      <EndEventModal show={showModal} onClose={handleModalClose} onSuccess={handleModalSuccess} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useCallback, useRef } from "react";
 import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
@@ -8,7 +8,7 @@ type ModalProps = {
   title: string;
   show: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
   children: ReactNode;
   primaryButtonText?: string;
   primaryButtonType?: string;
@@ -28,20 +28,24 @@ export function Modal({
   children,
 }: ModalProps) {
   const nodeRef = useRef(null);
+  const submitButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [disabled, setDisabled] = useState(false);
+  const handleSubmitClick = useCallback(async () => {
+    submitButtonRef.current!.disabled = true;
+    closeButtonRef.current!.disabled = true;
+    await onSubmit();
+    submitButtonRef.current!.disabled = false;
+    closeButtonRef.current!.disabled = false;
+  }, [onSubmit]);
 
-  const handleSubmitClick = () => {
-    setDisabled(true);
-    onSubmit();
-    setDisabled(false);
-  };
-
-  const handleCloseClick = () => {
-    setDisabled(true);
+  const handleCloseClick = useCallback(() => {
+    submitButtonRef.current!.disabled = true;
+    closeButtonRef.current!.disabled = true;
     onClose();
-    setDisabled(false);
-  };
+    submitButtonRef.current!.disabled = false;
+    closeButtonRef.current!.disabled = false;
+  }, [onClose]);
 
   return ReactDOM.createPortal(
     <CSSTransition
@@ -66,20 +70,20 @@ export function Modal({
 
           <div className={`${styles.footer} d-grid gap-2 d-md-flex justify-content-md-end`}>
             <button
+              ref={closeButtonRef}
               data-qa="modal-close-btn"
               type="button"
               className={`btn btn-${closeButtonType}`}
               onClick={handleCloseClick}
-              disabled={disabled}
             >
               {closeButtonText}
             </button>
             <button
+              ref={submitButtonRef}
               data-qa="modal-submit-btn"
               type="button"
               className={`btn btn-${primaryButtonType}`}
               onClick={handleSubmitClick}
-              disabled={disabled}
             >
               {primaryButtonText}
             </button>
