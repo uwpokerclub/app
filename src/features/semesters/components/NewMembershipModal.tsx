@@ -1,13 +1,12 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Select from "react-select";
-import { Modal } from "../../../components";
+import { Modal, SelectSearch } from "../../../components";
 import { useFetch } from "../../../hooks";
 import { Membership, User } from "../../../types";
 import { setDifference } from "../utils";
 import { FACULTIES } from "../../../data";
+import { sendAPIRequest } from "../../../lib";
 
 import styles from "./NewMembershipModal.module.css";
-import { sendAPIRequest } from "../../../lib";
 
 type NewMembershipModalProps = {
   show: boolean;
@@ -26,7 +25,7 @@ const defaultFormData = {
 
 export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipModalProps) {
   const [showMemberTab, setShowMemberTab] = useState(true);
-  const [unregisteredUsers, setUnregisteredUsers] = useState<{ value: string; label: string }[]>([]);
+  const [unregisteredUsers, setUnregisteredUsers] = useState<{ value: string; name: string }[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [paid, setPaid] = useState(false);
@@ -57,32 +56,11 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
         .filter((u) => unregisteredUserIds.includes(u.id))
         .map((u) => ({
           value: u.id,
-          label: `${u.firstName} ${u.lastName} (${u.id})`,
+          name: `${u.firstName} ${u.lastName} (${u.id})`,
         })),
     );
   }, [memberships, users]);
-  useEffect(() => {
-    if (!users || !memberships) {
-      return;
-    }
 
-    const userIds = users.map((u) => u.id);
-    const memberIds = memberships.map((m) => m.userId);
-
-    const userSet = new Set(userIds);
-    const memberSet = new Set(memberIds);
-
-    const unregisteredUserIds = Array.from(setDifference(userSet, memberSet));
-
-    setUnregisteredUsers(
-      users
-        .filter((u) => unregisteredUserIds.includes(u.id))
-        .map((u) => ({
-          value: u.id,
-          label: `${u.firstName} ${u.lastName} (${u.id})`,
-        })),
-    );
-  }, [memberships, users]);
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormState((prev) => ({
       ...prev,
@@ -94,7 +72,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
     if (showMemberTab) {
       const { status } = await sendAPIRequest("memberships", "POST", {
         semesterId,
-        userId,
+        userId: Number(userId),
         paid,
         discounted,
       });
@@ -169,7 +147,16 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
         <form>
           <div className="mb-3">
             <label>User</label>
-            <Select data-qa="select-members" options={unregisteredUsers} onChange={(e) => setUserId(e!.value)} />
+            <SelectSearch
+              data-qa="select-members"
+              search
+              options={unregisteredUsers}
+              placeholder="Search for members"
+              value={userId}
+              onChange={(e) => setUserId(e.toString())}
+              onBlur={() => {}}
+              onFocus={() => {}}
+            />
           </div>
         </form>
       ) : (

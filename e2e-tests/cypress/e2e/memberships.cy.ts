@@ -144,11 +144,11 @@ describe("Memberships", () => {
     cy.getByData("modal-existing-member-tab").click();
 
     // Find the existing member and select them
-    cy.get("#react-select-2-input").type("Port");
+    cy.get(".select-search-input").type("Port");
 
     // Interact with the custom selector
     cy.get<Cypress.Response<User>>("@user0").then((response) => {
-      cy.get("#react-select-2-listbox").within(() => {
+      cy.get(".select-search-options").within(() => {
         cy.contains(`${response.body.firstName} ${response.body.lastName} (${response.body.id})`).click();
       });
 
@@ -179,11 +179,11 @@ describe("Memberships", () => {
     cy.getByData("modal-existing-member-tab").click();
 
     // Find the existing member and select them
-    cy.get("#react-select-2-input").type("Gill");
+    cy.get(".select-search-input").type("Gill");
 
     // Interact with the custom selector
     cy.get<Cypress.Response<User>>("@user1").then((response) => {
-      cy.get("#react-select-2-listbox").within(() => {
+      cy.get(".select-search-options").within(() => {
         cy.contains(`${response.body.firstName} ${response.body.lastName} (${response.body.id})`).click();
       });
 
@@ -216,11 +216,11 @@ describe("Memberships", () => {
     cy.getByData("modal-existing-member-tab").click();
 
     // Find the existing member and select them
-    cy.get("#react-select-2-input").type("Jane");
+    cy.get(".select-search-input").type("Jane");
 
     // Interact with the custom selector
     cy.get<Cypress.Response<User>>("@user2").then((response) => {
-      cy.get("#react-select-2-listbox").within(() => {
+      cy.get(".select-search-options").within(() => {
         cy.contains(`${response.body.firstName} ${response.body.lastName} (${response.body.id})`).click();
       });
 
