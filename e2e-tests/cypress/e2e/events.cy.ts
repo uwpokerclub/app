@@ -121,6 +121,87 @@ describe("Events", () => {
     });
   });
 
+  context("Edit Event", () => {
+    beforeEach(() => {
+      cy.get<Cypress.Response<Semester>>("@semester").then((semResponse) => {
+        // Seed the members
+        cy.fixture("users.json").then((users) => {
+          cy.request<User>("POST", "http://localhost:5000/users", users[0]).then((response) => {
+            cy.request("POST", "http://localhost:5000/memberships", {
+              userId: response.body.id,
+              semesterId: semResponse.body.id,
+              paid: false,
+              discounted: false,
+            }).as("member1");
+          });
+          cy.request("POST", "http://localhost:5000/users", users[1]).then((response) => {
+            cy.request("POST", "http://localhost:5000/memberships", {
+              userId: response.body.id,
+              semesterId: semResponse.body.id,
+              paid: false,
+              discounted: false,
+            }).as("member2");
+          });
+          cy.request("POST", "http://localhost:5000/users", users[2]).then((response) => {
+            cy.request("POST", "http://localhost:5000/memberships", {
+              userId: response.body.id,
+              semesterId: semResponse.body.id,
+              paid: false,
+              discounted: false,
+            }).as("member3");
+          });
+        });
+        // Seed the structure
+        cy.fixture("structure.json").then((structure) => {
+          cy.request<Structure>("POST", "http://localhost:5000/structures", structure).then((structResponse) => {
+            // Seed the event
+            cy.fixture("event.json").then((event) => {
+              cy.request<Event>("POST", "http://localhost:5000/events", {
+                ...event,
+                structureId: structResponse.body.id,
+                semesterId: semResponse.body.id,
+              })
+                .as("event")
+                .then(() => cy.visit("/admin/events"));
+            });
+          });
+        });
+      });
+    });
+
+    it("should edit an event's details", () => {
+      cy.get<Cypress.Response<Event>>("@event").then((response) => {
+        cy.getByData(`event-${response.body.id}-card`).within(() => {
+          cy.getByData("actions")
+            .invoke("show")
+            .within(() => {
+              cy.getByData("edit-event-btn").click();
+            });
+        });
+      });
+
+      cy.location("pathname").should("include", "edit");
+
+      // Change event details
+      cy.getByData("input-name").clear().type("Updated Event");
+      cy.getByData("input-date").type("2025-01-14T19:00");
+      cy.getByData("select-format").select("Pot Limit Omaha");
+      cy.getByData("input-points-multiplier").clear().type("2");
+      cy.getByData("input-additional-details").clear().type("Updated this event");
+
+      cy.getByData("submit-btn").click();
+
+      cy.location("pathname").should("eq", "/admin/events/");
+
+      cy.get<Cypress.Response<Event>>("@event").then((response) => {
+        cy.getByData(`${response.body.id}-name`).should("contain", "Updated Event");
+        cy.getByData(`${response.body.id}-format`).should("contain", "Pot Limit Omaha");
+        cy.getByData(`${response.body.id}-date`).should("contain", "Tuesday, January 14, 2025 at 7:00 PM");
+        cy.getByData(`${response.body.id}-additional-details`).should("contain", "Updated this event");
+      });
+    });
+  });
+
   context("Event Management", () => {
     beforeEach(() => {
       cy.get<Cypress.Response<Semester>>("@semester").then((semResponse) => {
