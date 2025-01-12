@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Modal } from "../../../components";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { endEvent } from "../../../sdk/events";
 
 type EndEventModalProps = {
@@ -14,7 +14,7 @@ export function EndEventModal({ show, onClose, onSuccess }: EndEventModalProps) 
 
   const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     try {
       await endEvent(eventId);
     } catch (err) {
@@ -26,7 +26,7 @@ export function EndEventModal({ show, onClose, onSuccess }: EndEventModalProps) 
     onSuccess();
     onClose();
     setError(() => "");
-  };
+  }, [eventId, onClose, onSuccess]);
 
   return (
     <Modal

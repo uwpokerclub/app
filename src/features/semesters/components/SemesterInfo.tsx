@@ -26,7 +26,7 @@ export function SemesterInfo() {
           </div>
         </div>
 
-        <div className={`card ${styles.item}`}>
+        <div data-qa="current-budget-card" className={`card ${styles.item}`}>
           <div className="card-body">
             <h2 className="card-title">
               {Number(semester?.currentBudget).toLocaleString("en-US", {

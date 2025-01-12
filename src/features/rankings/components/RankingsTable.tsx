@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../../../hooks";
 import { Ranking } from "../../../types";
+import { DownloadRankingsButton } from "./DownloadRankingsButton";
 
 export function RankingsTable() {
   const { semesterId = "" } = useParams<{ semesterId: string }>();
@@ -9,7 +10,11 @@ export function RankingsTable() {
 
   return (
     <div>
-      <h1>Rankings</h1>
+      <div className="d-flex justify-content-between align-items-center">
+        <h1>Rankings</h1>
+
+        <DownloadRankingsButton semesterID={semesterId} />
+      </div>
 
       <div className="list-group">
         <div className="table-responsive">

@@ -29,6 +29,7 @@ export function NewTransactionModal({ show, onClose, semesterId }: NewTransactio
         <div className="mb-3">
           <label className="form-label">Description</label>
           <input
+            data-qa="input-description"
             className="form-control"
             type="text"
             value={description}
@@ -38,6 +39,7 @@ export function NewTransactionModal({ show, onClose, semesterId }: NewTransactio
         <div className="mb-3">
           <label className="form-label">Amount</label>
           <input
+            data-qa="input-amount"
             className="form-control"
             type="number"
             value={amount}

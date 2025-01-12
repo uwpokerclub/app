@@ -1,0 +1,10 @@
+{
+  "name": "Structure C",
+  "blinds": [
+    { "small": 10, "big": 20, "ante": 20, "time": 5 },
+    { "small": 20, "big": 40, "ante": 40, "time": 5 },
+    { "small": 30, "big": 60, "ante": 60, "time": 5 },
+    { "small": 40, "big": 80, "ante": 80, "time": 5 },
+    { "small": 50, "big": 100, "ante": 100, "time": 5 }
+  ]
+}

@@ -1,13 +1,12 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Select from "react-select";
-import { Modal } from "../../../components";
+import { Modal, SelectSearch } from "../../../components";
 import { useFetch } from "../../../hooks";
 import { Membership, User } from "../../../types";
 import { setDifference } from "../utils";
 import { FACULTIES } from "../../../data";
+import { sendAPIRequest } from "../../../lib";
 
 import styles from "./NewMembershipModal.module.css";
-import { sendAPIRequest } from "../../../lib";
 
 type NewMembershipModalProps = {
   show: boolean;
@@ -26,7 +25,7 @@ const defaultFormData = {
 
 export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipModalProps) {
   const [showMemberTab, setShowMemberTab] = useState(true);
-  const [unregisteredUsers, setUnregisteredUsers] = useState<{ value: string; label: string }[]>([]);
+  const [unregisteredUsers, setUnregisteredUsers] = useState<{ value: string; name: string }[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [paid, setPaid] = useState(false);
@@ -57,32 +56,11 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
         .filter((u) => unregisteredUserIds.includes(u.id))
         .map((u) => ({
           value: u.id,
-          label: `${u.firstName} ${u.lastName} (${u.id})`,
+          name: `${u.firstName} ${u.lastName} (${u.id})`,
         })),
     );
   }, [memberships, users]);
-  useEffect(() => {
-    if (!users || !memberships) {
-      return;
-    }
 
-    const userIds = users.map((u) => u.id);
-    const memberIds = memberships.map((m) => m.userId);
-
-    const userSet = new Set(userIds);
-    const memberSet = new Set(memberIds);
-
-    const unregisteredUserIds = Array.from(setDifference(userSet, memberSet));
-
-    setUnregisteredUsers(
-      users
-        .filter((u) => unregisteredUserIds.includes(u.id))
-        .map((u) => ({
-          value: u.id,
-          label: `${u.firstName} ${u.lastName} (${u.id})`,
-        })),
-    );
-  }, [memberships, users]);
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormState((prev) => ({
       ...prev,
@@ -94,7 +72,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
     if (showMemberTab) {
       const { status } = await sendAPIRequest("memberships", "POST", {
         semesterId,
-        userId,
+        userId: Number(userId),
         paid,
         discounted,
       });
@@ -150,10 +128,18 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
   return (
     <Modal title="New Membership" onClose={onClose} onSubmit={handleSubmit} show={show}>
       <div className={styles.tabs}>
-        <div className={showMemberTab ? styles.tabActive : styles.tab} onClick={() => setShowMemberTab(true)}>
+        <div
+          data-qa="modal-existing-member-tab"
+          className={showMemberTab ? styles.tabActive : styles.tab}
+          onClick={() => setShowMemberTab(true)}
+        >
           <span>Existing User</span>
         </div>
-        <div className={!showMemberTab ? styles.tabActive : styles.tab} onClick={() => setShowMemberTab(false)}>
+        <div
+          data-qa="modal-new-member-tab"
+          className={!showMemberTab ? styles.tabActive : styles.tab}
+          onClick={() => setShowMemberTab(false)}
+        >
           <span>New User</span>
         </div>
       </div>
@@ -161,7 +147,16 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
         <form>
           <div className="mb-3">
             <label>User</label>
-            <Select options={unregisteredUsers} onChange={(e) => setUserId(e!.value)} />
+            <SelectSearch
+              data-qa="select-members"
+              search
+              options={unregisteredUsers}
+              placeholder="Search for members"
+              value={userId}
+              onChange={(e) => setUserId(e.toString())}
+              onBlur={() => {}}
+              onFocus={() => {}}
+            />
           </div>
         </form>
       ) : (
@@ -170,6 +165,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="firstName">First Name:</label>
             <input
+              data-qa="input-firstName"
               type="text"
               placeholder="First name"
               name="firstName"
@@ -182,6 +178,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="lastName">Last Name:</label>
             <input
+              data-qa="input-lastName"
               type="text"
               placeholder="Last name"
               name="lastName"
@@ -194,6 +191,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="email">Email:</label>
             <input
+              data-qa="input-email"
               type="text"
               placeholder="Email"
               name="email"
@@ -205,7 +203,13 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
 
           <div className="mb-3">
             <label htmlFor="faculty">Faculty:</label>
-            <select name="faculty" className="form-control" value={formState.faculty} onChange={handleChange}>
+            <select
+              data-qa="select-faculty"
+              name="faculty"
+              className="form-control"
+              value={formState.faculty}
+              onChange={handleChange}
+            >
               <option>Choose one</option>
               {FACULTIES.map((f) => (
                 <option key={f} value={f}>
@@ -218,6 +222,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="questId">Quest ID:</label>
             <input
+              data-qa="input-questId"
               type="text"
               placeholder="Quest ID"
               name="questId"
@@ -230,6 +235,7 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
           <div className="mb-3">
             <label htmlFor="id">Student Number:</label>
             <input
+              data-qa="input-id"
               type="text"
               placeholder="Student Number"
               name="id"
@@ -242,11 +248,21 @@ export function NewMembershipModal({ show, onClose, semesterId }: NewMembershipM
       )}
       <div className="form-check form-check-inline">
         <label className="form-check-label">Paid</label>
-        <input type="checkbox" className="form-check-input" onChange={() => setPaid(!paid)}></input>
+        <input
+          data-qa="checkbox-paid"
+          type="checkbox"
+          className="form-check-input"
+          onChange={() => setPaid(!paid)}
+        ></input>
       </div>
       <div className="form-check form-check-inline">
         <label className="form-check-label">Discounted</label>
-        <input type="checkbox" className="form-check-input" onChange={() => setDiscounted(!discounted)}></input>
+        <input
+          data-qa="checkbox-discounted"
+          type="checkbox"
+          className="form-check-input"
+          onChange={() => setDiscounted(!discounted)}
+        ></input>
       </div>
     </Modal>
   );

@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { sendAPIRequest } from "../../../lib";
 import { Membership, getEligibleMembers } from "../../../sdk/memberships";
 
@@ -75,7 +74,12 @@ export function EventRegister() {
                   placeholder="Search"
                   onChange={(e) => setQuery(e.target.value)}
                 ></input>
-                <button style={{ whiteSpace: "nowrap" }} className="btn btn-primary" onClick={registerMembers}>
+                <button
+                  data-qa="sign-in-btn"
+                  style={{ whiteSpace: "nowrap" }}
+                  className="btn btn-primary"
+                  onClick={registerMembers}
+                >
                   Sign In
                 </button>
               </div>
@@ -84,11 +88,12 @@ export function EventRegister() {
                   <div
                     key={member.id}
                     className={`${styles.item} ${
-                      Number(member.attendance) >= 4 && !member.paid ? styles.itemDanger : ""
+                      Number(member.attendance) >= 3 && !member.paid ? styles.itemDanger : ""
                     }`}
                   >
-                    <div className={styles.itemCheckbox}>
+                    <div data-qa={`member-${member.id}`} className={styles.itemCheckbox}>
                       <input
+                        data-qa="checkbox-selected"
                         type="checkbox"
                         name="selected"
                         value={member.id}

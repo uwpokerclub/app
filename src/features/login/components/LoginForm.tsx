@@ -39,7 +39,13 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         <input ref={passwordRef} type="password" name="password" className="form-control" />
       </div>
 
-      <button type="submit" className="btn btn-success" disabled={submitDisabled} onClick={(e) => handleClick(e)}>
+      <button
+        data-qa="login-submit"
+        type="submit"
+        className="btn btn-success"
+        disabled={submitDisabled}
+        onClick={(e) => handleClick(e)}
+      >
         Login
       </button>
     </form>

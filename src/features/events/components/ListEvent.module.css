@@ -1,0 +1,9 @@
+.actions {
+  display: none;
+}
+
+.card:hover .actions {
+  display: flex;
+}
+
+

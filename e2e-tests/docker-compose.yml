@@ -1,0 +1,50 @@
+services:
+  webapp:
+    build:
+      context: ../
+      dockerfile: integration_test.Dockerfile
+    ports:
+      - 5173:5173
+    environment:
+      - PORT=5173
+    networks:
+      - services
+    depends_on:
+      - api
+  
+  api:
+    build:
+      context: https://github.com/uwpokerclub/api.git#develop
+      dockerfile: integration.Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - ENVIRONMENT=testing
+      - GIN_MODE=release
+      - DATABASE_URL=postgres://docker:password@db:5432/uwpokerclub
+    networks:
+      - services
+    depends_on:
+      db:
+        condition: service_healthy
+    
+  db:
+    image: postgres:13.7-alpine
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=uwpokerclub
+    ports:
+      - 5432:5432
+    networks:
+      - services
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker -d uwpokerclub"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+networks:
+  services:
+    name: uwpokerclub_services_network
+    external: true
