@@ -2,8 +2,14 @@
   display: none;
 }
 
+.card {
+  display: flex;
+  justify-content: space-between;
+}
+
 .card:hover .actions {
   display: flex;
+  align-items: center;
 }
 
 
