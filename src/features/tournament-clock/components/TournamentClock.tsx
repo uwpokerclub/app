@@ -47,6 +47,9 @@ export function TournamentClock({ levels }: Props) {
     };
   }, []);
 
+  // Handles stopping the auto-start feature when the timer is paused
+  const handleTimerPause = useCallback(() => setShouldStart(false), []);
+
   // Handles advancing to the next level when the timer is finished
   const handleTimerEnd = useCallback(() => {
     if (levelIndex >= levels.length - 1) {
@@ -96,6 +99,7 @@ export function TournamentClock({ levels }: Props) {
         key={levelIndex}
         startOnRender={shouldStart}
         levelTime={levels[levelIndex].time}
+        onTimerPause={handleTimerPause}
         onTimerEnd={handleTimerEnd}
         onPreviousLevel={handlePreviousLevel}
         onNextLevel={handleNextLevel}
