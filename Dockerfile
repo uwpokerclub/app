@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 # Build production ready application
 RUN npm run build
 
-FROM nginx:1.27.3-alpine
+FROM nginx:1.27.4-alpine
 
 WORKDIR /usr/share/nginx/html
 
