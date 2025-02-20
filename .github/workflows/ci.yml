@@ -19,6 +19,10 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,4 +38,10 @@ jobs:
           working-directory: e2e-tests
           build: docker compose build
           start: docker compose up -d
+          wait-on: 'http://localhost:5173'
+          record: true
+          parallel: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
