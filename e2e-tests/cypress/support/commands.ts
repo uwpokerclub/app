@@ -58,10 +58,11 @@ Cypress.Commands.add("login", (username, password) => {
   cy.getCookie("uwpsc-dev-session-id").should("exist");
 });
 
-Cypress.Commands.add("setupLogin", (username, password) => {
+Cypress.Commands.add("setupLogin", (username, password, role = "webmaster") => {
   cy.request("POST", "http://localhost:5000/login", {
     username,
     password,
+    role,
   });
 });
 

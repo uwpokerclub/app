@@ -1,25 +1,27 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../contexts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sendAPIRequest } from "../../../lib";
 import { LoginForm } from "./LoginForm";
 
 export function CreateLogin() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const auth = useAuth();
-
-  if (auth.authenticated) {
-    const from = (location.state as { from: { pathname: string } })?.from?.pathname || "/admin";
-    navigate(from, { replace: true });
-  }
-
   const [errorMessage, setErrorMessage] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = async (username: string, password: string) => {
-    const { status } = await sendAPIRequest("login", "POST", { username, password });
+  // After 2 seconds, hide the success message
+  useEffect(() => {
+    if (!showSuccess) return;
+    const timer = setTimeout(() => {
+      setShowSuccess(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [showSuccess]);
+
+  const handleSubmit = async (username: string, password: string, role: string) => {
+    const { status } = await sendAPIRequest("login", "POST", { username, password, role });
     if (status === 201) {
-      navigate("/login", { replace: true });
+      setShowSuccess(true);
     } else if (status === 400 || status === 401) {
       setErrorMessage("Invalid username or password.");
     } else if (status === 403) {
@@ -37,12 +39,18 @@ export function CreateLogin() {
         </div>
       )}
 
+      {showSuccess && (
+        <div className="alert alert-success" role="alert">
+          Successfully created this user!
+        </div>
+      )}
+
       <div className="row">
         <div className="col-md-4 col-lg-4 col-sm-3" />
 
         <div className="col-md-4 col-lg-4 col-sm-6">
           <h1>Create a Login</h1>
-          <LoginForm onSubmit={handleSubmit} />
+          <LoginForm create onSubmit={handleSubmit} />
         </div>
 
         <div className="col-md-4 col-lg-4 col-sm-3" />

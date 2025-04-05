@@ -38,7 +38,7 @@ export function NewSession() {
 
         <div className="col-md-4 col-lg-4 col-sm-6">
           <h1>Login</h1>
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm create={false} onSubmit={handleLogin} />
         </div>
 
         <div className="col-md-4 col-lg-4 col-sm-3" />
